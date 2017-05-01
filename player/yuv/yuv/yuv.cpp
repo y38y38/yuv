@@ -8,6 +8,8 @@
 
 #include "rawvideo420.h"
 
+#include "yuv_setting.h"
+
 #define MAX_LOADSTRING 100
 
 // グローバル変数:
@@ -46,6 +48,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(lpCmdLine);
 
     // TODO: ここにコードを挿入してください。
+
+	YuvSetting::GetInst().InitSetting();
 
     // グローバル文字列を初期化しています。
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
@@ -146,9 +150,11 @@ void setFormat(HWND hWnd, int wmId)
 
 	switch (wmId) {
 		case ID_FORMAT_YV12:
+			YuvSetting::GetInst().SetFormat(YuvSetting::YUV_FORMAT_YV12);
 			m_format = FORMAT_YV12;
 			break;
 		case ID_FORMAT_YUV44:
+			YuvSetting::GetInst().SetFormat(YuvSetting::YUV_FORMAT_YUV4);
 			m_format = FORMAT_YUV4;
 			break;
 		default:
@@ -171,12 +177,15 @@ void setViewSize(HWND hWnd, int wmId)
 	return;
 
 }
+#if 0
 void setHeightWitdh(int height, int width)
 {
 	m_heigth = height;
 	m_width = width;
 	return;
 }
+#endif
+
 int setPixel(HWND hWnd, int wmId)
 {
 	HMENU m = GetMenu(hWnd);
@@ -187,10 +196,12 @@ int setPixel(HWND hWnd, int wmId)
 	CheckMenuItem(m, wmId, MF_CHECKED);
 	switch (wmId) {
 	case ID_PIXEL_352X288:
+		YuvSetting::GetInst().SetSize(YuvSetting::YUV_SIZE_352_288);
 		m_heigth =288;
 		m_width = 352;
 		break;
 	case ID_PIXEL_1920X1080:
+		YuvSetting::GetInst().SetSize(YuvSetting::YUV_SIZE_1920_1080);
 		m_heigth = 1920;
 		m_width = 1080;
 		break;
@@ -203,11 +214,14 @@ int setPixel(HWND hWnd, int wmId)
 
 int getFrameBufferSize(void)
 {
-	if (m_format == FORMAT_YV12) {
-		return RawVideo420::getFrameBufferSize(m_width, m_heigth);
+	uint32_t width = YuvSetting::GetInst().GetWidthSize();
+	uint32_t height = YuvSetting::GetInst().GetHeightSize();
+
+	if (YuvSetting::GetInst().GetFormat() == YuvSetting::YUV_FORMAT_YV12) {
+		return RawVideo420::getFrameBufferSize(width, height);
 	}
 	else {
-		return Yuv4::getFrameBufferSize(m_width, m_heigth);
+		return Yuv4::getFrameBufferSize(width, height);
 	}
 	return 0;
 }
