@@ -99,8 +99,9 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_YUV));
     wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
     wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
-    wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_YUV);
-    wcex.lpszClassName  = szWindowClass;
+    //wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_YUV);
+	wcex.lpszMenuName = NULL;
+	wcex.lpszClassName  = szWindowClass;
     wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 
     return RegisterClassExW(&wcex);
@@ -125,7 +126,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
       CW_USEDEFAULT, 0, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HIEGHT, nullptr, nullptr, hInstance, nullptr);
 #else 
    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_POPUP,
-	   CW_USEDEFAULT, 0, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HIEGHT, nullptr, nullptr, hInstance, nullptr);
+	   CW_USEDEFAULT, 0, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HIEGHT, nullptr, nullptr, NULL, nullptr);
 #endif
 
    if (!hWnd)
