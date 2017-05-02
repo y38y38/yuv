@@ -120,8 +120,13 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // グローバル変数にインスタンス処理を格納します。
 
+#if 0
    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, 0, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HIEGHT, nullptr, nullptr, hInstance, nullptr);
+#else 
+   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_POPUP,
+	   CW_USEDEFAULT, 0, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HIEGHT, nullptr, nullptr, hInstance, nullptr);
+#endif
 
    if (!hWnd)
    {
@@ -388,7 +393,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		ClientToScreen(hWnd, &pos);
 		TrackPopupMenu(m_hSubMenu, TPM_LEFTALIGN, pos.x, pos.y, 0, hWnd, NULL);
 		break;
-
+	case WM_LBUTTONDOWN:
+		PostMessage(hWnd, WM_NCLBUTTONDOWN, (WPARAM)HTCAPTION, lParam);
+		break;
 	default:
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
