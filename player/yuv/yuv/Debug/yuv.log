@@ -1,3 +1,11 @@
-﻿  yuv.cpp
+﻿  stdafx.cpp
+  yuv_setting.cpp
+  yuvrgb.cpp
+  yuv4.cpp
+  yuv.cpp
+  ui.cpp
+  rawvideo420.cpp
+  filebuffer.cpp
+  コードを生成中...
   yuv.vcxproj -> C:\cygwin\home\y38y3\yuv\yuv\player\yuv\Debug\yuv.exe
   yuv.vcxproj -> C:\cygwin\home\y38y3\yuv\yuv\player\yuv\Debug\yuv.pdb (Partial PDB)
