@@ -22,11 +22,7 @@ unsigned char rgb_buf[BUF_MAX];
 
 filebuffer g_filebuffer;
 
-int m_heigth = DEFAULT_HIEGHT;
-int m_width = DEFAULT_WIDTH;
 
-
-int m_format = FORMAT_YV12;
 
 
 // このコード モジュールに含まれる関数の宣言を転送します:
@@ -151,11 +147,9 @@ void setFormat(HWND hWnd, int wmId)
 	switch (wmId) {
 		case ID_FORMAT_YV12:
 			YuvSetting::GetInst().SetFormat(YuvSetting::YUV_FORMAT_YV12);
-			m_format = FORMAT_YV12;
 			break;
 		case ID_FORMAT_YUV44:
 			YuvSetting::GetInst().SetFormat(YuvSetting::YUV_FORMAT_YUV4);
-			m_format = FORMAT_YUV4;
 			break;
 		default:
 			break;
@@ -177,14 +171,6 @@ void setViewSize(HWND hWnd, int wmId)
 	return;
 
 }
-#if 0
-void setHeightWitdh(int height, int width)
-{
-	m_heigth = height;
-	m_width = width;
-	return;
-}
-#endif
 
 int setPixel(HWND hWnd, int wmId)
 {
@@ -197,13 +183,9 @@ int setPixel(HWND hWnd, int wmId)
 	switch (wmId) {
 	case ID_PIXEL_352X288:
 		YuvSetting::GetInst().SetSize(YuvSetting::YUV_SIZE_352_288);
-		m_heigth =288;
-		m_width = 352;
 		break;
 	case ID_PIXEL_1920X1080:
 		YuvSetting::GetInst().SetSize(YuvSetting::YUV_SIZE_1920_1080);
-		m_heigth = 1920;
-		m_width = 1080;
 		break;
 	default:
 		break;
@@ -228,11 +210,14 @@ int getFrameBufferSize(void)
 
 void getrgb(unsigned char *yuvbuffer)
 {
-	if (m_format == FORMAT_YV12) {
-		RawVideo420::getRgb(yuvbuffer, m_width, m_heigth, rgb_buf, TRUE, TRUE, TRUE);
+	uint32_t width = YuvSetting::GetInst().GetWidthSize();
+	uint32_t height = YuvSetting::GetInst().GetHeightSize();
+
+	if (YuvSetting::GetInst().GetFormat() == YuvSetting::YUV_FORMAT_YV12) {
+			RawVideo420::getRgb(yuvbuffer, width, height, rgb_buf, TRUE, TRUE, TRUE);
 	}
 	else {
-		Yuv4::getRgb(yuvbuffer, m_width, m_heigth, rgb_buf, TRUE, TRUE, TRUE);
+		Yuv4::getRgb(yuvbuffer, width, height, rgb_buf, TRUE, TRUE, TRUE);
 	}
 	return;
 }
@@ -270,6 +255,9 @@ int wm_command(HWND hWnd, WPARAM wParam)
 }
 void wm_paint(HWND hWnd)
 {
+	uint32_t width = YuvSetting::GetInst().GetWidthSize();
+	uint32_t height = YuvSetting::GetInst().GetHeightSize();
+
 	PAINTSTRUCT ps;
 	HDC hdc = BeginPaint(hWnd, &ps);
 	// TODO: HDC を使用する描画コードをここに追加してください...
@@ -281,8 +269,8 @@ void wm_paint(HWND hWnd)
 	bitmapinfo.bmiHeader.biPlanes = 1;
 	bitmapinfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
 	bitmapinfo.bmiHeader.biSizeImage = 0;
-	bitmapinfo.bmiHeader.biWidth = m_width;
-	bitmapinfo.bmiHeader.biHeight = -(m_heigth);
+	bitmapinfo.bmiHeader.biWidth = width;
+	bitmapinfo.bmiHeader.biHeight = -((LONG)height);
 	bitmapinfo.bmiHeader.biXPelsPerMeter = 0;
 	bitmapinfo.bmiHeader.biYPelsPerMeter = 0;
 	//縮小を綺麗にする関数
@@ -291,12 +279,12 @@ void wm_paint(HWND hWnd)
 	StretchDIBits(hdc,
 		0,//x座標 
 		0,//y座標
-		m_width,//横幅 
-		(m_heigth),//縦幅
+		width,//横幅 
+		(height),//縦幅
 		0,
 		0,
-		m_width,
-		(m_heigth),
+		width,
+		(height),
 		rgb_buf,
 		&bitmapinfo,
 		DIB_RGB_COLORS,
@@ -344,19 +332,11 @@ void wm_timer(HWND hWnd)
 	InvalidateRect(hWnd, NULL, FALSE);
 
 }
-void wm_init(HWND hWnd)
-{
-	setPixel(hWnd, ID_PIXEL_352X288);
-	setViewSize(hWnd, ID_VIEW_1_1);
-	setFormat(hWnd, ID_FORMAT_YUV44);
-	return;
-}
 void wm_craete(HWND hWnd)
 {
 	//ウィンドウがドラック＆ドロップを受け付けるようにする。
 	DragAcceptFiles(hWnd, TRUE);
 	SetTimer(hWnd, 1, UPDATE_WINDOW_TIME, NULL);
-	wm_init(hWnd);
 	return;
 }
 
