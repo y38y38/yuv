@@ -220,7 +220,7 @@ void getrgb(unsigned char *yuvbuffer)
 	uint32_t height = YuvSetting::GetInst().GetHeightSize();
 
 	if (YuvSetting::GetInst().GetFormat() == YuvSetting::YUV_FORMAT_YV12) {
-			RawVideo420::getRgb(yuvbuffer, width, height, rgb_buf, TRUE, TRUE, TRUE);
+		RawVideo420::getRgb(yuvbuffer, width, height, rgb_buf, TRUE, TRUE, TRUE);
 	}
 	else {
 		Yuv4::getRgb(yuvbuffer, width, height, rgb_buf, TRUE, TRUE, TRUE);
@@ -253,6 +253,10 @@ int wm_command(HWND hWnd, WPARAM wParam)
 	case ID_FORMAT_YUV44:
 		setFormat(hWnd, wmId);
 		break;
+	case ID_DUMMY_EXIT:
+		DestroyWindow(hWnd);
+		break;
+
 	default:
 		return -1;
 	}

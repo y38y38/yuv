@@ -37,8 +37,13 @@ int RawVideo420::getRgb(unsigned char *ypbpr_buffer, int width, int height, unsi
 		if (enable_pr != TRUE) {
 			pr = 128;
 		}
+#if 0
 		YuvRgb *yuvrgbp = new YuvRgb();
 		yuvrgbp->ypbpr2rgb(y, pb, pr, rgb_buffer);
+#else
+		YuvRgb::ypbpr2rgb(y, pb, pr, rgb_buffer);
+#endif
+
 		rgb_buffer += 3;
 	}
 
