@@ -1,5 +1,6 @@
 #ifndef _FILEBUFFER_
 #define _FILEBUFFER_
+
 class filebuffer {
 public:
 	filebuffer(void);

@@ -12,12 +12,19 @@
 #include <Winuser.h>
 #include <shellapi.h>
 
+#include "resource.h"
+
 #include "filebuffer.h"
-#include "yuv.h"
-#include "yuv4.h"
+
 #include "rawvideo420.h"
+#include "yuv4.h"
+
+
 #include "yuv_setting.h"
 #include "window_manager.h"
+
+#include "yuv.h"
+
 
 #define MAX_LOADSTRING 100
 
@@ -36,8 +43,6 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // メイン ウィンドウ クラス名
 unsigned char rgb_buf[RGB_BUF_MAX];
 
 filebuffer g_filebuffer;
-
-
 
 
 // このコード モジュールに含まれる関数の宣言を転送します:
@@ -151,64 +156,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 }
 
 
-void setFormat(HWND hWnd, int wmId)
-{
-	HMENU m = GetMenu(hWnd);
-
-	CheckMenuItem(m, ID_FORMAT_YV12, MF_UNCHECKED);
-	CheckMenuItem(m, ID_FORMAT_YUV44, MF_UNCHECKED);
-
-	CheckMenuItem(m, wmId, MF_CHECKED);
-
-	switch (wmId) {
-		case ID_FORMAT_YV12:
-			YuvSetting::GetInst().SetFormat(YuvSetting::YUV_FORMAT_YV12);
-			break;
-		case ID_FORMAT_YUV44:
-			YuvSetting::GetInst().SetFormat(YuvSetting::YUV_FORMAT_YUV4);
-			break;
-		default:
-			break;
-	}
-
-	return;
-}
-
-void setViewSize(HWND hWnd, int wmId)
-{
-	HMENU m = GetMenu(hWnd);
-
-	CheckMenuItem(m, ID_VIEW_1_1, MF_UNCHECKED);
-	CheckMenuItem(m, ID_VIEW_1_2, MF_UNCHECKED);
-	CheckMenuItem(m, ID_VIEW_1_4, MF_UNCHECKED);
-
-	CheckMenuItem(m, wmId, MF_CHECKED);
-
-	return;
-
-}
-
-int setPixel(HWND hWnd, int wmId)
-{
-	HMENU m = GetMenu(hWnd);
-
-	CheckMenuItem(m, ID_PIXEL_352X288, MF_UNCHECKED);
-	CheckMenuItem(m, ID_PIXEL_1920X1080, MF_UNCHECKED);
-
-	CheckMenuItem(m, wmId, MF_CHECKED);
-	switch (wmId) {
-	case ID_PIXEL_352X288:
-		YuvSetting::GetInst().SetSize(YuvSetting::YUV_SIZE_352_288);
-		break;
-	case ID_PIXEL_1920X1080:
-		YuvSetting::GetInst().SetSize(YuvSetting::YUV_SIZE_1920_1080);
-		break;
-	default:
-		break;
-	}
-
-	return 0;
-}
 
 int getFrameBufferSize(void)
 {
@@ -237,39 +184,6 @@ void getrgb(unsigned char *yuvbuffer)
 	}
 	return;
 }
-
-int wm_command(HWND hWnd, WPARAM wParam)
-{
-	int wmId = LOWORD(wParam);
-	// 選択されたメニューの解析:
-	switch (wmId)
-	{
-	case IDM_EXIT:
-		DestroyWindow(hWnd);
-		break;
-	case ID_PIXEL_352X288:
-	case ID_PIXEL_1920X1080:
-		setPixel(hWnd, wmId);
-		break;
-	case ID_VIEW_1_1:
-	case ID_VIEW_1_2:
-	case ID_VIEW_1_4:
-		setViewSize(hWnd, wmId);
-		break;
-	case ID_FORMAT_YV12:
-	case ID_FORMAT_YUV44:
-		setFormat(hWnd, wmId);
-		break;
-	case ID_DUMMY_EXIT:
-		DestroyWindow(hWnd);
-		break;
-
-	default:
-		return -1;
-	}
-	return 0;
-
-}
 void imgge_update(int frame_number)
 {
 	int yuv_offset = 0;
@@ -290,6 +204,27 @@ void imgge_update(int frame_number)
 	free(yuv_buffer);
 
 	return;
+}
+
+int wm_command(HWND hWnd, WPARAM wParam)
+{
+	int wmId = LOWORD(wParam);
+	// 選択されたメニューの解析:
+	switch (wmId)
+	{
+	case ID_PIXEL_352X289:
+	case ID_PIXEL_1920X1081:
+		WindowManager::GetInst().SetPixel(m_hSubMenu, hWnd, wmId);
+		break;
+	case ID_DUMMY_EXIT:
+		DestroyWindow(hWnd);
+		break;
+
+	default:
+		return -1;
+	}
+	return 0;
+
 }
 //
 //  関数: WndProc(HWND, UINT, WPARAM, LPARAM)
