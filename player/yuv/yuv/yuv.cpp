@@ -12,13 +12,20 @@
 
 #define MAX_LOADSTRING 100
 
+
+#define RGB_BUF_MAX (4096*2160*3*2) /* 4K(4096x2160) RGB (x3) 16bit (x2) */
+#define YUV_BUF_MAX (4096*2160*3*2) /* 4K(4096x2160) RGB (x3) 16bit (x2) */
+
+#define	CACHE_MEMORY_SIZE (0)
+
+
 // グローバル変数:
 HINSTANCE hInst;                                // 現在のインターフェイス
 WCHAR szTitle[MAX_LOADSTRING];                  // タイトル バーのテキスト
 WCHAR szWindowClass[MAX_LOADSTRING];            // メイン ウィンドウ クラス名
 
 TCHAR temp_filename[1024];
-unsigned char rgb_buf[BUF_MAX];
+unsigned char rgb_buf[RGB_BUF_MAX];
 
 filebuffer g_filebuffer;
 
@@ -29,7 +36,6 @@ filebuffer g_filebuffer;
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
-INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
 HMENU    m_hMenu;
 HMENU    m_hSubMenu;
@@ -230,9 +236,6 @@ int wm_command(HWND hWnd, WPARAM wParam)
 	// 選択されたメニューの解析:
 	switch (wmId)
 	{
-	case IDM_ABOUT:
-		DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
-		break;
 	case IDM_EXIT:
 		DestroyWindow(hWnd);
 		break;
@@ -281,7 +284,6 @@ void wm_paint(HWND hWnd)
 	bitmapinfo.bmiHeader.biYPelsPerMeter = 0;
 	//縮小を綺麗にする関数
 	SetStretchBltMode(hdc, HALFTONE);
-	//memset(rgb_buf, 0x00, BUF_MAX);
 	StretchDIBits(hdc,
 		0,//x座標 
 		0,//y座標
@@ -300,6 +302,27 @@ void wm_paint(HWND hWnd)
 	return;
 
 }
+void imgge_update(int frame_number)
+{
+	int yuv_offset = 0;
+	int framesize = getFrameBufferSize();
+	unsigned char *yuv_buffer = (unsigned char *)malloc(framesize);
+	if (yuv_buffer == NULL) {
+		return;
+	}
+
+	unsigned long ret;
+	yuv_offset = framesize * frame_number;
+	g_filebuffer.read(yuv_buffer, yuv_offset, framesize, &ret);
+	if (framesize != ret) {
+		//本当はエラー処理
+	}
+	getrgb(yuv_buffer);
+
+	free(yuv_buffer);
+
+	return;
+}
 void wm_dropfile(HWND hWnd, WPARAM wParam)
 {
 	HDROP  hDrop = NULL;
@@ -313,36 +336,31 @@ void wm_dropfile(HWND hWnd, WPARAM wParam)
 	}
 	DragFinish(hDrop);
 	g_filebuffer.create(temp_filename, CACHE_MEMORY_SIZE);
+	imgge_update(0);
 
 	InvalidateRect(hWnd, NULL, FALSE);
 	return;
-}
-void wm_timer(HWND hWnd)
-{
-	int yuv_offset = 0;
-	int framesize = getFrameBufferSize();
-	unsigned char *yuv_buffer = (unsigned char *)malloc(framesize*2);
-	if (yuv_buffer == NULL) {
-		return;
-	}
-
-	unsigned long ret;
-	g_filebuffer.read(yuv_buffer, yuv_offset, framesize, &ret);
-	if (framesize != ret) {
-		//本当はエラー処理
-	}
-	getrgb(yuv_buffer);
-
-	free(yuv_buffer);
-
-	InvalidateRect(hWnd, NULL, FALSE);
-
 }
 void wm_craete(HWND hWnd)
 {
 	//ウィンドウがドラック＆ドロップを受け付けるようにする。
 	DragAcceptFiles(hWnd, TRUE);
-	SetTimer(hWnd, 1, UPDATE_WINDOW_TIME, NULL);
+	return;
+}
+void wm_mouse_right(HWND hWnd, LPARAM lParam)
+{
+	POINT pos;
+	pos.x = LOWORD(lParam);
+	pos.y = HIWORD(lParam);
+
+	ClientToScreen(hWnd, &pos);
+	TrackPopupMenu(m_hSubMenu, TPM_LEFTALIGN, pos.x, pos.y, 0, hWnd, NULL);
+
+	return;
+}
+void wm_mouse_left(HWND hWnd, LPARAM lParam)
+{
+	PostMessage(hWnd, WM_NCLBUTTONDOWN, (WPARAM)HTCAPTION, lParam);
 	return;
 }
 
@@ -363,9 +381,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
 	case WM_CREATE:
 		wm_craete(hWnd);
-		
 		break;
-
     case WM_COMMAND:
 		{
 			int ret = wm_command(hWnd, wParam);
@@ -383,19 +399,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_DROPFILES:
 		wm_dropfile(hWnd, wParam);
 		break;
-	case WM_TIMER:
-		wm_timer(hWnd);
-		break;
 	case WM_RBUTTONUP:
-		POINT pos;
-		pos.x = LOWORD(lParam);
-		pos.y = HIWORD(lParam);
-
-		ClientToScreen(hWnd, &pos);
-		TrackPopupMenu(m_hSubMenu, TPM_LEFTALIGN, pos.x, pos.y, 0, hWnd, NULL);
+		wm_mouse_right(hWnd, lParam);
 		break;
 	case WM_LBUTTONDOWN:
-		PostMessage(hWnd, WM_NCLBUTTONDOWN, (WPARAM)HTCAPTION, lParam);
+		wm_mouse_left(hWnd, lParam);
 		break;
 	default:
         return DefWindowProc(hWnd, message, wParam, lParam);
@@ -403,22 +411,3 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-// バージョン情報ボックスのメッセージ ハンドラーです。
-INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-{
-    UNREFERENCED_PARAMETER(lParam);
-    switch (message)
-    {
-    case WM_INITDIALOG:
-        return (INT_PTR)TRUE;
-
-    case WM_COMMAND:
-        if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
-        {
-            EndDialog(hDlg, LOWORD(wParam));
-            return (INT_PTR)TRUE;
-        }
-        break;
-    }
-    return (INT_PTR)FALSE;
-}

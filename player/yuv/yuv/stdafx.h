@@ -26,11 +26,9 @@
 
 #include "filebuffer.h"
 
-#define BUF_MAX (4096*2160*3*2) /* 4K(4096x2160) RGB (x3) 16bit (x2) */
 
 #define UPDATE_WINDOW_TIME (2000)
 
-#define	CACHE_MEMORY_SIZE (0)
 
 
 
