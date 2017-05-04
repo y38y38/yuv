@@ -270,46 +270,6 @@ int wm_command(HWND hWnd, WPARAM wParam)
 	return 0;
 
 }
-void wm_paint(HWND hWnd)
-{
-	uint32_t width = YuvSetting::GetInst().GetWidthSize();
-	uint32_t height = YuvSetting::GetInst().GetHeightSize();
-
-	PAINTSTRUCT ps;
-	HDC hdc = BeginPaint(hWnd, &ps);
-	// TODO: HDC を使用する描画コードをここに追加してください...
-	BITMAPINFO bitmapinfo;
-	bitmapinfo.bmiHeader.biBitCount = 24;
-	bitmapinfo.bmiHeader.biClrImportant = 0;
-	bitmapinfo.bmiHeader.biClrUsed = 0;
-	bitmapinfo.bmiHeader.biCompression = BI_RGB;
-	bitmapinfo.bmiHeader.biPlanes = 1;
-	bitmapinfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-	bitmapinfo.bmiHeader.biSizeImage = 0;
-	bitmapinfo.bmiHeader.biWidth = width;
-	bitmapinfo.bmiHeader.biHeight = -((LONG)height);
-	bitmapinfo.bmiHeader.biXPelsPerMeter = 0;
-	bitmapinfo.bmiHeader.biYPelsPerMeter = 0;
-	//縮小を綺麗にする関数
-	SetStretchBltMode(hdc, HALFTONE);
-	StretchDIBits(hdc,
-		0,//x座標 
-		0,//y座標
-		width,//横幅 
-		(height),//縦幅
-		0,
-		0,
-		width,
-		(height),
-		rgb_buf,
-		&bitmapinfo,
-		DIB_RGB_COLORS,
-		SRCCOPY);
-
-	EndPaint(hWnd, &ps);
-	return;
-
-}
 void imgge_update(int frame_number)
 {
 	int yuv_offset = 0;
@@ -359,8 +319,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
         break;
     case WM_PAINT:
-		wm_paint(hWnd);
-        break;
+		{
+			uint32_t width = YuvSetting::GetInst().GetWidthSize();
+			uint32_t height = YuvSetting::GetInst().GetHeightSize();
+
+			WindowManager::GetInst().Paint(hWnd, width, height, rgb_buf);
+		}
+		break;
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
@@ -371,7 +336,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_RBUTTONUP:
 		WindowManager::GetInst().MouseRight(m_hSubMenu, hWnd, lParam);
-//		wm_mouse_right(hWnd, lParam);
 		break;
 	case WM_LBUTTONDOWN:
 		WindowManager::GetInst().MouseLeft(hWnd, lParam);
