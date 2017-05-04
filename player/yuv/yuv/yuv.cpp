@@ -2,13 +2,22 @@
 //
 
 #include "stdafx.h"
+#include <stdlib.h>
+#include <malloc.h>
+#include <memory.h>
+#include <tchar.h>
 
+
+#include <windef.h>
+#include <Winuser.h>
+#include <shellapi.h>
+
+#include "filebuffer.h"
 #include "yuv.h"
 #include "yuv4.h"
-
 #include "rawvideo420.h"
-
 #include "yuv_setting.h"
+#include "window_manager.h"
 
 #define MAX_LOADSTRING 100
 
@@ -24,7 +33,6 @@ HINSTANCE hInst;                                // 現在のインターフェイス
 WCHAR szTitle[MAX_LOADSTRING];                  // タイトル バーのテキスト
 WCHAR szWindowClass[MAX_LOADSTRING];            // メイン ウィンドウ クラス名
 
-TCHAR temp_filename[1024];
 unsigned char rgb_buf[RGB_BUF_MAX];
 
 filebuffer g_filebuffer;
@@ -323,47 +331,6 @@ void imgge_update(int frame_number)
 
 	return;
 }
-void wm_dropfile(HWND hWnd, WPARAM wParam)
-{
-	HDROP  hDrop = NULL;
-	//ドラック＆ドロップされたファイル名を取り出す処理。
-	hDrop = (HDROP)wParam;
-	DWORD   dwDropped;
-	dwDropped = DragQueryFile(hDrop, (UINT)-1, NULL, 0);
-	//もし、一度に3ファイル以上入力された場合、最後の3ファイルを解析対象とする。
-	for (DWORD i = 0; i < dwDropped; i++) {
-		DragQueryFile(hDrop, 0, temp_filename, MAX_PATH);
-	}
-	DragFinish(hDrop);
-	g_filebuffer.create(temp_filename, CACHE_MEMORY_SIZE);
-	imgge_update(0);
-
-	InvalidateRect(hWnd, NULL, FALSE);
-	return;
-}
-void wm_craete(HWND hWnd)
-{
-	//ウィンドウがドラック＆ドロップを受け付けるようにする。
-	DragAcceptFiles(hWnd, TRUE);
-	return;
-}
-void wm_mouse_right(HWND hWnd, LPARAM lParam)
-{
-	POINT pos;
-	pos.x = LOWORD(lParam);
-	pos.y = HIWORD(lParam);
-
-	ClientToScreen(hWnd, &pos);
-	TrackPopupMenu(m_hSubMenu, TPM_LEFTALIGN, pos.x, pos.y, 0, hWnd, NULL);
-
-	return;
-}
-void wm_mouse_left(HWND hWnd, LPARAM lParam)
-{
-	PostMessage(hWnd, WM_NCLBUTTONDOWN, (WPARAM)HTCAPTION, lParam);
-	return;
-}
-
 //
 //  関数: WndProc(HWND, UINT, WPARAM, LPARAM)
 //
@@ -376,11 +343,12 @@ void wm_mouse_left(HWND hWnd, LPARAM lParam)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	TCHAR temp_filename[1024];
 
     switch (message)
     {
 	case WM_CREATE:
-		wm_craete(hWnd);
+		WindowManager::GetInst().Create(hWnd);
 		break;
     case WM_COMMAND:
 		{
@@ -397,13 +365,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         PostQuitMessage(0);
         break;
 	case WM_DROPFILES:
-		wm_dropfile(hWnd, wParam);
+		WindowManager::GetInst().DropFile(hWnd, wParam, temp_filename);
+		g_filebuffer.create(temp_filename, CACHE_MEMORY_SIZE);
+		imgge_update(0);
 		break;
 	case WM_RBUTTONUP:
-		wm_mouse_right(hWnd, lParam);
+		WindowManager::GetInst().MouseRight(m_hSubMenu, hWnd, lParam);
+//		wm_mouse_right(hWnd, lParam);
 		break;
 	case WM_LBUTTONDOWN:
-		wm_mouse_left(hWnd, lParam);
+		WindowManager::GetInst().MouseLeft(hWnd, lParam);
 		break;
 	default:
         return DefWindowProc(hWnd, message, wParam, lParam);

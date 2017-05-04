@@ -1,11 +1,10 @@
 #pragma once
-#ifndef _YUV_SETTING_H
-#define _YUV_SETTING_H
+#ifndef _YUV_SETTING_H_
+#define _YUV_SETTING_H_
 #include <stdint.h>
 
 class YuvSetting {
 public:
-	//static YuvSetting *GetInst(void);
 	static YuvSetting& GetInst(void) {
 		static YuvSetting singleton;
 		return singleton;
@@ -30,11 +29,8 @@ private:
 	YuvSetting();
 	~YuvSetting();
 
-	//static YuvSetting Instance;
-#if 1
 	YuvFormat Format;
 	YuvSize Size;
-#endif
 };
 
 #endif //_YUV_SETTING_H
