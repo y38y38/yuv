@@ -19,15 +19,18 @@ public:
 	void DropFile(HWND hWnd, WPARAM wParam);
 	void Paint(HWND hWnd);
 	void SetPixel(HMENU hSubMenu, HWND hWnd, int wmId);
+	int KeyDown(WPARAM wParam);
 	uint32_t GetWidthSize(void);
 	uint32_t GetHeightSize(void);
-	void Init(void);
+	void Init(HWND hWnd);
+	void Update(void);
 
 
 private:
 	WindowManager();
 	~WindowManager();
 	YuvPlayer Player;
+	HWND MyWindow;
 
 };
 

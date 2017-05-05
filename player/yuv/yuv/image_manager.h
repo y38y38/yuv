@@ -14,11 +14,13 @@ public:
 	~ImageManager();
 	void Init(TCHAR *filename);
 	void Update(int frame_number, uint32_t width, uint32_t height, uint8_t *rgb_buf);
+	uint32_t GetFrameNumber(void);
 
 private:
-	filebuffer g_filebuffer;
+	filebuffer Buffer;
 	void GetRgb(uint8_t *yuvbuffer, uint32_t width, uint32_t heigth, uint8_t *rgb_buf);
 	int getFrameBufferSize(uint32_t widht, uint32_t height);
+	uint32_t FrameNumber;
 
 
 };

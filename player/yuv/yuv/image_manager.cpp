@@ -1,5 +1,7 @@
 #include "stdafx.h"
 
+#include "stdio.h"
+
 #include "stdlib.h"
 #include "stdint.h"
 
@@ -15,6 +17,7 @@
 
 ImageManager::ImageManager()
 {
+	FrameNumber = 0;
 	return;
 }
 ImageManager::~ImageManager()
@@ -23,11 +26,13 @@ ImageManager::~ImageManager()
 }
 void ImageManager::Init(TCHAR *filename)
 {
-	g_filebuffer.create(filename, CACHE_MEMORY_SIZE);
+	Buffer.create(filename, CACHE_MEMORY_SIZE);
 
 }
 void ImageManager::Update(int frame_number, uint32_t width, uint32_t height, uint8_t *rgb_buf)
 {
+	wchar_t msg[32];
+
 	int yuv_offset = 0;
 	int framesize = getFrameBufferSize(width, height);
 	uint8_t *yuv_buffer = (uint8_t *)malloc(framesize);
@@ -37,14 +42,20 @@ void ImageManager::Update(int frame_number, uint32_t width, uint32_t height, uin
 
 	unsigned long ret;
 	yuv_offset = framesize * frame_number;
-	g_filebuffer.read(yuv_buffer, yuv_offset, framesize, &ret);
+	Buffer.read(yuv_buffer, yuv_offset, framesize, &ret);
+
+	swprintf_s(msg, L"offset=%d ret=%d\n", yuv_offset, ret);
+	OutputDebugString(msg);
 	if (framesize != ret) {
 		//ñ{ìñÇÕÉGÉâÅ[èàóù
+		free(yuv_buffer);
+		return;
 	}
 	GetRgb(yuv_buffer, width, height, rgb_buf);
 
 	free(yuv_buffer);
-
+	FrameNumber = frame_number;
+	return;
 }
 void ImageManager::GetRgb(uint8_t *yuvbuffer, uint32_t width, uint32_t height, uint8_t *rgb_buf)
 {
@@ -66,3 +77,8 @@ int ImageManager::getFrameBufferSize(uint32_t width, uint32_t height)
 		return Yuv4::getFrameBufferSize(width, height);
 	}
 }
+uint32_t ImageManager::GetFrameNumber(void)
+{
+	return FrameNumber;
+}
+

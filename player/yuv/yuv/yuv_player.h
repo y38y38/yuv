@@ -9,7 +9,6 @@
 
 #include "image_manager.h"
 
-
 class YuvPlayer {
 public:
 	YuvPlayer();
@@ -20,6 +19,8 @@ public:
 	void InputFile(TCHAR *filename);
 	uint8_t *GetRgbBuf(void);
 	void Init(void);
+	void NextFrame(void);
+	void PrevFrame(void);
 
 private:
 	ImageManager Img;

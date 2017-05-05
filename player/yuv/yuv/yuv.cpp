@@ -3,6 +3,8 @@
 
 #include "stdafx.h"
 
+#include <stdio.h>  
+
 #include <windef.h>
 #include <Winuser.h>
 
@@ -43,7 +45,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(lpCmdLine);
 
     // TODO: ここにコードを挿入してください。
-	WindowManager::GetInst().Init();
 
     // グローバル文字列を初期化しています。
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
@@ -168,9 +169,11 @@ int wm_command(HWND hWnd, WPARAM wParam)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	wchar_t msg[32];
     switch (message)
     {
 	case WM_CREATE:
+		WindowManager::GetInst().Init(hWnd);
 		WindowManager::GetInst().Create(hWnd);
 		break;
     case WM_COMMAND:
@@ -196,6 +199,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_LBUTTONDOWN:
 		WindowManager::GetInst().MouseLeft(hWnd, lParam);
+		break;
+	case WM_KEYDOWN:
+		{
+			swprintf_s(msg, L"WM_KEYDOWN: 0x%x\n", wParam);
+			OutputDebugString(msg);
+			int ret = WindowManager::GetInst().KeyDown(wParam);
+			if (ret < 0) {
+				return DefWindowProc(hWnd, message, wParam, lParam);
+			}
+
+		}
 		break;
 	default:
         return DefWindowProc(hWnd, message, wParam, lParam);

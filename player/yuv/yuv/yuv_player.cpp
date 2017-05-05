@@ -4,6 +4,7 @@
 
 #include "yuv_player.h"
 
+#include "window_manager.h"
 
 YuvPlayer::YuvPlayer(void)
 {
@@ -37,7 +38,7 @@ void YuvPlayer::InputFile(TCHAR *filename)
 
 	Img.Init(filename);
 	Img.Update(0, width, height, rgb_buf);
-
+	WindowManager::GetInst().Update();
 	return;
 }
 
@@ -54,6 +55,28 @@ void YuvPlayer::Init(void)
 	}
 
 	YuvSetting::GetInst().InitSetting();
+
+	return;
+}
+
+void YuvPlayer::NextFrame(void)
+{
+	uint32_t width = YuvSetting::GetInst().GetWidthSize();
+	uint32_t height = YuvSetting::GetInst().GetHeightSize();
+	uint32_t frame_number = Img.GetFrameNumber() + 1;
+	Img.Update(frame_number, width, height, rgb_buf);
+	WindowManager::GetInst().Update();
+	return;
+}
+void YuvPlayer::PrevFrame(void)
+{
+	uint32_t frame_number = Img.GetFrameNumber();
+	if (frame_number != 0) {
+		uint32_t width = YuvSetting::GetInst().GetWidthSize();
+		uint32_t height = YuvSetting::GetInst().GetHeightSize();
+		Img.Update(frame_number - 1, width, height, rgb_buf);
+		WindowManager::GetInst().Update();
+	}
 	return;
 }
 

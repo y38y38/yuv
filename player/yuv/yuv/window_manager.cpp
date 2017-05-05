@@ -68,7 +68,7 @@ void WindowManager::DropFile(HWND hWnd, WPARAM wParam)
 	Player.InputFile(filename);
 	free(filename);
 
-	InvalidateRect(hWnd, NULL, FALSE);
+	//InvalidateRect(hWnd, NULL, FALSE);
 	return;
 }
 void WindowManager::Paint(HWND hWnd)
@@ -147,9 +147,35 @@ uint32_t WindowManager::GetHeightSize(void)
 	return Player.GetHeightSize();
 
 }
-void WindowManager::Init(void)
+void WindowManager::Init(HWND hWnd)
 {
 	Player.Init();
+	MyWindow = hWnd;
+	return;
+}
+int WindowManager::KeyDown(WPARAM wParam)
+{
+	switch (wParam)
+	{
+	case 0x25://Å©
+		Player.PrevFrame();
+		break;
+	case 0x26://Å™
+		break;
+	case 0x27://Å®
+		Player.NextFrame();
+		break;
+	case 0x28://Å´
+		break;
+	default:
+		return -1;
+		break;
+	}
+	return 0;
+}
+void WindowManager::Update(void)
+{
+	InvalidateRect(MyWindow, NULL, FALSE);
 	return;
 }
 
