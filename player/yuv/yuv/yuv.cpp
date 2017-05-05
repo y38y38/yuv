@@ -7,20 +7,14 @@
 #include <memory.h>
 #include <tchar.h>
 
-
 #include <windef.h>
 #include <Winuser.h>
 
 #include "resource.h"
 
-#include "filebuffer.h"
-
-#include "rawvideo420.h"
-#include "yuv4.h"
-
-
 #include "yuv_setting.h"
 #include "window_manager.h"
+#include "image_manager.h"
 
 #include "yuv.h"
 
@@ -31,7 +25,6 @@
 #define RGB_BUF_MAX (4096*2160*3*2) /* 4K(4096x2160) RGB (x3) 16bit (x2) */
 #define YUV_BUF_MAX (4096*2160*3*2) /* 4K(4096x2160) RGB (x3) 16bit (x2) */
 
-#define	CACHE_MEMORY_SIZE (0)
 
 
 // グローバル変数:
@@ -40,8 +33,6 @@ WCHAR szTitle[MAX_LOADSTRING];                  // タイトル バーのテキスト
 WCHAR szWindowClass[MAX_LOADSTRING];            // メイン ウィンドウ クラス名
 
 unsigned char rgb_buf[RGB_BUF_MAX];
-
-filebuffer g_filebuffer;
 
 
 // このコード モジュールに含まれる関数の宣言を転送します:
@@ -155,55 +146,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 }
 
 
-
-int getFrameBufferSize(void)
-{
-	uint32_t width = YuvSetting::GetInst().GetWidthSize();
-	uint32_t height = YuvSetting::GetInst().GetHeightSize();
-
-	if (YuvSetting::GetInst().GetFormat() == YuvSetting::YUV_FORMAT_YV12) {
-		return RawVideo420::getFrameBufferSize(width, height);
-	}
-	else {
-		return Yuv4::getFrameBufferSize(width, height);
-	}
-}
-
-void getrgb(unsigned char *yuvbuffer)
-{
-	uint32_t width = YuvSetting::GetInst().GetWidthSize();
-	uint32_t height = YuvSetting::GetInst().GetHeightSize();
-
-	if (YuvSetting::GetInst().GetFormat() == YuvSetting::YUV_FORMAT_YV12) {
-		RawVideo420::getRgb(yuvbuffer, width, height, rgb_buf, TRUE, TRUE, TRUE);
-	}
-	else {
-		Yuv4::getRgb(yuvbuffer, width, height, rgb_buf, TRUE, TRUE, TRUE);
-	}
-	return;
-}
-void imgge_update(int frame_number)
-{
-	int yuv_offset = 0;
-	int framesize = getFrameBufferSize();
-	unsigned char *yuv_buffer = (unsigned char *)malloc(framesize);
-	if (yuv_buffer == NULL) {
-		return;
-	}
-
-	unsigned long ret;
-	yuv_offset = framesize * frame_number;
-	g_filebuffer.read(yuv_buffer, yuv_offset, framesize, &ret);
-	if (framesize != ret) {
-		//本当はエラー処理
-	}
-	getrgb(yuv_buffer);
-
-	free(yuv_buffer);
-
-	return;
-}
-
 int wm_command(HWND hWnd, WPARAM wParam)
 {
 	int wmId = LOWORD(wParam);
@@ -237,7 +179,7 @@ int wm_command(HWND hWnd, WPARAM wParam)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	TCHAR temp_filename[1024];
+	static ImageManager img;
 
     switch (message)
     {
@@ -264,9 +206,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         PostQuitMessage(0);
         break;
 	case WM_DROPFILES:
-		WindowManager::GetInst().DropFile(hWnd, wParam, temp_filename);
-		g_filebuffer.create(temp_filename, CACHE_MEMORY_SIZE);
-		imgge_update(0);
+		{	
+			TCHAR temp_filename[1024];
+			uint32_t width = YuvSetting::GetInst().GetWidthSize();
+			uint32_t height = YuvSetting::GetInst().GetHeightSize();
+
+			WindowManager::GetInst().DropFile(hWnd, wParam, temp_filename);
+			img.Init(temp_filename);
+			img.Update(0, width, height, rgb_buf);
+
+		}
 		break;
 	case WM_RBUTTONUP:
 		WindowManager::GetInst().MouseRight(m_hSubMenu, hWnd, lParam);
