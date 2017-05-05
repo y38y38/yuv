@@ -3,8 +3,9 @@
 #define _WINDOW_MANAGER_H_
 
 #include "stdint.h"
-
 #include <Winuser.h>
+
+#include "yuv_player.h"
 
 class WindowManager {
 public:
@@ -12,7 +13,7 @@ public:
 		static WindowManager singleton;
 		return singleton;
 	}
-	void Create(HWND hWnd);
+	void Create(HWND hWnd, YuvPlayer* player);
 	void MouseLeft(HWND hWnd, LPARAM lParam);
 	void MouseRight(HMENU hSubMenu, HWND hWnd, LPARAM lParam);
 	void DropFile(HWND hWnd, WPARAM wParam, TCHAR *temp_filename);
@@ -22,6 +23,7 @@ public:
 private:
 	WindowManager();
 	~WindowManager();
+	YuvPlayer *Player;
 
 };
 

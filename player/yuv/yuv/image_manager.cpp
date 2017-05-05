@@ -30,7 +30,7 @@ void ImageManager::Update(int frame_number, uint32_t width, uint32_t height, uin
 {
 	int yuv_offset = 0;
 	int framesize = getFrameBufferSize(width, height);
-	unsigned char *yuv_buffer = (unsigned char *)malloc(framesize);
+	uint8_t *yuv_buffer = (uint8_t *)malloc(framesize);
 	if (yuv_buffer == NULL) {
 		return;
 	}
@@ -46,7 +46,7 @@ void ImageManager::Update(int frame_number, uint32_t width, uint32_t height, uin
 	free(yuv_buffer);
 
 }
-void ImageManager::GetRgb(unsigned char *yuvbuffer, uint32_t width, uint32_t height, uint8_t *rgb_buf)
+void ImageManager::GetRgb(uint8_t *yuvbuffer, uint32_t width, uint32_t height, uint8_t *rgb_buf)
 {
 
 	if (YuvSetting::GetInst().GetFormat() == YuvSetting::YUV_FORMAT_YV12) {

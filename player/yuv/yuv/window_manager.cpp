@@ -5,6 +5,7 @@
 #include "resource.h"
 
 #include "yuv_setting.h"
+#include "yuv_player.h"
 
 #include "window_manager.h"
 
@@ -18,8 +19,9 @@ WindowManager::~WindowManager()
 	return;
 }
 
-void WindowManager::Create(HWND hWnd)
+void WindowManager::Create(HWND hWnd, YuvPlayer *player)
 {
+	Player = player;
 	//ウィンドウがドラック＆ドロップを受け付けるようにする。
 	DragAcceptFiles(hWnd, TRUE);
 	return;
@@ -104,10 +106,12 @@ void WindowManager::SetPixel(HMENU hSubMenu, HWND hWnd, int wmId)
 	CheckMenuItem(hSubMenu, wmId, MF_CHECKED);
 	switch (wmId) {
 	case ID_PIXEL_352X289:
-		YuvSetting::GetInst().SetSize(YuvSetting::YUV_SIZE_352_288);
+		Player->SetPixel(YuvSetting::YUV_SIZE_352_288);
+		//YuvSetting::GetInst().SetSize(YuvSetting::YUV_SIZE_352_288);
 		break;
 	case ID_PIXEL_1920X1081:
-		YuvSetting::GetInst().SetSize(YuvSetting::YUV_SIZE_1920_1080);
+		Player->SetPixel(YuvSetting::YUV_SIZE_1920_1080);
+		//YuvSetting::GetInst().SetSize(YuvSetting::YUV_SIZE_1920_1080);
 		break;
 	default:
 		break;
