@@ -24,6 +24,8 @@ WindowManager::~WindowManager()
 
 void WindowManager::Create(HWND hWnd)
 {
+	Player.Init();
+	MyWindow = hWnd;
 	//ウィンドウがドラック＆ドロップを受け付けるようにする。
 	DragAcceptFiles(hWnd, TRUE);
 	return;
@@ -146,12 +148,6 @@ uint32_t WindowManager::GetHeightSize(void)
 {
 	return Player.GetHeightSize();
 
-}
-void WindowManager::Init(HWND hWnd)
-{
-	Player.Init();
-	MyWindow = hWnd;
-	return;
 }
 int WindowManager::KeyDown(WPARAM wParam)
 {

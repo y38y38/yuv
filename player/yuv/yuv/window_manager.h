@@ -22,7 +22,6 @@ public:
 	int KeyDown(WPARAM wParam);
 	uint32_t GetWidthSize(void);
 	uint32_t GetHeightSize(void);
-	void Init(HWND hWnd);
 	void Update(void);
 
 

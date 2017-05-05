@@ -169,11 +169,9 @@ int wm_command(HWND hWnd, WPARAM wParam)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	wchar_t msg[32];
     switch (message)
     {
 	case WM_CREATE:
-		WindowManager::GetInst().Init(hWnd);
 		WindowManager::GetInst().Create(hWnd);
 		break;
     case WM_COMMAND:
@@ -202,8 +200,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_KEYDOWN:
 		{
-			swprintf_s(msg, L"WM_KEYDOWN: 0x%x\n", wParam);
-			OutputDebugString(msg);
 			int ret = WindowManager::GetInst().KeyDown(wParam);
 			if (ret < 0) {
 				return DefWindowProc(hWnd, message, wParam, lParam);
