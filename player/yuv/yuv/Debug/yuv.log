@@ -6,6 +6,7 @@
   window_manager.cpp
   ui.cpp
   rawvideo420.cpp
+  image_manager.cpp
   filebuffer.cpp
   コードを生成中...
   yuv.vcxproj -> C:\cygwin\home\y38y3\yuv\yuv\player\yuv\Debug\yuv.exe

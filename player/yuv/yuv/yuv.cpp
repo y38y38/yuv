@@ -10,7 +10,6 @@
 
 #include <windef.h>
 #include <Winuser.h>
-#include <shellapi.h>
 
 #include "resource.h"
 
@@ -168,7 +167,6 @@ int getFrameBufferSize(void)
 	else {
 		return Yuv4::getFrameBufferSize(width, height);
 	}
-	return 0;
 }
 
 void getrgb(unsigned char *yuvbuffer)
@@ -226,6 +224,7 @@ int wm_command(HWND hWnd, WPARAM wParam)
 	return 0;
 
 }
+
 //
 //  ä÷êî: WndProc(HWND, UINT, WPARAM, LPARAM)
 //
