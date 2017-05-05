@@ -13,17 +13,21 @@ public:
 		static WindowManager singleton;
 		return singleton;
 	}
-	void Create(HWND hWnd, YuvPlayer* player);
+	void Create(HWND hWnd);
 	void MouseLeft(HWND hWnd, LPARAM lParam);
 	void MouseRight(HMENU hSubMenu, HWND hWnd, LPARAM lParam);
-	void DropFile(HWND hWnd, WPARAM wParam, TCHAR *temp_filename);
-	void Paint(HWND hWnd, uint32_t width, uint32_t height, unsigned char *rgb_buf);
+	void DropFile(HWND hWnd, WPARAM wParam);
+	void Paint(HWND hWnd);
 	void SetPixel(HMENU hSubMenu, HWND hWnd, int wmId);
+	uint32_t GetWidthSize(void);
+	uint32_t GetHeightSize(void);
+	void Init(void);
+
 
 private:
 	WindowManager();
 	~WindowManager();
-	YuvPlayer *Player;
+	YuvPlayer Player;
 
 };
 

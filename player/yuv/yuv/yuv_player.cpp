@@ -1,5 +1,7 @@
 #include "stdafx.h"
 
+#include "stdlib.h"
+
 #include "yuv_player.h"
 
 
@@ -42,5 +44,16 @@ void YuvPlayer::InputFile(TCHAR *filename)
 uint8_t *YuvPlayer::GetRgbBuf(void)
 {
 	return rgb_buf;
+}
+void YuvPlayer::Init(void)
+{
+#define RGB_BUF_MAX (4096*2160*3*2) /* 4K(4096x2160) RGB (x3) 16bit (x2) */
+	rgb_buf = (uint8_t*)malloc(RGB_BUF_MAX);
+	if (rgb_buf) {
+		//ÉGÉâÅ[èàóù
+	}
+
+	YuvSetting::GetInst().InitSetting();
+	return;
 }
 

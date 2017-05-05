@@ -9,7 +9,6 @@
 
 #include "image_manager.h"
 
-#define RGB_BUF_MAX (4096*2160*3*2) /* 4K(4096x2160) RGB (x3) 16bit (x2) */
 
 class YuvPlayer {
 public:
@@ -20,10 +19,11 @@ public:
 	uint32_t GetHeightSize(void);
 	void InputFile(TCHAR *filename);
 	uint8_t *GetRgbBuf(void);
+	void Init(void);
 
 private:
 	ImageManager Img;
-	uint8_t rgb_buf[RGB_BUF_MAX];
+	uint8_t *rgb_buf;
 
 };
 

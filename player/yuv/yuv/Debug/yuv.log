@@ -1,9 +1,14 @@
-﻿  yuv_player.cpp
+﻿  stdafx.cpp
+  yuv_setting.cpp
+  yuvrgb.cpp
+  yuv4.cpp
   yuv.cpp
-  image_manager.cpp
-  コードを生成中...
-  スキップ中... (関連する変更は検出されませんでした)
   window_manager.cpp
+  ui.cpp
+  rawvideo420.cpp
+  yuv_player.cpp
+  image_manager.cpp
   filebuffer.cpp
+  コードを生成中...
   yuv.vcxproj -> C:\cygwin\home\y38y3\yuv\yuv\player\yuv\Debug\yuv.exe
   yuv.vcxproj -> C:\cygwin\home\y38y3\yuv\yuv\player\yuv\Debug\yuv.pdb (Partial PDB)

@@ -2,29 +2,21 @@
 //
 
 #include "stdafx.h"
-#include <stdlib.h>
-#include <malloc.h>
-#include <memory.h>
-#include <tchar.h>
 
 #include <windef.h>
 #include <Winuser.h>
 
-#include "resource.h"
-
-
 
 #include "yuv.h"
 
-#include "yuv_player.h"
-
 #include "window_manager.h"
+
+#include "resource.h"
 
 
 #define MAX_LOADSTRING 100
 
 
-#define	MAX_YUV_FILENAME	(1024)
 
 // グローバル変数:
 HINSTANCE hInst;                                // 現在のインターフェイス
@@ -51,8 +43,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(lpCmdLine);
 
     // TODO: ここにコードを挿入してください。
-
-	YuvSetting::GetInst().InitSetting();
+	WindowManager::GetInst().Init();
 
     // グローバル文字列を初期化しています。
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
@@ -127,8 +118,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // グローバル変数にインスタンス処理を格納します。
 
-   uint32_t width = YuvSetting::GetInst().GetWidthSize();
-   uint32_t height = YuvSetting::GetInst().GetHeightSize();
+   uint32_t width = WindowManager::GetInst().GetWidthSize();
+   uint32_t height = WindowManager::GetInst().GetHeightSize();
    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_POPUP,
 	   CW_USEDEFAULT, 0, width, height, nullptr, nullptr, NULL, nullptr);
 
@@ -177,13 +168,10 @@ int wm_command(HWND hWnd, WPARAM wParam)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	static ImageManager img;
-	static YuvPlayer player;
-
     switch (message)
     {
 	case WM_CREATE:
-		WindowManager::GetInst().Create(hWnd, &player);
+		WindowManager::GetInst().Create(hWnd);
 		break;
     case WM_COMMAND:
 		{
@@ -194,29 +182,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
         break;
     case WM_PAINT:
-		{
-			uint32_t width = player.GetWidthSize();
-			uint32_t height = player.GetHeightSize();
-			uint8_t *rgb_buf = player.GetRgbBuf();
-
-			WindowManager::GetInst().Paint(hWnd, width, height, rgb_buf);
-		}
+		WindowManager::GetInst().Paint(hWnd);
 		break;
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
 	case WM_DROPFILES:
-		{	
-			TCHAR *filename = (TCHAR*)malloc(sizeof(TCHAR) * MAX_YUV_FILENAME);
-			if (filename == NULL) {
-				//エラー処理
-			}
+		WindowManager::GetInst().DropFile(hWnd, wParam);
 
-			WindowManager::GetInst().DropFile(hWnd, wParam, filename);
-			player.InputFile(filename);
-			free(filename);
-
-		}
 		break;
 	case WM_RBUTTONUP:
 		WindowManager::GetInst().MouseRight(m_hSubMenu, hWnd, lParam);

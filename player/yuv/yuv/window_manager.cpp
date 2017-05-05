@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "stdlib.h"
 #include <shellapi.h>
 
 #include "resource.h"
@@ -8,6 +9,8 @@
 #include "yuv_player.h"
 
 #include "window_manager.h"
+
+#define	MAX_YUV_FILENAME	(1024)
 
 
 WindowManager::WindowManager()
@@ -19,9 +22,8 @@ WindowManager::~WindowManager()
 	return;
 }
 
-void WindowManager::Create(HWND hWnd, YuvPlayer *player)
+void WindowManager::Create(HWND hWnd)
 {
-	Player = player;
 	//ウィンドウがドラック＆ドロップを受け付けるようにする。
 	DragAcceptFiles(hWnd, TRUE);
 	return;
@@ -43,8 +45,13 @@ void WindowManager::MouseRight(HMENU hSubMenu, HWND hWnd, LPARAM lParam)
 
 	return;
 }
-void WindowManager::DropFile(HWND hWnd, WPARAM wParam, TCHAR *temp_filename)
+void WindowManager::DropFile(HWND hWnd, WPARAM wParam)
 {
+	TCHAR *filename = (TCHAR*)malloc(sizeof(TCHAR) * MAX_YUV_FILENAME);
+	if (filename == NULL) {
+		//エラー処理
+	}
+
 	HDROP  hDrop = NULL;
 
 	//ドラック＆ドロップされたファイル名を取り出す処理。
@@ -53,17 +60,30 @@ void WindowManager::DropFile(HWND hWnd, WPARAM wParam, TCHAR *temp_filename)
 	dwDropped = DragQueryFile(hDrop, (UINT)-1, NULL, 0);
 	//もし、一度に3ファイル以上入力された場合、最後の3ファイルを解析対象とする。
 	for (DWORD i = 0; i < dwDropped; i++) {
-		DragQueryFile(hDrop, 0, temp_filename, MAX_PATH);
+		DragQueryFile(hDrop, 0, filename, MAX_PATH);
 	}
 	DragFinish(hDrop);
+
+
+	Player.InputFile(filename);
+	free(filename);
 
 	InvalidateRect(hWnd, NULL, FALSE);
 	return;
 }
-void WindowManager::Paint(HWND hWnd, uint32_t width, uint32_t height, unsigned char *rgb_buf)
+void WindowManager::Paint(HWND hWnd)
 {
+
+	uint32_t width = Player.GetWidthSize();
+	uint32_t height = Player.GetHeightSize();
+	uint8_t *rgb_buf = Player.GetRgbBuf();
+
+
 	PAINTSTRUCT ps;
 	HDC hdc = BeginPaint(hWnd, &ps);
+
+
+
 	// TODO: HDC を使用する描画コードをここに追加してください...
 	BITMAPINFO bitmapinfo;
 	bitmapinfo.bmiHeader.biBitCount = 24;
@@ -106,12 +126,10 @@ void WindowManager::SetPixel(HMENU hSubMenu, HWND hWnd, int wmId)
 	CheckMenuItem(hSubMenu, wmId, MF_CHECKED);
 	switch (wmId) {
 	case ID_PIXEL_352X289:
-		Player->SetPixel(YuvSetting::YUV_SIZE_352_288);
-		//YuvSetting::GetInst().SetSize(YuvSetting::YUV_SIZE_352_288);
+		Player.SetPixel(YuvSetting::YUV_SIZE_352_288);
 		break;
 	case ID_PIXEL_1920X1081:
-		Player->SetPixel(YuvSetting::YUV_SIZE_1920_1080);
-		//YuvSetting::GetInst().SetSize(YuvSetting::YUV_SIZE_1920_1080);
+		Player.SetPixel(YuvSetting::YUV_SIZE_1920_1080);
 		break;
 	default:
 		break;
@@ -120,5 +138,18 @@ void WindowManager::SetPixel(HMENU hSubMenu, HWND hWnd, int wmId)
 	return;
 
 }
+uint32_t WindowManager::GetWidthSize(void)
+{
+	return Player.GetWidthSize();
+}
+uint32_t WindowManager::GetHeightSize(void)
+{
+	return Player.GetHeightSize();
 
+}
+void WindowManager::Init(void)
+{
+	Player.Init();
+	return;
+}
 
