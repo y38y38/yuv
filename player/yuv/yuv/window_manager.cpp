@@ -13,6 +13,7 @@
 #define	MAX_YUV_FILENAME	(1024)
 
 
+
 WindowManager::WindowManager()
 {
 	return;
@@ -60,17 +61,14 @@ void WindowManager::DropFile(HWND hWnd, WPARAM wParam)
 	hDrop = (HDROP)wParam;
 	DWORD   dwDropped;
 	dwDropped = DragQueryFile(hDrop, (UINT)-1, NULL, 0);
-	//もし、一度に3ファイル以上入力された場合、最後の3ファイルを解析対象とする。
 	for (DWORD i = 0; i < dwDropped; i++) {
 		DragQueryFile(hDrop, 0, filename, MAX_PATH);
+		Player.InputFile(filename);
 	}
 	DragFinish(hDrop);
 
-
-	Player.InputFile(filename);
 	free(filename);
 
-	//InvalidateRect(hWnd, NULL, FALSE);
 	return;
 }
 void WindowManager::Paint(HWND hWnd)

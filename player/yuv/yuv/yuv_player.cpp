@@ -8,6 +8,8 @@
 
 YuvPlayer::YuvPlayer(void)
 {
+	FileNum = 0;
+	SingleViewIndex = 0;
 	return;
 }
 
@@ -19,6 +21,17 @@ YuvPlayer::~YuvPlayer(void)
 void YuvPlayer::SetPixel(YuvSetting::YuvSize size)
 {
 	YuvSetting::GetInst().SetSize(size);
+	uint32_t width = YuvSetting::GetInst().GetWidthSize();
+	uint32_t height = YuvSetting::GetInst().GetHeightSize();
+
+	for (int i = 0; i < MAX_FILE_NUM; i++) {
+		RgbBuf[i] = (uint8_t*)malloc(width * height * 3);
+		if (RgbBuf[i] == NULL) {
+			//エラー処理
+		}
+		Img[i].Update(0, width, height, RgbBuf[i]);
+	}
+	WindowManager::GetInst().Update();
 	return;
 }
 uint32_t YuvPlayer::GetWidthSize(void)
@@ -36,23 +49,28 @@ void YuvPlayer::InputFile(TCHAR *filename)
 	uint32_t width = YuvSetting::GetInst().GetWidthSize();
 	uint32_t height = YuvSetting::GetInst().GetHeightSize();
 
-	Img.Init(filename);
-	Img.Update(0, width, height, rgb_buf);
+	int index = FileNum % MAX_FILE_NUM;
+	Img[index].Init(filename);
+	Img[index].Update(0, width, height, RgbBuf[index]);
+	SingleViewIndex = index;
+
+	FileNum++;
+
 	WindowManager::GetInst().Update();
 	return;
 }
 
 uint8_t *YuvPlayer::GetRgbBuf(void)
 {
-	return rgb_buf;
+	return RgbBuf[SingleViewIndex];
 }
 void YuvPlayer::Init(void)
 {
-#define RGB_BUF_MAX (4096*2160*3*2) /* 4K(4096x2160) RGB (x3) 16bit (x2) */
-	rgb_buf = (uint8_t*)malloc(RGB_BUF_MAX);
-	if (rgb_buf) {
-		//エラー処理
-	}
+//#define RGB_BUF_MAX (4096*2160*3) /* 4K(4096x2160) RGB (x3) 8bit */
+//	RgbBuf[SingleViewIndex] = (uint8_t*)malloc(RGB_BUF_MAX);
+//	if (RgbBuf) {
+//		//エラー処理
+//	}
 
 	YuvSetting::GetInst().InitSetting();
 
@@ -61,21 +79,39 @@ void YuvPlayer::Init(void)
 
 void YuvPlayer::NextFrame(void)
 {
-	uint32_t width = YuvSetting::GetInst().GetWidthSize();
-	uint32_t height = YuvSetting::GetInst().GetHeightSize();
-	uint32_t frame_number = Img.GetFrameNumber() + 1;
-	Img.Update(frame_number, width, height, rgb_buf);
-	WindowManager::GetInst().Update();
+	int file_num;
+	if (FileNum > MAX_FILE_NUM) {
+		file_num = MAX_FILE_NUM;
+	} else {
+		file_num = FileNum;
+	}
+	for (int i = 0; i < file_num; i++) {
+		uint32_t width = YuvSetting::GetInst().GetWidthSize();
+		uint32_t height = YuvSetting::GetInst().GetHeightSize();
+		uint32_t frame_number = Img[i].GetFrameNumber() + 1;
+		Img[i].Update(frame_number, width, height, RgbBuf[SingleViewIndex]);
+		WindowManager::GetInst().Update();
+	}
+
 	return;
 }
 void YuvPlayer::PrevFrame(void)
 {
-	uint32_t frame_number = Img.GetFrameNumber();
-	if (frame_number != 0) {
-		uint32_t width = YuvSetting::GetInst().GetWidthSize();
-		uint32_t height = YuvSetting::GetInst().GetHeightSize();
-		Img.Update(frame_number - 1, width, height, rgb_buf);
-		WindowManager::GetInst().Update();
+	int file_num;
+	if (FileNum > MAX_FILE_NUM) {
+		file_num = MAX_FILE_NUM;
+	}
+	else {
+		file_num = FileNum;
+	}
+	for (int i = 0; i < file_num; i++) {
+		uint32_t frame_number = Img[i].GetFrameNumber();
+		if (frame_number != 0) {
+			uint32_t width = YuvSetting::GetInst().GetWidthSize();
+			uint32_t height = YuvSetting::GetInst().GetHeightSize();
+			Img[i].Update(frame_number - 1, width, height, RgbBuf[SingleViewIndex]);
+			WindowManager::GetInst().Update();
+		}
 	}
 	return;
 }
@@ -88,5 +124,13 @@ void YuvPlayer::SetView(YuvSetting::YuvView view)
 YuvSetting::YuvView YuvPlayer::GetView(void)
 {
 	return YuvSetting::GetInst().GetView();
-//	return YuvSetting::YUV_VIEW_SINGLE;
+}
+void YuvPlayer::NextImage(void)
+{
+	return;
+}
+
+void YuvPlayer::PrevImage(void)
+{
+	return;
 }

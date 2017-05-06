@@ -21,12 +21,17 @@ public:
 	void Init(void);
 	void NextFrame(void);
 	void PrevFrame(void);
+	void NextImage(void);
+	void PrevImage(void);
 	void SetView(YuvSetting::YuvView view);
 	YuvSetting::YuvView GetView(void);
 
 private:
-	ImageManager Img;
-	uint8_t *rgb_buf;
+	const static int MAX_FILE_NUM = 4;
+	uint32_t FileNum;
+	ImageManager Img[MAX_FILE_NUM];
+	uint8_t *RgbBuf[MAX_FILE_NUM];
+	int SingleViewIndex;
 
 };
 
