@@ -55,7 +55,16 @@ void YuvSetting::InitSetting(void)
 {
 	Format = YUV_FORMAT_YV12;
 	Size = YUV_SIZE_352_288;
+	View = YUV_VIEW_SINGLE;
 	return;
 }
-
+void YuvSetting::SetView(YuvView view)
+{
+	View = view;
+	return;
+}
+YuvSetting::YuvView YuvSetting::GetView(void)
+{
+	return View;
+}
 

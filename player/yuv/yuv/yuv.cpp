@@ -146,6 +146,11 @@ int wm_command(HWND hWnd, WPARAM wParam)
 	case ID_PIXEL_1920X1081:
 		WindowManager::GetInst().SetPixel(m_hSubMenu, hWnd, wmId);
 		break;
+	case ID_VIEW_SINGLE:
+	case ID_VIEW_SIDEBYSIDE:
+		WindowManager::GetInst().SetView(m_hSubMenu, hWnd, wmId);
+		break;
+
 	case ID_DUMMY_EXIT:
 		DestroyWindow(hWnd);
 		break;

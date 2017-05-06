@@ -140,6 +140,26 @@ void WindowManager::SetPixel(HMENU hSubMenu, HWND hWnd, int wmId)
 	return;
 
 }
+void WindowManager::SetView(HMENU hSubMenu, HWND hWnd, int wmId)
+{
+	CheckMenuItem(hSubMenu, ID_VIEW_SINGLE, MF_UNCHECKED);
+	CheckMenuItem(hSubMenu, ID_VIEW_SIDEBYSIDE, MF_UNCHECKED);
+
+	CheckMenuItem(hSubMenu, wmId, MF_CHECKED);
+	switch (wmId) {
+	case ID_VIEW_SINGLE:
+		Player.SetView(YuvSetting::YUV_VIEW_SINGLE);
+		break;
+	case ID_VIEW_SIDEBYSIDE:
+		Player.SetView(YuvSetting::YUV_VIEW_SIDE_BY_SIDE);
+		break;
+	default:
+		break;
+	}
+
+	return;
+
+}
 uint32_t WindowManager::GetWidthSize(void)
 {
 	return Player.GetWidthSize();

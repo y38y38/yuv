@@ -21,6 +21,8 @@ public:
 	void Init(void);
 	void NextFrame(void);
 	void PrevFrame(void);
+	void SetView(YuvSetting::YuvView view);
+	YuvSetting::YuvView GetView(void);
 
 private:
 	ImageManager Img;

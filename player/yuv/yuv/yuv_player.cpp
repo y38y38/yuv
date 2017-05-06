@@ -79,4 +79,14 @@ void YuvPlayer::PrevFrame(void)
 	}
 	return;
 }
+void YuvPlayer::SetView(YuvSetting::YuvView view)
+{
+	YuvSetting::GetInst().SetView(view);
+	return;
+}
 
+YuvSetting::YuvView YuvPlayer::GetView(void)
+{
+	return YuvSetting::GetInst().GetView();
+//	return YuvSetting::YUV_VIEW_SINGLE;
+}

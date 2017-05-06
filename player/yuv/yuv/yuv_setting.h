@@ -25,12 +25,23 @@ public:
 	YuvSize GetSize(void);
 	uint32_t GetWidthSize(void);
 	uint32_t GetHeightSize(void);
+
+	typedef enum {
+		YUV_VIEW_SINGLE,
+		YUV_VIEW_SIDE_BY_SIDE,
+	} YuvView;
+	void SetView(YuvView view);
+	YuvView GetView(void);
+
+
+
 private:
 	YuvSetting();
 	~YuvSetting();
 
 	YuvFormat Format;
 	YuvSize Size;
+	YuvView View;
 };
 
 #endif //_YUV_SETTING_H

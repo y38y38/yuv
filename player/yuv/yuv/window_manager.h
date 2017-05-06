@@ -19,6 +19,7 @@ public:
 	void DropFile(HWND hWnd, WPARAM wParam);
 	void Paint(HWND hWnd);
 	void SetPixel(HMENU hSubMenu, HWND hWnd, int wmId);
+	void SetView(HMENU hSubMenu, HWND hWnd, int wmId);
 	int KeyDown(WPARAM wParam);
 	uint32_t GetWidthSize(void);
 	uint32_t GetHeightSize(void);
