@@ -10,6 +10,10 @@ YuvPlayer::YuvPlayer(void)
 {
 	FileNum = 0;
 	SingleViewIndex = 0;
+	for (int i = 0; i < MAX_FILE_NUM; i++) {
+		RgbBuf[i] = NULL;
+	}
+
 	return;
 }
 
@@ -18,17 +22,31 @@ YuvPlayer::~YuvPlayer(void)
 	return;
 }
 
+void YuvPlayer::UpdateRgbBuf(void)
+{
+	uint32_t width = YuvSetting::GetInst().GetWidthSize();
+	uint32_t height = YuvSetting::GetInst().GetHeightSize();
+
+	for (int i = 0; i < MAX_FILE_NUM; i++) {
+		if (RgbBuf[i] != NULL) {
+			free(RgbBuf[i]);
+		}
+		RgbBuf[i] = (uint8_t*)malloc(width * height * 3);
+		if (RgbBuf[i] == NULL) {
+			//エラー処理
+		}
+	}
+	return;
+}
 void YuvPlayer::SetPixel(YuvSetting::YuvSize size)
 {
 	YuvSetting::GetInst().SetSize(size);
 	uint32_t width = YuvSetting::GetInst().GetWidthSize();
 	uint32_t height = YuvSetting::GetInst().GetHeightSize();
 
+	UpdateRgbBuf();
+
 	for (int i = 0; i < MAX_FILE_NUM; i++) {
-		RgbBuf[i] = (uint8_t*)malloc(width * height * 3);
-		if (RgbBuf[i] == NULL) {
-			//エラー処理
-		}
 		Img[i].Update(0, width, height, RgbBuf[i]);
 	}
 	WindowManager::GetInst().Update();
@@ -51,6 +69,9 @@ void YuvPlayer::InputFile(TCHAR *filename)
 
 	int index = FileNum % MAX_FILE_NUM;
 	Img[index].Init(filename);
+	wchar_t msg[32];
+	swprintf_s(msg, L"rgb=%x \n", RgbBuf[index]);
+	OutputDebugString(msg);
 	Img[index].Update(0, width, height, RgbBuf[index]);
 	SingleViewIndex = index;
 
@@ -66,14 +87,8 @@ uint8_t *YuvPlayer::GetRgbBuf(void)
 }
 void YuvPlayer::Init(void)
 {
-//#define RGB_BUF_MAX (4096*2160*3) /* 4K(4096x2160) RGB (x3) 8bit */
-//	RgbBuf[SingleViewIndex] = (uint8_t*)malloc(RGB_BUF_MAX);
-//	if (RgbBuf) {
-//		//エラー処理
-//	}
-
 	YuvSetting::GetInst().InitSetting();
-
+	UpdateRgbBuf();
 	return;
 }
 

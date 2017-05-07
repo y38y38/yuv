@@ -33,6 +33,8 @@ private:
 	uint8_t *RgbBuf[MAX_FILE_NUM];
 	int SingleViewIndex;
 
+	void UpdateRgbBuf(void);
+
 };
 
 

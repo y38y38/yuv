@@ -1,3 +1,10 @@
 ﻿  yuv_player.cpp
+c:\cygwin\home\y38y3\yuv\yuv\player\yuv\yuv\yuv_player.cpp(73): warning C4477: 'swprintf_s' : 書式文字列 '%x' には、型 'unsigned int' の引数が必要ですが、可変個引数 1 は型 'uint8_t *' です
+  コードを生成中...
+  コンパイル中...
+  window_manager.cpp
+  コードを生成中...
+  スキップ中... (関連する変更は検出されませんでした)
+  yuv.cpp
   yuv.vcxproj -> C:\cygwin\home\y38y3\yuv\yuv\player\yuv\Debug\yuv.exe
   yuv.vcxproj -> C:\cygwin\home\y38y3\yuv\yuv\player\yuv\Debug\yuv.pdb (Partial PDB)
