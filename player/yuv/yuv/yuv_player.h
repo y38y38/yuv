@@ -34,6 +34,7 @@ private:
 	int SingleViewIndex;
 
 	void UpdateRgbBuf(void);
+	void UpdateImage(int image_index, int  frame_number);
 
 };
 

@@ -38,18 +38,27 @@ void YuvPlayer::UpdateRgbBuf(void)
 	}
 	return;
 }
+void YuvPlayer::UpdateImage(int image_index, int frame_number)
+{
+	uint32_t width = YuvSetting::GetInst().GetWidthSize();
+	uint32_t height = YuvSetting::GetInst().GetHeightSize();
+	Img[image_index].Update(frame_number, width, height, RgbBuf[image_index]);
+
+	WindowManager::GetInst().Update();
+	return;
+}
 void YuvPlayer::SetPixel(YuvSetting::YuvSize size)
 {
 	YuvSetting::GetInst().SetSize(size);
-	uint32_t width = YuvSetting::GetInst().GetWidthSize();
-	uint32_t height = YuvSetting::GetInst().GetHeightSize();
 
+	//画像サイズが変更されたらバッファサイズを変更する必要がある。
 	UpdateRgbBuf();
 
+	//画像サイズが変更されたら画像の更新も行う。
 	for (int i = 0; i < MAX_FILE_NUM; i++) {
-		Img[i].Update(0, width, height, RgbBuf[i]);
+		uint32_t frame_number = Img[i].GetFrameNumber();
+		UpdateImage(i, frame_number);
 	}
-	WindowManager::GetInst().Update();
 	return;
 }
 uint32_t YuvPlayer::GetWidthSize(void)
@@ -64,20 +73,19 @@ uint32_t YuvPlayer::GetHeightSize(void)
 
 void YuvPlayer::InputFile(TCHAR *filename)
 {
-	uint32_t width = YuvSetting::GetInst().GetWidthSize();
-	uint32_t height = YuvSetting::GetInst().GetHeightSize();
-
 	int index = FileNum % MAX_FILE_NUM;
 	Img[index].Init(filename);
+	
 	wchar_t msg[32];
 	swprintf_s(msg, L"rgb=%x \n", RgbBuf[index]);
 	OutputDebugString(msg);
-	Img[index].Update(0, width, height, RgbBuf[index]);
+
+	UpdateImage(index, 0);
+
+
 	SingleViewIndex = index;
 
 	FileNum++;
-
-	WindowManager::GetInst().Update();
 	return;
 }
 
@@ -101,11 +109,8 @@ void YuvPlayer::NextFrame(void)
 		file_num = FileNum;
 	}
 	for (int i = 0; i < file_num; i++) {
-		uint32_t width = YuvSetting::GetInst().GetWidthSize();
-		uint32_t height = YuvSetting::GetInst().GetHeightSize();
 		uint32_t frame_number = Img[i].GetFrameNumber() + 1;
-		Img[i].Update(frame_number, width, height, RgbBuf[SingleViewIndex]);
-		WindowManager::GetInst().Update();
+		UpdateImage(i, frame_number);
 	}
 
 	return;
@@ -122,10 +127,7 @@ void YuvPlayer::PrevFrame(void)
 	for (int i = 0; i < file_num; i++) {
 		uint32_t frame_number = Img[i].GetFrameNumber();
 		if (frame_number != 0) {
-			uint32_t width = YuvSetting::GetInst().GetWidthSize();
-			uint32_t height = YuvSetting::GetInst().GetHeightSize();
-			Img[i].Update(frame_number - 1, width, height, RgbBuf[SingleViewIndex]);
-			WindowManager::GetInst().Update();
+			UpdateImage(i, frame_number - 1 );
 		}
 	}
 	return;
