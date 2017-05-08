@@ -31,6 +31,7 @@ private:
 	uint32_t FileNum;
 	ImageManager Img[MAX_FILE_NUM];
 	uint8_t *RgbBuf[MAX_FILE_NUM];
+	uint8_t *MultiRgbBuf;
 	int SingleViewIndex;
 
 	void UpdateRgbBuf(void);

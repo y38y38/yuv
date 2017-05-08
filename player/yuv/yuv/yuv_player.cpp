@@ -18,6 +18,7 @@ YuvPlayer::YuvPlayer(void)
 	for (int i = 0; i < MAX_FILE_NUM; i++) {
 		RgbBuf[i] = NULL;
 	}
+	MultiRgbBuf = NULL;
 
 	return;
 }
@@ -40,6 +41,13 @@ void YuvPlayer::UpdateRgbBuf(void)
 		if (RgbBuf[i] == NULL) {
 			//エラー処理
 		}
+	}
+	if (MultiRgbBuf != NULL) {
+		free(MultiRgbBuf);
+	}
+	MultiRgbBuf = (uint8_t*)malloc(width * height * 3 * 4);
+	if (MultiRgbBuf == NULL) {
+		//エラー処理
 	}
 	return;
 }
@@ -101,7 +109,6 @@ void YuvPlayer::InputFile(TCHAR *filename)
 
 
 	SingleViewIndex = index;
-	Win32Printf("SingleViewIndex %d\n", SingleViewIndex);
 
 	FileNum++;
 	return;
@@ -109,8 +116,6 @@ void YuvPlayer::InputFile(TCHAR *filename)
 
 uint8_t *YuvPlayer::GetRgbBuf(void)
 {
-	Win32Printf("GetRgbBuf %d\n", SingleViewIndex);
-
 	if (YuvSetting::GetInst().GetView() == YuvSetting::YUV_VIEW_SINGLE) {
 		return RgbBuf[SingleViewIndex];
 	}
@@ -120,7 +125,8 @@ uint8_t *YuvPlayer::GetRgbBuf(void)
 
 		int file_num = FileNum % MAX_FILE_NUM;
 
-		return  RgbUtility::RgbCombine(width, height, file_num, RgbBuf);
+		RgbUtility::RgbCombine(width, height, file_num, RgbBuf, MultiRgbBuf);
+		return MultiRgbBuf;
 	}
 }
 void YuvPlayer::Init(void)
@@ -184,7 +190,6 @@ void YuvPlayer::NextImage(void)
 	} else {
 		SingleViewIndex = SingleViewIndex % MAX_FILE_NUM;
 	}
-	Win32Printf("SingleViewIndex %d\n", SingleViewIndex);
 
 	WindowManager::GetInst().Update();
 	return;
@@ -198,7 +203,6 @@ void YuvPlayer::PrevImage(void)
 	} else {
 		SingleViewIndex = file_num - 1;
 	}
-	Win32Printf("SingleViewIndex %d\n", SingleViewIndex);
 	WindowManager::GetInst().Update();
 	return;
 }

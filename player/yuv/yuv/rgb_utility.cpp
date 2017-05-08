@@ -14,12 +14,8 @@ RgbUtility::~RgbUtility(void)
 {
 	return;
 }
-uint8_t *RgbUtility::RgbCombine(uint32_t width, uint32_t height, int image_num, uint8_t *img[])
+void RgbUtility::RgbCombine(uint32_t width, uint32_t height, int image_num, uint8_t *img[], uint8_t *output_rgb)
 {
-	uint8_t *output_rgb = (uint8_t*)malloc(width * height * 3 * 4);
-	if (output_rgb == NULL) {
-		//–{“–‚ÍƒGƒ‰[ˆ—
-	}
 
 	if (image_num == 1) {
 		memcpy(output_rgb, img[0], width * height * 3);
@@ -65,7 +61,7 @@ uint8_t *RgbUtility::RgbCombine(uint32_t width, uint32_t height, int image_num, 
 		}
 
 	}
-	return output_rgb;
+	return;
 }
 
 

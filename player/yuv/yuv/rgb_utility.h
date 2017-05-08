@@ -10,7 +10,7 @@ public:
 	RgbUtility();
 	~RgbUtility();
 
-	static uint8_t *RgbCombine(uint32_t width, uint32_t height, int image_num, uint8_t *img[]);
+	static void RgbCombine(uint32_t width, uint32_t height, int image_num, uint8_t *img[], uint8_t *output_rgb);
 private:
 };
 
