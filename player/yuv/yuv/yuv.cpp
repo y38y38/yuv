@@ -11,6 +11,7 @@
 
 #include "yuv.h"
 
+#include "yuv_debug.h"
 #include "window_manager.h"
 
 #include "resource.h"
@@ -63,6 +64,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	m_hSubMenu = GetSubMenu(m_hMenu, 0);
 
     MSG msg;
+	Win32Printf("debug %d", (int)m_hMenu);
 
     // メイン メッセージ ループ:
     while (GetMessage(&msg, nullptr, 0, 0))

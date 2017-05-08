@@ -175,11 +175,13 @@ int WindowManager::KeyDown(WPARAM wParam)
 		Player.PrevFrame();
 		break;
 	case 0x26://ª
+		Player.NextImage();
 		break;
 	case 0x27://¨
 		Player.NextFrame();
 		break;
 	case 0x28://«
+		Player.PrevImage();
 		break;
 	default:
 		return -1;

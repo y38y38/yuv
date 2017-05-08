@@ -99,15 +99,23 @@ void YuvPlayer::Init(void)
 	UpdateRgbBuf();
 	return;
 }
-
-void YuvPlayer::NextFrame(void)
+int YuvPlayer::GetFileNum(void)
 {
 	int file_num;
 	if (FileNum > MAX_FILE_NUM) {
 		file_num = MAX_FILE_NUM;
-	} else {
+	}
+	else {
 		file_num = FileNum;
 	}
+	return file_num;
+
+}
+
+
+void YuvPlayer::NextFrame(void)
+{
+	int file_num = GetFileNum();
 	for (int i = 0; i < file_num; i++) {
 		uint32_t frame_number = Img[i].GetFrameNumber() + 1;
 		UpdateImage(i, frame_number);
@@ -117,13 +125,7 @@ void YuvPlayer::NextFrame(void)
 }
 void YuvPlayer::PrevFrame(void)
 {
-	int file_num;
-	if (FileNum > MAX_FILE_NUM) {
-		file_num = MAX_FILE_NUM;
-	}
-	else {
-		file_num = FileNum;
-	}
+	int file_num = GetFileNum();
 	for (int i = 0; i < file_num; i++) {
 		uint32_t frame_number = Img[i].GetFrameNumber();
 		if (frame_number != 0) {
@@ -144,10 +146,26 @@ YuvSetting::YuvView YuvPlayer::GetView(void)
 }
 void YuvPlayer::NextImage(void)
 {
+	int file_num = GetFileNum();
+
+	SingleViewIndex++;
+	if (SingleViewIndex > file_num) {
+		SingleViewIndex = 0;
+	} else {
+		SingleViewIndex = SingleViewIndex % MAX_FILE_NUM;
+	}
+	WindowManager::GetInst().Update();
 	return;
 }
 
 void YuvPlayer::PrevImage(void)
 {
+	int file_num = GetFileNum();
+	if (SingleViewIndex != 0) {
+		SingleViewIndex--;
+	} else {
+		SingleViewIndex = file_num - 1;
+	}
+	WindowManager::GetInst().Update();
 	return;
 }

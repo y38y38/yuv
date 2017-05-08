@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClInclude Include="filebuffer.h" />
     <ClInclude Include="image_manager.h" />
+    <ClInclude Include="yuv_debug.h" />
     <ClInclude Include="yuv_player.h" />
     <ClInclude Include="rawvideo420.h" />
     <ClInclude Include="Resource.h" />
