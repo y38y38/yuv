@@ -151,23 +151,26 @@ int YuvPlayer::GetFileNum(void)
 
 void YuvPlayer::NextFrame(void)
 {
+	uint32_t frame_number;
 	int file_num = GetFileNum();
 	for (int i = 0; i < file_num; i++) {
-		uint32_t frame_number = Img[i].GetFrameNumber() + 1;
+		frame_number = Img[i].GetFrameNumber() + 1;
 		UpdateImage(i, frame_number);
 	}
-
+	Win32Printf("%d", frame_number);
 	return;
 }
 void YuvPlayer::PrevFrame(void)
 {
+	uint32_t frame_number;
 	int file_num = GetFileNum();
 	for (int i = 0; i < file_num; i++) {
-		uint32_t frame_number = Img[i].GetFrameNumber();
+		frame_number = Img[i].GetFrameNumber();
 		if (frame_number != 0) {
 			UpdateImage(i, frame_number - 1 );
 		}
 	}
+	Win32Printf("%d", frame_number);
 	return;
 }
 void YuvPlayer::SetView(YuvSetting::YuvView view)
