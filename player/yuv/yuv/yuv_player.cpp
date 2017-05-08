@@ -6,6 +6,8 @@
 
 #include "window_manager.h"
 
+#include "rgb_utility.h"
+
 #include "yuv_player.h"
 
 
@@ -66,12 +68,28 @@ void YuvPlayer::SetPixel(YuvSetting::YuvSize size)
 }
 uint32_t YuvPlayer::GetWidthSize(void)
 {
-	return 	YuvSetting::GetInst().GetWidthSize();
+	if (YuvSetting::GetInst().GetView() == YuvSetting::YUV_VIEW_SINGLE) {
+		return 	YuvSetting::GetInst().GetWidthSize();
+	}
+	else {
+		return 	(YuvSetting::GetInst().GetWidthSize() * 2);
+	}
 
 }
 uint32_t YuvPlayer::GetHeightSize(void)
 {
-	return	YuvSetting::GetInst().GetHeightSize();
+	if (YuvSetting::GetInst().GetView() == YuvSetting::YUV_VIEW_SINGLE) {
+		return	YuvSetting::GetInst().GetHeightSize();
+	}
+	else {
+		if (FileNum > 2) {
+			return	(YuvSetting::GetInst().GetHeightSize() * 2);
+		}
+		else {
+			return	YuvSetting::GetInst().GetHeightSize();
+		}
+
+	}
 }
 
 void YuvPlayer::InputFile(TCHAR *filename)
@@ -93,7 +111,17 @@ uint8_t *YuvPlayer::GetRgbBuf(void)
 {
 	Win32Printf("GetRgbBuf %d\n", SingleViewIndex);
 
-	return RgbBuf[SingleViewIndex];
+	if (YuvSetting::GetInst().GetView() == YuvSetting::YUV_VIEW_SINGLE) {
+		return RgbBuf[SingleViewIndex];
+	}
+	else {
+		int width = (int)YuvSetting::GetInst().GetWidthSize();
+		int height = (int)YuvSetting::GetInst().GetHeightSize();
+
+		int file_num = FileNum % MAX_FILE_NUM;
+
+		return  RgbUtility::RgbCombine(width, height, file_num, RgbBuf);
+	}
 }
 void YuvPlayer::Init(void)
 {
