@@ -31,8 +31,6 @@ void ImageManager::Init(TCHAR *filename)
 }
 void ImageManager::Update(int frame_number, uint32_t width, uint32_t height, uint8_t *rgb_buf)
 {
-	wchar_t msg[32];
-
 	int yuv_offset = 0;
 	int framesize = getFrameBufferSize(width, height);
 	uint8_t *yuv_buffer = (uint8_t *)malloc(framesize);
@@ -44,8 +42,6 @@ void ImageManager::Update(int frame_number, uint32_t width, uint32_t height, uin
 	yuv_offset = framesize * frame_number;
 	Buffer.read(yuv_buffer, yuv_offset, framesize, &ret);
 
-	swprintf_s(msg, L"offset=%d ret=%d\n", yuv_offset, ret);
-	OutputDebugString(msg);
 	if (framesize != ret) {
 		//–{“–‚ÍƒGƒ‰[ˆ—
 		free(yuv_buffer);

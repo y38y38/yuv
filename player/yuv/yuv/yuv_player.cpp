@@ -2,9 +2,12 @@
 
 #include "stdlib.h"
 
-#include "yuv_player.h"
+#include "yuv_debug.h"
 
 #include "window_manager.h"
+
+#include "yuv_player.h"
+
 
 YuvPlayer::YuvPlayer(void)
 {
@@ -76,14 +79,11 @@ void YuvPlayer::InputFile(TCHAR *filename)
 	int index = FileNum % MAX_FILE_NUM;
 	Img[index].Init(filename);
 	
-	wchar_t msg[32];
-	swprintf_s(msg, L"rgb=%x \n", RgbBuf[index]);
-	OutputDebugString(msg);
-
 	UpdateImage(index, 0);
 
 
 	SingleViewIndex = index;
+	Win32Printf("SingleViewIndex %d\n", SingleViewIndex);
 
 	FileNum++;
 	return;
@@ -91,6 +91,8 @@ void YuvPlayer::InputFile(TCHAR *filename)
 
 uint8_t *YuvPlayer::GetRgbBuf(void)
 {
+	Win32Printf("GetRgbBuf %d\n", SingleViewIndex);
+
 	return RgbBuf[SingleViewIndex];
 }
 void YuvPlayer::Init(void)
@@ -149,11 +151,13 @@ void YuvPlayer::NextImage(void)
 	int file_num = GetFileNum();
 
 	SingleViewIndex++;
-	if (SingleViewIndex > file_num) {
+	if (SingleViewIndex >= file_num) {
 		SingleViewIndex = 0;
 	} else {
 		SingleViewIndex = SingleViewIndex % MAX_FILE_NUM;
 	}
+	Win32Printf("SingleViewIndex %d\n", SingleViewIndex);
+
 	WindowManager::GetInst().Update();
 	return;
 }
@@ -166,6 +170,7 @@ void YuvPlayer::PrevImage(void)
 	} else {
 		SingleViewIndex = file_num - 1;
 	}
+	Win32Printf("SingleViewIndex %d\n", SingleViewIndex);
 	WindowManager::GetInst().Update();
 	return;
 }
