@@ -152,6 +152,11 @@ int wm_command(HWND hWnd, WPARAM wParam)
 	case ID_VIEW_SIDEBYSIDE:
 		WindowManager::GetInst().SetView(m_hSubMenu, hWnd, wmId);
 		break;
+	case ID_DIFF_DISABLE:
+	case ID_DIFF_ENABLE:
+	case ID_DIFF_ONMOUSE:
+		WindowManager::GetInst().SetView(m_hSubMenu, hWnd, wmId);
+		break;
 
 	case ID_DUMMY_EXIT:
 		DestroyWindow(hWnd);

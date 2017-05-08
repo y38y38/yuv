@@ -168,6 +168,30 @@ void WindowManager::SetView(HMENU hSubMenu, HWND hWnd, int wmId)
 	return;
 
 }
+void WindowManager::SetDiff(HMENU hSubMenu, HWND hWnd, int wmId)
+{
+	CheckMenuItem(hSubMenu, ID_DIFF_DISABLE, MF_UNCHECKED);
+	CheckMenuItem(hSubMenu, ID_DIFF_ENABLE, MF_UNCHECKED);
+	CheckMenuItem(hSubMenu, ID_DIFF_ONMOUSE, MF_UNCHECKED);
+
+	CheckMenuItem(hSubMenu, wmId, MF_CHECKED);
+	switch (wmId) {
+	case ID_DIFF_DISABLE:
+		Player.SetPixel(YuvSetting::YUV_SIZE_352_288);
+		break;
+	case ID_DIFF_ENABLE:
+		Player.SetPixel(YuvSetting::YUV_SIZE_1920_1080);
+		break;
+	case ID_DIFF_ONMOUSE:
+		Player.SetPixel(YuvSetting::YUV_SIZE_1920_1080);
+		break;
+	default:
+		break;
+	}
+	UpdateWindowSize(hWnd);
+	return;
+
+}
 uint32_t WindowManager::GetWidthSize(void)
 {
 	return Player.GetWidthSize();
