@@ -64,6 +64,13 @@ void YuvPlayer::SetPixel(YuvSetting::YuvSize size)
 {
 	YuvSetting::GetInst().SetSize(size);
 
+	uint32_t width = YuvSetting::GetInst().GetWidthSize();
+	uint32_t height = YuvSetting::GetInst().GetHeightSize();
+	for (int i = 0; i < MAX_FILE_NUM; i++) {
+		Img[i].SetSize(width, height);
+
+	}
+
 	//画像サイズが変更されたらバッファサイズを変更する必要がある。
 	UpdateRgbBuf();
 
@@ -104,7 +111,9 @@ void YuvPlayer::InputFile(TCHAR *filename)
 {
 	int index = FileNum % MAX_FILE_NUM;
 	Img[index].Init(filename);
-	
+	int width = (int)YuvSetting::GetInst().GetWidthSize();
+	int height = (int)YuvSetting::GetInst().GetHeightSize();
+	Img[index].SetSize(width, height);
 	UpdateImage(index, 0);
 
 

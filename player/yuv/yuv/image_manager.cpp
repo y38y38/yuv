@@ -18,6 +18,7 @@
 ImageManager::ImageManager()
 {
 	FrameNumber = 0;
+	YuvBuffer = NULL;
 	return;
 }
 ImageManager::~ImageManager()
@@ -32,24 +33,17 @@ void ImageManager::Init(TCHAR *filename)
 void ImageManager::Update(int frame_number, uint32_t width, uint32_t height, uint8_t *rgb_buf)
 {
 	int yuv_offset = 0;
-	int framesize = getFrameBufferSize(width, height);
-	uint8_t *yuv_buffer = (uint8_t *)malloc(framesize);
-	if (yuv_buffer == NULL) {
-		return;
-	}
-
 	unsigned long ret;
+	int framesize = getFrameBufferSize(Width, Height);
 	yuv_offset = framesize * frame_number;
-	Buffer.read(yuv_buffer, yuv_offset, framesize, &ret);
+	Buffer.read(YuvBuffer, yuv_offset, framesize, &ret);
 
 	if (framesize != ret) {
 		//ñ{ìñÇÕÉGÉâÅ[èàóù
-		free(yuv_buffer);
 		return;
 	}
-	GetRgb(yuv_buffer, width, height, rgb_buf);
+	GetRgb(YuvBuffer, width, height, rgb_buf);
 
-	free(yuv_buffer);
 	FrameNumber = frame_number;
 	return;
 }
@@ -76,5 +70,23 @@ int ImageManager::getFrameBufferSize(uint32_t width, uint32_t height)
 uint32_t ImageManager::GetFrameNumber(void)
 {
 	return FrameNumber;
+}
+
+void ImageManager::SetSize(uint32_t width, uint32_t height)
+{
+	if (YuvBuffer != NULL) {
+		free(YuvBuffer);
+	}
+
+	Width = width;
+	Height = height;
+	int framesize = getFrameBufferSize(width, height);
+	YuvBuffer = (uint8_t *)malloc(framesize);
+	if (YuvBuffer == NULL) {
+	}
+	
+
+
+	return;
 }
 
