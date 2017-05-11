@@ -68,3 +68,12 @@ YuvSetting::YuvView YuvSetting::GetView(void)
 	return View;
 }
 
+void YuvSetting::SetDiffMode(YuvDiffMode diffmode)
+{
+	DiffMode = diffmode;
+	return;
+}
+YuvSetting::YuvDiffMode YuvSetting::GetDiffMode(void)
+{
+	return DiffMode;
+}

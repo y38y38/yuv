@@ -25,18 +25,25 @@ public:
 	void PrevImage(void);
 	void SetView(YuvSetting::YuvView view);
 	YuvSetting::YuvView GetView(void);
+	void SetDiffMode(YuvSetting::YuvDiffMode diff);
+	YuvSetting::YuvDiffMode GetDiffMode(void);
+
+	void SetMouse(void);
+	void ReleaseMouse(void);
 
 private:
-	const static int MAX_FILE_NUM = 4;
+	const static int MAX_FILE_NUM = 2;
 	uint32_t FileNum;
 	ImageManager Img[MAX_FILE_NUM];
 	uint8_t *RgbBuf[MAX_FILE_NUM];
 	uint8_t *MultiRgbBuf;
 	int SingleViewIndex;
+	bool OnMouse;
 
 	void UpdateRgbBuf(void);
 	void UpdateImage(int image_index, int  frame_number);
 	int GetFileNum(void);
+	bool isImageDiff(void);
 
 };
 

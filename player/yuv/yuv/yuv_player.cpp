@@ -209,3 +209,39 @@ void YuvPlayer::PrevImage(void)
 	WindowManager::GetInst().Update();
 	return;
 }
+void YuvPlayer::SetDiffMode(YuvSetting::YuvDiffMode diff)
+{
+	YuvSetting::GetInst().SetDiffMode(diff);
+
+}
+YuvSetting::YuvDiffMode YuvPlayer::GetDiffMode(void)
+{
+	return YuvSetting::GetInst().GetDiffMode();
+}
+bool YuvPlayer::isImageDiff(void)
+{
+	YuvSetting::YuvDiffMode mode = YuvSetting::GetInst().GetDiffMode();
+	if (mode == YuvSetting::YUV_DIFF_DISABLE) {
+		return true;
+	}
+	else if (mode == YuvSetting::YUV_DIFF_ENABLE) {
+		return true;
+	}
+	else {
+		if (OnMouse == true) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+}
+void YuvPlayer::SetMouse(void) {
+	OnMouse = true;
+	return;
+}
+
+void YuvPlayer::ReleaseMouse(void) {
+	OnMouse = false;
+	return;
+}

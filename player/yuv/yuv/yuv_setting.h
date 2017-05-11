@@ -33,6 +33,13 @@ public:
 	void SetView(YuvView view);
 	YuvView GetView(void);
 
+	typedef enum {
+		YUV_DIFF_DISABLE,
+		YUV_DIFF_ENABLE,
+		YUV_DIFF_ONMOUSE,
+	} YuvDiffMode;
+	void SetDiffMode(YuvDiffMode diff);
+	YuvDiffMode GetDiffMode(void);
 
 
 private:
@@ -42,6 +49,7 @@ private:
 	YuvFormat Format;
 	YuvSize Size;
 	YuvView View;
+	YuvDiffMode DiffMode;
 };
 
 #endif //_YUV_SETTING_H

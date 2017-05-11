@@ -157,7 +157,6 @@ int wm_command(HWND hWnd, WPARAM wParam)
 	case ID_DIFF_ONMOUSE:
 		WindowManager::GetInst().SetView(m_hSubMenu, hWnd, wmId);
 		break;
-
 	case ID_DUMMY_EXIT:
 		DestroyWindow(hWnd);
 		break;
@@ -218,6 +217,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			}
 
 		}
+		break;
+	case WM_MOUSEMOVE:
+		WindowManager::GetInst().MouseMove();
+		break;
+	case WM_MOUSELEAVE:
+		WindowManager::GetInst().MouseLeave();
 		break;
 	default:
         return DefWindowProc(hWnd, message, wParam, lParam);

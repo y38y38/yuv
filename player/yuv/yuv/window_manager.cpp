@@ -168,27 +168,27 @@ void WindowManager::SetView(HMENU hSubMenu, HWND hWnd, int wmId)
 	return;
 
 }
-void WindowManager::SetDiff(HMENU hSubMenu, HWND hWnd, int wmId)
+void WindowManager::SetDiffMode(HMENU hSubMenu, HWND hWnd, int wmId)
 {
 	CheckMenuItem(hSubMenu, ID_DIFF_DISABLE, MF_UNCHECKED);
 	CheckMenuItem(hSubMenu, ID_DIFF_ENABLE, MF_UNCHECKED);
 	CheckMenuItem(hSubMenu, ID_DIFF_ONMOUSE, MF_UNCHECKED);
 
 	CheckMenuItem(hSubMenu, wmId, MF_CHECKED);
+
 	switch (wmId) {
 	case ID_DIFF_DISABLE:
-		Player.SetPixel(YuvSetting::YUV_SIZE_352_288);
+		Player.SetDiffMode(YuvSetting::YUV_DIFF_DISABLE);
 		break;
 	case ID_DIFF_ENABLE:
-		Player.SetPixel(YuvSetting::YUV_SIZE_1920_1080);
+		Player.SetDiffMode(YuvSetting::YUV_DIFF_ENABLE);
 		break;
 	case ID_DIFF_ONMOUSE:
-		Player.SetPixel(YuvSetting::YUV_SIZE_1920_1080);
+		Player.SetDiffMode(YuvSetting::YUV_DIFF_ONMOUSE);
 		break;
 	default:
 		break;
 	}
-	UpdateWindowSize(hWnd);
 	return;
 
 }
@@ -229,3 +229,22 @@ void WindowManager::Update(void)
 	return;
 }
 
+void WindowManager::MouseMove(void)
+{
+	TRACKMOUSEEVENT tme;
+	tme.cbSize = sizeof(tme);
+	tme.dwFlags = TME_LEAVE;
+	tme.hwndTrack = MyWindow;
+	tme.dwHoverTime = HOVER_DEFAULT;
+
+	TrackMouseEvent(&tme);
+
+	Player.SetMouse();
+	return;
+}
+
+void WindowManager::MouseLeave(void)
+{
+	Player.ReleaseMouse();
+	return;
+}

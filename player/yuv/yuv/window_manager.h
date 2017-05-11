@@ -20,8 +20,11 @@ public:
 	void Paint(HWND hWnd);
 	void SetPixel(HMENU hSubMenu, HWND hWnd, int wmId);
 	void SetView(HMENU hSubMenu, HWND hWnd, int wmId);
-	void SetDiff(HMENU hSubMenu, HWND hWnd, int wmId);
+	void SetDiffMode(HMENU hSubMenu, HWND hWnd, int wmId);
 	int KeyDown(WPARAM wParam);
+	void MouseMove(void);
+	void MouseLeave(void);
+
 	uint32_t GetWidthSize(void);
 	uint32_t GetHeightSize(void);
 	void Update(void);
