@@ -53,7 +53,7 @@ uint32_t YuvSetting::GetHeightSize(void)
 }
 void YuvSetting::InitSetting(void)
 {
-	Format = YUV_FORMAT_YV12;
+	Format = YUV_FORMAT_YUV4;
 	Size = YUV_SIZE_352_288;
 	View = YUV_VIEW_SINGLE;
 	return;

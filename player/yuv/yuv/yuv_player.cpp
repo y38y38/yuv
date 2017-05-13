@@ -28,7 +28,7 @@ YuvPlayer::~YuvPlayer(void)
 	return;
 }
 
-void YuvPlayer::UpdateRgbBuf(void)
+void YuvPlayer::SetRgbBuf(void)
 {
 	uint32_t width = YuvSetting::GetInst().GetWidthSize();
 	uint32_t height = YuvSetting::GetInst().GetHeightSize();
@@ -64,9 +64,8 @@ void YuvPlayer::UpdateImage(int image_index, int frame_number)
 void YuvPlayer::SetPixel(YuvSetting::YuvSize size)
 {
 	YuvSetting::GetInst().SetSize(size);
-
 	//画像サイズが変更されたらバッファサイズを変更する必要がある。
-	UpdateRgbBuf();
+	SetRgbBuf();
 
 	uint32_t width = YuvSetting::GetInst().GetWidthSize();
 	uint32_t height = YuvSetting::GetInst().GetHeightSize();
@@ -78,6 +77,7 @@ void YuvPlayer::SetPixel(YuvSetting::YuvSize size)
 		uint32_t frame_number = Img[i].GetFrameNumber();
 		UpdateImage(i, frame_number);
 	}
+	Diff.SetSize(width, height);
 	return;
 }
 uint32_t YuvPlayer::GetWidthSize(void)
@@ -113,8 +113,9 @@ void YuvPlayer::InputFile(TCHAR *filename)
 	int width = (int)YuvSetting::GetInst().GetWidthSize();
 	int height = (int)YuvSetting::GetInst().GetHeightSize();
 	Img[index].SetSize(width, height);
-	UpdateImage(index, 0);
+	Diff.SetSize(width, height);
 
+	UpdateImage(index, 0);
 
 	SingleViewIndex = index;
 
@@ -128,6 +129,15 @@ uint8_t *YuvPlayer::GetRgbBuf(void)
 		return RgbBuf[SingleViewIndex];
 	}
 	else {
+#if 1
+		if (IsImageDiff() == true) {
+			uint8_t * img0 = Img[0].GetYuvBuf();
+			uint8_t * img1 = Img[1].GetYuvBuf();
+			Diff.CreateDiff(img0, img1);
+			Diff.GetRgb(RgbBuf[1]);
+
+		}
+#endif
 		int width = (int)YuvSetting::GetInst().GetWidthSize();
 		int height = (int)YuvSetting::GetInst().GetHeightSize();
 
@@ -140,7 +150,7 @@ uint8_t *YuvPlayer::GetRgbBuf(void)
 void YuvPlayer::Init(void)
 {
 	YuvSetting::GetInst().InitSetting();
-	UpdateRgbBuf();
+	SetRgbBuf();
 	return;
 }
 int YuvPlayer::GetFileNum(void)
@@ -226,11 +236,11 @@ YuvSetting::YuvDiffMode YuvPlayer::GetDiffMode(void)
 {
 	return YuvSetting::GetInst().GetDiffMode();
 }
-bool YuvPlayer::isImageDiff(void)
+bool YuvPlayer::IsImageDiff(void)
 {
 	YuvSetting::YuvDiffMode mode = YuvSetting::GetInst().GetDiffMode();
 	if (mode == YuvSetting::YUV_DIFF_DISABLE) {
-		return true;
+		return false;
 	}
 	else if (mode == YuvSetting::YUV_DIFF_ENABLE) {
 		return true;

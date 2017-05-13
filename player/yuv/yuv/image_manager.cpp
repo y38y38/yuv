@@ -32,7 +32,7 @@ void ImageManager::Init(TCHAR *filename)
 	Buffer.create(filename, CACHE_MEMORY_SIZE);
 
 }
-uint8_t *ImageManager::UpdateYuv(int frame_number)
+void ImageManager::UpdateYuv(int frame_number)
 {
 	int yuv_offset = 0;
 	unsigned long ret;
@@ -43,23 +43,20 @@ uint8_t *ImageManager::UpdateYuv(int frame_number)
 	if (framesize != ret) {
 		//–{“–‚ÍƒGƒ‰[ˆ—
 		Win32Printf("%hs %d read error\n", __func__, __LINE__)
-	    return NULL;
+	    return;
 	}
 
 	FrameNumber = frame_number;
-	return YuvBuffer;
+	return;
 }
-
-void ImageManager::UpdateRgb(uint8_t *rgb_buf)
+void ImageManager::SetRgbBuf(uint8_t *rgb_buf)
 {
 	GetRgb(YuvBuffer, Width, Height, rgb_buf);
-
 }
-
 void ImageManager::Update(int frame_number, uint8_t *rgb_buf)
 {
 	UpdateYuv(frame_number);
-	GetRgb(YuvBuffer, Width, Height, rgb_buf);
+	SetRgbBuf(rgb_buf);
 
 	return;
 }
@@ -104,4 +101,9 @@ void ImageManager::SetSize(uint32_t width, uint32_t height)
 
 	return;
 }
+uint8_t *ImageManager::GetYuvBuf(void)
+{
+	return YuvBuffer;
+}
+
 

@@ -6,6 +6,7 @@
 #include "stdint.h"
 
 #include "yuv_setting.h"
+#include "yuv_diff.h"
 
 #include "image_manager.h"
 
@@ -35,15 +36,17 @@ private:
 	const static int MAX_FILE_NUM = 4;
 	uint32_t FileNum;
 	ImageManager Img[MAX_FILE_NUM];
+	YuvDiff Diff;
+
 	uint8_t *RgbBuf[MAX_FILE_NUM];
 	uint8_t *MultiRgbBuf;
 	int SingleViewIndex;
 	bool OnMouse;
 
-	void UpdateRgbBuf(void);
+	void SetRgbBuf(void);
 	void UpdateImage(int image_index, int  frame_number);
 	int GetFileNum(void);
-	bool isImageDiff(void);
+	bool IsImageDiff(void);
 
 };
 
