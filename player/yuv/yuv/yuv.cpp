@@ -157,6 +157,10 @@ int wm_command(HWND hWnd, WPARAM wParam)
 	case ID_DIFF_ONMOUSE:
 		WindowManager::GetInst().SetDiffMode(m_hSubMenu, hWnd, wmId);
 		break;
+	case ID_DIFFTIMES_X1:
+	case ID_DIFFTIMES_X10:
+		WindowManager::GetInst().SetDiffTimes(m_hSubMenu, hWnd, wmId);
+		break;
 	case ID_DUMMY_EXIT:
 		DestroyWindow(hWnd);
 		break;

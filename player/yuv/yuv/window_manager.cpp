@@ -192,6 +192,26 @@ void WindowManager::SetDiffMode(HMENU hSubMenu, HWND hWnd, int wmId)
 	return;
 
 }
+void WindowManager::SetDiffTimes(HMENU hSubMenu, HWND hWnd, int wmId)
+{
+	CheckMenuItem(hSubMenu, ID_DIFFTIMES_X1, MF_UNCHECKED);
+	CheckMenuItem(hSubMenu, ID_DIFFTIMES_X10, MF_UNCHECKED);
+	CheckMenuItem(hSubMenu, wmId, MF_CHECKED);
+
+	switch (wmId) {
+	case ID_DIFFTIMES_X1:
+		Player.SetDiffTimes(YuvSetting::YUV_DIFFTIMES_X1);
+		break;
+	case ID_DIFFTIMES_X10:
+		Player.SetDiffTimes(YuvSetting::YUV_DIFFTIMES_X10);
+		break;
+	default:
+		break;
+	}
+	return;
+}
+
+
 uint32_t WindowManager::GetWidthSize(void)
 {
 	return Player.GetWidthSize();

@@ -42,6 +42,13 @@ public:
 	YuvDiffMode GetDiffMode(void);
 
 
+	typedef enum {
+		YUV_DIFFTIMES_X1,
+		YUV_DIFFTIMES_X10,
+	} YuvDiffTimes;
+	void SetDiffTimes(YuvDiffTimes times);
+	uint32_t GetDiffTimes(void);
+
 private:
 	YuvSetting();
 	~YuvSetting();
@@ -50,6 +57,7 @@ private:
 	YuvSize Size;
 	YuvView View;
 	YuvDiffMode DiffMode;
+	YuvDiffTimes DiffTimes;
 };
 
 #endif //_YUV_SETTING_H

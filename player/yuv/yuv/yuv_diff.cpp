@@ -16,6 +16,7 @@ YuvDiff::YuvDiff(void)
 	YuvBuffer = NULL;
 	Width = 0;
 	Height = 0;
+	Times = 1;
 	return;
 }
 
@@ -42,7 +43,7 @@ void YuvDiff::CreateDiff(uint8_t *img1, uint8_t *img2)
 				Yuv4::getYPixel(img2, (i % Width) + (j * Width), &y2, &pb, &pr, width, height);
 
 			}
-			diff = 0x80 + (y1 - y2);
+			diff = 0x80 + ((y1 - y2)  * Times);
 			if (YuvSetting::GetInst().GetFormat() == YuvSetting::YUV_FORMAT_YV12) {
 				RawVideo420::setYPixel(diff, (i % Width) + (j * Width), YuvBuffer);
 			}

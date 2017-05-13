@@ -14,6 +14,7 @@ public:
 	void GetRgb(uint8_t *rgbbuf);
 
 	void SetDiffTimes(int times);
+
 	void SetSize(uint32_t width, uint32_t height);
 
 private:

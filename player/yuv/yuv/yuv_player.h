@@ -28,6 +28,8 @@ public:
 	YuvSetting::YuvView GetView(void);
 	void SetDiffMode(YuvSetting::YuvDiffMode diff);
 	YuvSetting::YuvDiffMode GetDiffMode(void);
+	void SetDiffTimes(YuvSetting::YuvDiffTimes times);
+
 
 	void SetMouse(void);
 	void ReleaseMouse(void);

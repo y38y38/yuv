@@ -129,7 +129,6 @@ uint8_t *YuvPlayer::GetRgbBuf(void)
 		return RgbBuf[SingleViewIndex];
 	}
 	else {
-#if 1
 		if (IsImageDiff() == true) {
 			uint8_t * img0 = Img[0].GetYuvBuf();
 			uint8_t * img1 = Img[1].GetYuvBuf();
@@ -137,7 +136,6 @@ uint8_t *YuvPlayer::GetRgbBuf(void)
 			Diff.GetRgb(RgbBuf[1]);
 
 		}
-#endif
 		int width = (int)YuvSetting::GetInst().GetWidthSize();
 		int height = (int)YuvSetting::GetInst().GetHeightSize();
 
@@ -151,6 +149,7 @@ void YuvPlayer::Init(void)
 {
 	YuvSetting::GetInst().InitSetting();
 	SetRgbBuf();
+	Diff.SetDiffTimes(1);
 	return;
 }
 int YuvPlayer::GetFileNum(void)
@@ -261,5 +260,11 @@ void YuvPlayer::SetMouse(void) {
 
 void YuvPlayer::ReleaseMouse(void) {
 	OnMouse = false;
+	return;
+}
+void YuvPlayer::SetDiffTimes(YuvSetting::YuvDiffTimes times)
+{
+	YuvSetting::GetInst().SetDiffTimes(times);
+	Diff.SetDiffTimes(YuvSetting::GetInst().GetDiffTimes());
 	return;
 }

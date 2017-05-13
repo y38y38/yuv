@@ -56,6 +56,8 @@ void YuvSetting::InitSetting(void)
 	Format = YUV_FORMAT_YUV4;
 	Size = YUV_SIZE_352_288;
 	View = YUV_VIEW_SINGLE;
+	DiffMode = YUV_DIFF_DISABLE;
+	DiffTimes = YUV_DIFFTIMES_X1;
 	return;
 }
 void YuvSetting::SetView(YuvView view)
@@ -77,3 +79,20 @@ YuvSetting::YuvDiffMode YuvSetting::GetDiffMode(void)
 {
 	return DiffMode;
 }
+void YuvSetting::SetDiffTimes(YuvDiffTimes times)
+{
+	DiffTimes = times;
+	return;
+}
+
+uint32_t YuvSetting::GetDiffTimes(void)
+{
+	if (DiffTimes == YUV_DIFFTIMES_X1) {
+		return 1;
+	}
+	else {
+		return 10;
+
+	}
+}
+
