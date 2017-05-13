@@ -1,6 +1,7 @@
 #ifndef _YUV_DEBUG_H_
 #define _YUV_DEBUG_H_
 
+#include "tchar.h"
 #
 #define		Win32Printf(str, ...) \
       { \

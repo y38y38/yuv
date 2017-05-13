@@ -14,7 +14,10 @@ public:
 	~ImageManager();
 	void Init(TCHAR *filename);
 	void SetSize(uint32_t width, uint32_t height);
-	void Update(int frame_number, uint32_t width, uint32_t height, uint8_t *rgb_buf);
+	void Update(int frame_number, uint8_t *rgb_buf);
+
+	uint8_t *UpdateYuv(int frame_number);
+	void UpdateRgb(uint8_t *rgb_buf);
 	uint32_t GetFrameNumber(void);
 
 private:

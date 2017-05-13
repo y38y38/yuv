@@ -39,23 +39,24 @@ void YuvPlayer::UpdateRgbBuf(void)
 		}
 		RgbBuf[i] = (uint8_t*)malloc(width * height * 3);
 		if (RgbBuf[i] == NULL) {
+			Win32Printf("%hs %d malloc error", __FUNCTION__, __LINE__);
 			//エラー処理
 		}
 	}
+
 	if (MultiRgbBuf != NULL) {
 		free(MultiRgbBuf);
 	}
-	MultiRgbBuf = (uint8_t*)malloc(width * height * 3 * 4);
+	MultiRgbBuf = (uint8_t*)malloc(width * height * 3 * MAX_FILE_NUM);
 	if (MultiRgbBuf == NULL) {
+		Win32Printf("%hs %d malloc error", __FUNCTION__, __LINE__);
 		//エラー処理
 	}
 	return;
 }
 void YuvPlayer::UpdateImage(int image_index, int frame_number)
 {
-	uint32_t width = YuvSetting::GetInst().GetWidthSize();
-	uint32_t height = YuvSetting::GetInst().GetHeightSize();
-	Img[image_index].Update(frame_number, width, height, RgbBuf[image_index]);
+	Img[image_index].Update(frame_number, RgbBuf[image_index]);
 
 	WindowManager::GetInst().Update();
 	return;
@@ -64,18 +65,16 @@ void YuvPlayer::SetPixel(YuvSetting::YuvSize size)
 {
 	YuvSetting::GetInst().SetSize(size);
 
-	uint32_t width = YuvSetting::GetInst().GetWidthSize();
-	uint32_t height = YuvSetting::GetInst().GetHeightSize();
-	for (int i = 0; i < MAX_FILE_NUM; i++) {
-		Img[i].SetSize(width, height);
-
-	}
-
 	//画像サイズが変更されたらバッファサイズを変更する必要がある。
 	UpdateRgbBuf();
 
-	//画像サイズが変更されたら画像の更新も行う。
+	uint32_t width = YuvSetting::GetInst().GetWidthSize();
+	uint32_t height = YuvSetting::GetInst().GetHeightSize();
+
 	for (int i = 0; i < MAX_FILE_NUM; i++) {
+		Img[i].SetSize(width, height);
+
+		//画像サイズが変更されたら画像の更新も行う。
 		uint32_t frame_number = Img[i].GetFrameNumber();
 		UpdateImage(i, frame_number);
 	}

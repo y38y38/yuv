@@ -60,6 +60,9 @@
     <ClInclude Include="rgb_utility.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="yuv_diff.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -93,6 +96,9 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="rgb_utility.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="yuv_diff.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>

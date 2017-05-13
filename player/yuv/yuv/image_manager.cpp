@@ -13,6 +13,8 @@
 #include "yuv4.h"
 #include "yuv_setting.h"
 
+#include "yuv_debug.h"
+
 #define	CACHE_MEMORY_SIZE (0)
 
 ImageManager::ImageManager()
@@ -30,7 +32,7 @@ void ImageManager::Init(TCHAR *filename)
 	Buffer.create(filename, CACHE_MEMORY_SIZE);
 
 }
-void ImageManager::Update(int frame_number, uint32_t width, uint32_t height, uint8_t *rgb_buf)
+uint8_t *ImageManager::UpdateYuv(int frame_number)
 {
 	int yuv_offset = 0;
 	unsigned long ret;
@@ -40,11 +42,25 @@ void ImageManager::Update(int frame_number, uint32_t width, uint32_t height, uin
 
 	if (framesize != ret) {
 		//ñ{ìñÇÕÉGÉâÅ[èàóù
-		return;
+		Win32Printf("%hs %d read error\n", __func__, __LINE__)
+	    return NULL;
 	}
-	GetRgb(YuvBuffer, width, height, rgb_buf);
 
 	FrameNumber = frame_number;
+	return YuvBuffer;
+}
+
+void ImageManager::UpdateRgb(uint8_t *rgb_buf)
+{
+	GetRgb(YuvBuffer, Width, Height, rgb_buf);
+
+}
+
+void ImageManager::Update(int frame_number, uint8_t *rgb_buf)
+{
+	UpdateYuv(frame_number);
+	GetRgb(YuvBuffer, Width, Height, rgb_buf);
+
 	return;
 }
 void ImageManager::GetRgb(uint8_t *yuvbuffer, uint32_t width, uint32_t height, uint8_t *rgb_buf)
@@ -83,9 +99,8 @@ void ImageManager::SetSize(uint32_t width, uint32_t height)
 	int framesize = getFrameBufferSize(width, height);
 	YuvBuffer = (uint8_t *)malloc(framesize);
 	if (YuvBuffer == NULL) {
+		Win32Printf("%hs %d read error\n", __func__, __LINE__)
 	}
-	
-
 
 	return;
 }

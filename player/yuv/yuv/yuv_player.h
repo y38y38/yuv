@@ -32,7 +32,7 @@ public:
 	void ReleaseMouse(void);
 
 private:
-	const static int MAX_FILE_NUM = 2;
+	const static int MAX_FILE_NUM = 4;
 	uint32_t FileNum;
 	ImageManager Img[MAX_FILE_NUM];
 	uint8_t *RgbBuf[MAX_FILE_NUM];

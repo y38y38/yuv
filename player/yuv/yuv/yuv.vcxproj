@@ -149,6 +149,7 @@
     <ClInclude Include="image_manager.h" />
     <ClInclude Include="rgb_utility.h" />
     <ClInclude Include="yuv_debug.h" />
+    <ClInclude Include="yuv_diff.h" />
     <ClInclude Include="yuv_player.h" />
     <ClInclude Include="rawvideo420.h" />
     <ClInclude Include="Resource.h" />
@@ -164,6 +165,7 @@
     <ClCompile Include="filebuffer.cpp" />
     <ClCompile Include="image_manager.cpp" />
     <ClCompile Include="rgb_utility.cpp" />
+    <ClCompile Include="yuv_diff.cpp" />
     <ClCompile Include="yuv_player.cpp" />
     <ClCompile Include="rawvideo420.cpp" />
     <ClCompile Include="stdafx.cpp">
