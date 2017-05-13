@@ -198,6 +198,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
         break;
     case WM_PAINT:
+		Win32Printf("PAINT");
 		WindowManager::GetInst().Paint(hWnd);
 		break;
     case WM_DESTROY:

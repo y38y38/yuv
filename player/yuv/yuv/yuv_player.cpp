@@ -125,17 +125,20 @@ void YuvPlayer::InputFile(TCHAR *filename)
 
 uint8_t *YuvPlayer::GetRgbBuf(void)
 {
+	Win32Printf("%hs !\n", __func__);
 	if (YuvSetting::GetInst().GetView() == YuvSetting::YUV_VIEW_SINGLE) {
 		return RgbBuf[SingleViewIndex];
 	}
 	else {
 		if (IsImageDiff() == true) {
+			Win32Printf("diff mode\n");
 			uint8_t * img0 = Img[0].GetYuvBuf();
 			uint8_t * img1 = Img[1].GetYuvBuf();
 			Diff.CreateDiff(img0, img1);
 			Diff.GetRgb(RgbBuf[1]);
 
 		}
+		//diff enable->disableの時は↑で、RgbBuf[1]を上書きしているので、もう一度RGBを生成する必要がある。
 		int width = (int)YuvSetting::GetInst().GetWidthSize();
 		int height = (int)YuvSetting::GetInst().GetHeightSize();
 
@@ -228,7 +231,9 @@ void YuvPlayer::PrevImage(void)
 }
 void YuvPlayer::SetDiffMode(YuvSetting::YuvDiffMode diff)
 {
+	Win32Printf("start %hs", __func__);
 	YuvSetting::GetInst().SetDiffMode(diff);
+	WindowManager::GetInst().Update();
 
 }
 YuvSetting::YuvDiffMode YuvPlayer::GetDiffMode(void)
@@ -266,5 +271,6 @@ void YuvPlayer::SetDiffTimes(YuvSetting::YuvDiffTimes times)
 {
 	YuvSetting::GetInst().SetDiffTimes(times);
 	Diff.SetDiffTimes(YuvSetting::GetInst().GetDiffTimes());
+	WindowManager::GetInst().Update();
 	return;
 }

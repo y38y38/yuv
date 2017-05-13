@@ -5,6 +5,7 @@
 
 #include "resource.h"
 
+#include "yuv_debug.h"
 #include "yuv_setting.h"
 #include "yuv_player.h"
 
@@ -245,6 +246,7 @@ int WindowManager::KeyDown(WPARAM wParam)
 }
 void WindowManager::Update(void)
 {
+	Win32Printf("%hs", __func__);
 	InvalidateRect(MyWindow, NULL, FALSE);
 	return;
 }
