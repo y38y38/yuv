@@ -64,7 +64,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	m_hSubMenu = GetSubMenu(m_hMenu, 0);
 
     MSG msg;
-	Win32Printf("debug %d", (int)m_hMenu);
 
     // メイン メッセージ ループ:
     while (GetMessage(&msg, nullptr, 0, 0))
@@ -198,7 +197,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
         break;
     case WM_PAINT:
-		Win32Printf("PAINT");
 		WindowManager::GetInst().Paint(hWnd);
 		break;
     case WM_DESTROY:
@@ -206,7 +204,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         break;
 	case WM_DROPFILES:
 		WindowManager::GetInst().DropFile(hWnd, wParam);
-
 		break;
 	case WM_RBUTTONUP:
 		WindowManager::GetInst().MouseRight(m_hSubMenu, hWnd, lParam);

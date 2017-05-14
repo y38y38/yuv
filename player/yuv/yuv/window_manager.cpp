@@ -244,7 +244,6 @@ int WindowManager::KeyDown(WPARAM wParam)
 }
 void WindowManager::Update(void)
 {
-	Win32Printf("%hs", __func__);
 	UpdateWindowSize();
 	InvalidateRect(MyWindow, NULL, FALSE);
 	return;
