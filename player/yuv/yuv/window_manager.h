@@ -35,7 +35,7 @@ private:
 	WindowManager();
 	~WindowManager();
 
-	void UpdateWindowSize(HWND hWnd);
+	void UpdateWindowSize(void);
 	YuvPlayer Player;
 	HWND MyWindow;
 

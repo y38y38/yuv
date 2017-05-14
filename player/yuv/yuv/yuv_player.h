@@ -45,7 +45,7 @@ private:
 	int SingleViewIndex;
 	bool OnMouse;
 
-	void SetRgbBuf(void);
+	void SetRgbBufSize(void);
 	void UpdateImage(int image_index, int  frame_number);
 	int GetFileNum(void);
 	bool IsImageDiff(void);

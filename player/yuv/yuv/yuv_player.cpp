@@ -28,7 +28,7 @@ YuvPlayer::~YuvPlayer(void)
 	return;
 }
 
-void YuvPlayer::SetRgbBuf(void)
+void YuvPlayer::SetRgbBufSize(void)
 {
 	uint32_t width = YuvSetting::GetInst().GetWidthSize();
 	uint32_t height = YuvSetting::GetInst().GetHeightSize();
@@ -64,8 +64,10 @@ void YuvPlayer::UpdateImage(int image_index, int frame_number)
 void YuvPlayer::SetPixel(YuvSetting::YuvSize size)
 {
 	YuvSetting::GetInst().SetSize(size);
+
+
 	//画像サイズが変更されたらバッファサイズを変更する必要がある。
-	SetRgbBuf();
+	SetRgbBufSize();
 
 	uint32_t width = YuvSetting::GetInst().GetWidthSize();
 	uint32_t height = YuvSetting::GetInst().GetHeightSize();
@@ -78,6 +80,8 @@ void YuvPlayer::SetPixel(YuvSetting::YuvSize size)
 		UpdateImage(i, frame_number);
 	}
 	Diff.SetSize(width, height);
+
+	WindowManager::GetInst().Update();
 	return;
 }
 uint32_t YuvPlayer::GetWidthSize(void)
@@ -110,16 +114,14 @@ void YuvPlayer::InputFile(TCHAR *filename)
 {
 	int index = FileNum % MAX_FILE_NUM;
 	Img[index].Init(filename);
-	int width = (int)YuvSetting::GetInst().GetWidthSize();
-	int height = (int)YuvSetting::GetInst().GetHeightSize();
-	Img[index].SetSize(width, height);
-	Diff.SetSize(width, height);
 
 	UpdateImage(index, 0);
 
 	SingleViewIndex = index;
 
 	FileNum++;
+
+	WindowManager::GetInst().Update();
 	return;
 }
 
@@ -151,8 +153,18 @@ uint8_t *YuvPlayer::GetRgbBuf(void)
 void YuvPlayer::Init(void)
 {
 	YuvSetting::GetInst().InitSetting();
-	SetRgbBuf();
+	SetRgbBufSize();
+
+	uint32_t width = YuvSetting::GetInst().GetWidthSize();
+	uint32_t height = (int)YuvSetting::GetInst().GetHeightSize();
+
+	Diff.SetSize(width, height);
 	Diff.SetDiffTimes(1);
+
+	for (int i = 0; i < MAX_FILE_NUM; i++) {
+		Img[i].SetSize(width, height);
+	}
+
 	return;
 }
 int YuvPlayer::GetFileNum(void)
@@ -177,7 +189,7 @@ void YuvPlayer::NextFrame(void)
 		frame_number = Img[i].GetFrameNumber() + 1;
 		UpdateImage(i, frame_number);
 	}
-	Win32Printf("%d", frame_number);
+	WindowManager::GetInst().Update();
 	return;
 }
 void YuvPlayer::PrevFrame(void)
@@ -190,12 +202,13 @@ void YuvPlayer::PrevFrame(void)
 			UpdateImage(i, frame_number - 1 );
 		}
 	}
-	Win32Printf("%d", frame_number);
+	WindowManager::GetInst().Update();
 	return;
 }
 void YuvPlayer::SetView(YuvSetting::YuvView view)
 {
 	YuvSetting::GetInst().SetView(view);
+	WindowManager::GetInst().Update();
 	return;
 }
 
@@ -231,10 +244,8 @@ void YuvPlayer::PrevImage(void)
 }
 void YuvPlayer::SetDiffMode(YuvSetting::YuvDiffMode diff)
 {
-	Win32Printf("start %hs", __func__);
 	YuvSetting::GetInst().SetDiffMode(diff);
 	WindowManager::GetInst().Update();
-
 }
 YuvSetting::YuvDiffMode YuvPlayer::GetDiffMode(void)
 {
@@ -270,7 +281,9 @@ void YuvPlayer::ReleaseMouse(void) {
 void YuvPlayer::SetDiffTimes(YuvSetting::YuvDiffTimes times)
 {
 	YuvSetting::GetInst().SetDiffTimes(times);
+
 	Diff.SetDiffTimes(YuvSetting::GetInst().GetDiffTimes());
+
 	WindowManager::GetInst().Update();
 	return;
 }

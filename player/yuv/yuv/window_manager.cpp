@@ -118,14 +118,14 @@ void WindowManager::Paint(HWND hWnd)
 	return;
 
 }
-void WindowManager::UpdateWindowSize(HWND hWnd)
+void WindowManager::UpdateWindowSize(void)
 {
 	//Windowサイズを変更する。
 	RECT rc1;
 	int width = Player.GetWidthSize();
 	int height = Player.GetHeightSize();
-	GetWindowRect(hWnd, &rc1);
-	SetWindowPos(hWnd, NULL, rc1.left, rc1.top, width, height, (SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOMOVE));
+	GetWindowRect(MyWindow, &rc1);
+	SetWindowPos(MyWindow, NULL, rc1.left, rc1.top, width, height, (SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOMOVE));
 
 }
 
@@ -145,7 +145,6 @@ void WindowManager::SetPixel(HMENU hSubMenu, HWND hWnd, int wmId)
 	default:
 		break;
 	}
-	UpdateWindowSize(hWnd);
 	return;
 
 }
@@ -165,7 +164,6 @@ void WindowManager::SetView(HMENU hSubMenu, HWND hWnd, int wmId)
 	default:
 		break;
 	}
-	UpdateWindowSize(hWnd);
 	return;
 
 }
@@ -247,6 +245,7 @@ int WindowManager::KeyDown(WPARAM wParam)
 void WindowManager::Update(void)
 {
 	Win32Printf("%hs", __func__);
+	UpdateWindowSize();
 	InvalidateRect(MyWindow, NULL, FALSE);
 	return;
 }
