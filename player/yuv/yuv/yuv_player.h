@@ -44,9 +44,12 @@ private:
 	uint8_t *MultiRgbBuf;
 	int SingleViewIndex;
 	bool OnMouse;
+	int DiffPosition;
 
 	void SetRgbBufSize(void);
+	void UpdateImageAll(int  frame_number);
 	void UpdateImage(int image_index, int  frame_number);
+	void UpdateRgbBuf();
 	int GetFileNum(void);
 	bool IsImageDiff(void);
 

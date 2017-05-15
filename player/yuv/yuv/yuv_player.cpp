@@ -20,6 +20,8 @@ YuvPlayer::YuvPlayer(void)
 	}
 	MultiRgbBuf = NULL;
 
+	DiffPosition = 0;
+
 	return;
 }
 
@@ -54,6 +56,16 @@ void YuvPlayer::SetRgbBufSize(void)
 	}
 	return;
 }
+void YuvPlayer::UpdateImageAll(int frame_number)
+{
+	int file_num = GetFileNum();
+	for (int i = 0; i < file_num; i++) {
+		UpdateImage(i, frame_number);
+	}
+
+	return;
+}
+
 void YuvPlayer::UpdateImage(int image_index, int frame_number)
 {
 	Img[image_index].Update(frame_number, RgbBuf[image_index]);
@@ -127,17 +139,15 @@ void YuvPlayer::InputFile(TCHAR *filename)
 
 uint8_t *YuvPlayer::GetRgbBuf(void)
 {
-	Win32Printf("%hs !\n", __func__);
 	if (YuvSetting::GetInst().GetView() == YuvSetting::YUV_VIEW_SINGLE) {
 		return RgbBuf[SingleViewIndex];
 	}
 	else {
 		if (IsImageDiff() == true) {
-			Win32Printf("diff mode\n");
 			uint8_t * img0 = Img[0].GetYuvBuf();
 			uint8_t * img1 = Img[1].GetYuvBuf();
 			Diff.CreateDiff(img0, img1);
-			Diff.GetRgb(RgbBuf[1]);
+			Diff.GetRgb(RgbBuf[DiffPosition]);
 
 		}
 		//diff enable->disableの時は↑で、RgbBuf[1]を上書きしているので、もう一度RGBを生成する必要がある。
@@ -183,10 +193,9 @@ int YuvPlayer::GetFileNum(void)
 
 void YuvPlayer::NextFrame(void)
 {
-	uint32_t frame_number;
 	int file_num = GetFileNum();
 	for (int i = 0; i < file_num; i++) {
-		frame_number = Img[i].GetFrameNumber() + 1;
+		uint32_t  frame_number = Img[i].GetFrameNumber() + 1;
 		UpdateImage(i, frame_number);
 	}
 	WindowManager::GetInst().Update();
@@ -194,10 +203,9 @@ void YuvPlayer::NextFrame(void)
 }
 void YuvPlayer::PrevFrame(void)
 {
-	uint32_t frame_number;
 	int file_num = GetFileNum();
 	for (int i = 0; i < file_num; i++) {
-		frame_number = Img[i].GetFrameNumber();
+		uint32_t frame_number = Img[i].GetFrameNumber();
 		if (frame_number != 0) {
 			UpdateImage(i, frame_number - 1 );
 		}
@@ -245,7 +253,15 @@ void YuvPlayer::PrevImage(void)
 void YuvPlayer::SetDiffMode(YuvSetting::YuvDiffMode diff)
 {
 	YuvSetting::GetInst().SetDiffMode(diff);
+
+	int file_num = GetFileNum();
+	for (int i = 0; i < file_num; i++) {
+		uint32_t  frame_number = Img[i].GetFrameNumber();
+		UpdateImage(i, frame_number);
+	}
+
 	WindowManager::GetInst().Update();
+	return;
 }
 YuvSetting::YuvDiffMode YuvPlayer::GetDiffMode(void)
 {
@@ -270,11 +286,17 @@ bool YuvPlayer::IsImageDiff(void)
 	}
 }
 void YuvPlayer::SetMouse(void) {
+	if (OnMouse == false) {
+		UpdateRgbBuf();
+	}
 	OnMouse = true;
 	return;
 }
 
 void YuvPlayer::ReleaseMouse(void) {
+	if (OnMouse == true) {
+		UpdateRgbBuf();
+	}
 	OnMouse = false;
 	return;
 }
@@ -287,3 +309,14 @@ void YuvPlayer::SetDiffTimes(YuvSetting::YuvDiffTimes times)
 	WindowManager::GetInst().Update();
 	return;
 }
+void YuvPlayer::UpdateRgbBuf()
+{
+	int file_num = GetFileNum();
+	for (int i = 0; i < file_num; i++) {
+		Img[i].SetRgbBuf(RgbBuf[i]);
+
+	}
+	WindowManager::GetInst().Update();
+
+}
+
