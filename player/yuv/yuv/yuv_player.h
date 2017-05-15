@@ -30,8 +30,14 @@ public:
 	YuvSetting::YuvDiffMode GetDiffMode(void);
 	void SetDiffTimes(YuvSetting::YuvDiffTimes times);
 
+	typedef enum {
+		YUV_WINDOW_LEFT_TOP,
+		YUV_WINDOW_LEFT_BOTTOM,
+		YUV_WINDOW_RIGHT_TOP,
+		YUV_WINDOW_RIGHT_BOTTOM,
+	} YUV_WINDOW_POS;
 
-	void SetMouse(void);
+	void SetMouse(YUV_WINDOW_POS pos);
 	void ReleaseMouse(void);
 
 private:

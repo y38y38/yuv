@@ -285,7 +285,7 @@ bool YuvPlayer::IsImageDiff(void)
 		}
 	}
 }
-void YuvPlayer::SetMouse(void) {
+void YuvPlayer::SetMouse(YUV_WINDOW_POS pos) {
 	if (OnMouse == false) {
 		UpdateRgbBuf();
 	}

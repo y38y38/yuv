@@ -259,7 +259,13 @@ void WindowManager::MouseMove(void)
 
 	TrackMouseEvent(&tme);
 
-	Player.SetMouse();
+	POINT p;
+	GetCursorPos(&p);
+	ScreenToClient(MyWindow, &p);
+	uint32_t width = Player.GetWidthSize();
+	uint32_t height = Player.GetHeightSize();
+	//if xxxxx
+	Player.SetMouse(YuvPlayer::YUV_WINDOW_LEFT_BOTTOM);
 	return;
 }
 
