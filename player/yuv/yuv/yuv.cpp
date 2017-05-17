@@ -160,6 +160,12 @@ int wm_command(HWND hWnd, WPARAM wParam)
 	case ID_DIFFTIMES_X10:
 		WindowManager::GetInst().SetDiffTimes(m_hSubMenu, hWnd, wmId);
 		break;
+	case ID_TEXT_NONE:
+	case ID_TEXT_FILENAME:
+	case ID_TEXT_SN:
+		WindowManager::GetInst().SetText(m_hSubMenu, hWnd, wmId);
+		break;
+
 	case ID_DUMMY_EXIT:
 		DestroyWindow(hWnd);
 		break;

@@ -314,6 +314,7 @@ void YuvPlayer::SetDiffTimes(YuvSetting::YuvDiffTimes times)
 	WindowManager::GetInst().Update();
 	return;
 }
+
 void YuvPlayer::UpdateRgbBuf()
 {
 	int file_num = GetFileNum();
@@ -323,5 +324,10 @@ void YuvPlayer::UpdateRgbBuf()
 	}
 	WindowManager::GetInst().Update();
 
+}
+
+TCHAR *YuvPlayer::GetFileName(int file_index)
+{
+	return Img[file_index].GetFileName();
 }
 

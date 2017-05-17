@@ -40,6 +40,9 @@ public:
 	void SetMouse(YUV_WINDOW_POS pos);
 	void ReleaseMouse(void);
 
+	TCHAR *GetFileName(int file_index);
+	int GetFileNum(void);
+
 private:
 	const static int MAX_FILE_NUM = 4;
 	uint32_t FileNum;
@@ -56,7 +59,6 @@ private:
 	void UpdateImageAll(int  frame_number);
 	void UpdateImage(int image_index, int  frame_number);
 	void UpdateRgbBuf();
-	int GetFileNum(void);
 	bool IsImageDiff(void);
 
 };

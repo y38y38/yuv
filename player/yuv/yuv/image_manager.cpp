@@ -107,3 +107,10 @@ uint8_t *ImageManager::GetYuvBuf(void)
 }
 
 
+TCHAR *ImageManager::GetFileName(void)
+{
+
+	return Buffer.getFileName();
+}
+
+

@@ -22,6 +22,7 @@ public:
 	void SetView(HMENU hSubMenu, HWND hWnd, int wmId);
 	void SetDiffMode(HMENU hSubMenu, HWND hWnd, int wmId);
 	void SetDiffTimes(HMENU hSubMenu, HWND hWnd, int wmId);
+	void SetText(HMENU hSubMenu, HWND hWnd, int wmId);
 	int KeyDown(WPARAM wParam);
 	void MouseMove(void);
 	void MouseLeave(void);

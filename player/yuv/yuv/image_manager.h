@@ -21,6 +21,9 @@ public:
 
 	uint32_t GetFrameNumber(void);
 
+	TCHAR *GetFileName(void);
+
+
 private:
 	filebuffer Buffer;
 	uint32_t FrameNumber;

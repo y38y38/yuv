@@ -10,6 +10,7 @@ public:
 	int read(unsigned char *buffer, unsigned long long offset, unsigned long size, unsigned long *result_read_size);
 	void close(void);
 	unsigned long long getSize(void);
+	TCHAR *getFileName(void);
 
 #if CACHE_THREAD_ON
 	void thread_run();	

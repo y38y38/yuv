@@ -306,5 +306,10 @@ unsigned long long filebuffer::getSize(void)
 
 	return size;
 }
+TCHAR *filebuffer::getFileName(void)
+{
+	return input_filename;
+}
+
 
 

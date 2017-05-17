@@ -209,6 +209,25 @@ void WindowManager::SetDiffTimes(HMENU hSubMenu, HWND hWnd, int wmId)
 	}
 	return;
 }
+void WindowManager::SetText(HMENU hSubMenu, HWND hWnd, int wmId)
+{
+	CheckMenuItem(hSubMenu, ID_TEXT_NONE, MF_UNCHECKED);
+	CheckMenuItem(hSubMenu, ID_TEXT_FILENAME, MF_UNCHECKED);
+	CheckMenuItem(hSubMenu, ID_TEXT_SN, MF_UNCHECKED);
+
+	CheckMenuItem(hSubMenu, wmId, MF_CHECKED);
+	switch (wmId) {
+	case ID_TEXT_NONE:
+		break;
+	case ID_TEXT_FILENAME:
+		break;
+	case ID_TEXT_SN:
+		break;
+	default:
+		break;
+	}
+	return;
+}
 
 
 uint32_t WindowManager::GetWidthSize(void)
