@@ -38,6 +38,7 @@ private:
 	void UpdateWindowSize(void);
 	YuvPlayer Player;
 	HWND MyWindow;
+	YuvPlayer::YUV_WINDOW_POS GetMousePosition(void);
 
 };
 

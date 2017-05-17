@@ -20,7 +20,7 @@ YuvPlayer::YuvPlayer(void)
 	}
 	MultiRgbBuf = NULL;
 
-	DiffPosition = 0;
+	DiffPosition = YUV_WINDOW_LEFT_TOP;
 
 	return;
 }
@@ -147,7 +147,7 @@ uint8_t *YuvPlayer::GetRgbBuf(void)
 			uint8_t * img0 = Img[0].GetYuvBuf();
 			uint8_t * img1 = Img[1].GetYuvBuf();
 			Diff.CreateDiff(img0, img1);
-			Diff.GetRgb(RgbBuf[DiffPosition]);
+			Diff.GetRgb(RgbBuf[DiffPosition % MAX_FILE_NUM]);
 
 		}
 		//diff enable->disableの時は↑で、RgbBuf[1]を上書きしているので、もう一度RGBを生成する必要がある。
@@ -289,7 +289,12 @@ void YuvPlayer::SetMouse(YUV_WINDOW_POS pos) {
 	if (OnMouse == false) {
 		UpdateRgbBuf();
 	}
+	else if (DiffPosition != pos) {
+		UpdateRgbBuf();
+	}
+
 	OnMouse = true;
+	DiffPosition = pos;
 	return;
 }
 

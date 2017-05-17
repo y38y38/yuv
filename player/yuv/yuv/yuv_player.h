@@ -31,10 +31,10 @@ public:
 	void SetDiffTimes(YuvSetting::YuvDiffTimes times);
 
 	typedef enum {
-		YUV_WINDOW_LEFT_TOP,
-		YUV_WINDOW_LEFT_BOTTOM,
-		YUV_WINDOW_RIGHT_TOP,
-		YUV_WINDOW_RIGHT_BOTTOM,
+		YUV_WINDOW_LEFT_TOP = 0,
+		YUV_WINDOW_LEFT_BOTTOM = 0,
+		YUV_WINDOW_RIGHT_TOP = 1,
+		YUV_WINDOW_RIGHT_BOTTOM = 1,
 	} YUV_WINDOW_POS;
 
 	void SetMouse(YUV_WINDOW_POS pos);
@@ -50,7 +50,7 @@ private:
 	uint8_t *MultiRgbBuf;
 	int SingleViewIndex;
 	bool OnMouse;
-	int DiffPosition;
+	YUV_WINDOW_POS DiffPosition;
 
 	void SetRgbBufSize(void);
 	void UpdateImageAll(int  frame_number);

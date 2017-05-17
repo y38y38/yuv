@@ -248,6 +248,32 @@ void WindowManager::Update(void)
 	InvalidateRect(MyWindow, NULL, FALSE);
 	return;
 }
+YuvPlayer::YUV_WINDOW_POS  WindowManager::GetMousePosition(void)
+{
+	POINT p;
+	GetCursorPos(&p);
+	ScreenToClient(MyWindow, &p);
+	int width = (int)Player.GetWidthSize();
+	int height = (int)Player.GetHeightSize();
+	if ((p.x > (width / 2))) {
+		if ((p.y) > (height / 2)) {
+			return YuvPlayer::YUV_WINDOW_RIGHT_BOTTOM;
+		}
+		else {
+			return YuvPlayer::YUV_WINDOW_RIGHT_TOP;
+		}
+	}
+	else {
+		if ((p.y) > (height / 2)) {
+			return YuvPlayer::YUV_WINDOW_LEFT_BOTTOM;
+		}
+		else {
+			return YuvPlayer::YUV_WINDOW_LEFT_TOP;
+		}
+	}
+
+}
+
 
 void WindowManager::MouseMove(void)
 {
@@ -259,13 +285,8 @@ void WindowManager::MouseMove(void)
 
 	TrackMouseEvent(&tme);
 
-	POINT p;
-	GetCursorPos(&p);
-	ScreenToClient(MyWindow, &p);
-	uint32_t width = Player.GetWidthSize();
-	uint32_t height = Player.GetHeightSize();
-	//if xxxxx
-	Player.SetMouse(YuvPlayer::YUV_WINDOW_LEFT_BOTTOM);
+	Player.SetMouse(GetMousePosition());
+
 	return;
 }
 
