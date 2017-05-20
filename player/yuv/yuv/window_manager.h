@@ -41,6 +41,9 @@ private:
 	HWND MyWindow;
 	YuvPlayer::YUV_WINDOW_POS GetMousePosition(void);
 
+	int Text;
+	void ShowText(HDC hdc);
+	void ShowRgb(HDC hdc);
 };
 
 #endif //_WINDOW_MANAGER_H_

@@ -160,6 +160,7 @@
     <ClInclude Include="yuv4.h" />
     <ClInclude Include="yuvrgb.h" />
     <ClInclude Include="yuv_setting.h" />
+    <ClInclude Include="yuv_str.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="filebuffer.cpp" />
@@ -179,6 +180,7 @@
     <ClCompile Include="yuv4.cpp" />
     <ClCompile Include="yuvrgb.cpp" />
     <ClCompile Include="yuv_setting.cpp" />
+    <ClCompile Include="yuv_str.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="yuv.rc" />

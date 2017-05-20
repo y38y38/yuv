@@ -8,6 +8,7 @@
 #include "yuv_debug.h"
 #include "yuv_setting.h"
 #include "yuv_player.h"
+#include "yuv_str.h"
 
 #include "window_manager.h"
 
@@ -17,6 +18,7 @@
 
 WindowManager::WindowManager()
 {
+	Text = ID_TEXT_NONE;
 	return;
 }
 WindowManager::~WindowManager()
@@ -72,18 +74,29 @@ void WindowManager::DropFile(HWND hWnd, WPARAM wParam)
 
 	return;
 }
-void WindowManager::Paint(HWND hWnd)
-{
 
+void WindowManager::ShowText(HDC hdc)
+{
+	LPTSTR lptStr = TEXT("Kitty on your lap");
+	SetBkMode(hdc, TRANSPARENT);
+
+	int file_num = Player.GetFileNum();
+
+	if (file_num == 2) {
+		TCHAR *path = Player.GetFileName(0);
+		TCHAR *filename = YuvStr::GetFileName(path);
+
+		TextOut(hdc, 0, 0, filename, _tcslen(filename));
+		path = Player.GetFileName(1);
+		filename = YuvStr::GetFileName(path);
+		TextOut(hdc, (Player.GetWidthSize() / 2), 0, filename, _tcslen (filename));
+	}
+}
+void WindowManager::ShowRgb(HDC hdc)
+{
 	uint32_t width = Player.GetWidthSize();
 	uint32_t height = Player.GetHeightSize();
 	uint8_t *rgb_buf = Player.GetRgbBuf();
-
-
-	PAINTSTRUCT ps;
-	HDC hdc = BeginPaint(hWnd, &ps);
-
-
 
 	// TODO: HDC を使用する描画コードをここに追加してください...
 	BITMAPINFO bitmapinfo;
@@ -113,6 +126,17 @@ void WindowManager::Paint(HWND hWnd)
 		&bitmapinfo,
 		DIB_RGB_COLORS,
 		SRCCOPY);
+
+}
+
+void WindowManager::Paint(HWND hWnd)
+{
+
+	PAINTSTRUCT ps;
+	HDC hdc = BeginPaint(hWnd, &ps);
+
+	ShowRgb(hdc);
+	ShowText(hdc);
 
 	EndPaint(hWnd, &ps);
 	return;
