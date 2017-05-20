@@ -19,6 +19,8 @@
 WindowManager::WindowManager()
 {
 	Text = ID_TEXT_NONE;
+	TextPosition = ID_POSITION_TOP;
+	TextColor = ID_COLOR_BLACK;
 	return;
 }
 WindowManager::~WindowManager()
@@ -75,22 +77,56 @@ void WindowManager::DropFile(HWND hWnd, WPARAM wParam)
 	return;
 }
 
+int WindowManager::GetTextPosition(void)
+{
+	int test_position;
+	if (TextPosition == ID_POSITION_TOP) {
+		return  0;
+	}
+	else {
+		return Player.GetHeightSize() - 20;
+	}
+}
+
+void WindowManager::ShowTextFileName(HDC hdc)
+{
+	YuvSetting::YuvView view =  Player.GetView();
+	if (view == YuvSetting::YUV_VIEW_SIDE_BY_SIDE) {
+		int file_num = Player.GetFileNum();
+
+		if (file_num == 2) {
+			SetBkMode(hdc, TRANSPARENT);
+			TCHAR *path = Player.GetFileName(0);
+			TCHAR *filename = YuvStr::GetFileName(path);
+
+			TextOut(hdc, 0, GetTextPosition(), filename, _tcslen(filename));
+			path = Player.GetFileName(1);
+			filename = YuvStr::GetFileName(path);
+			TextOut(hdc, (Player.GetWidthSize() / 2), GetTextPosition(), filename, _tcslen(filename));
+		}
+	}
+
+}
 void WindowManager::ShowText(HDC hdc)
 {
-	LPTSTR lptStr = TEXT("Kitty on your lap");
-	SetBkMode(hdc, TRANSPARENT);
 
-	int file_num = Player.GetFileNum();
-
-	if (file_num == 2) {
-		TCHAR *path = Player.GetFileName(0);
-		TCHAR *filename = YuvStr::GetFileName(path);
-
-		TextOut(hdc, 0, 0, filename, _tcslen(filename));
-		path = Player.GetFileName(1);
-		filename = YuvStr::GetFileName(path);
-		TextOut(hdc, (Player.GetWidthSize() / 2), 0, filename, _tcslen (filename));
+	if (TextColor == ID_COLOR_BLACK) {
+		SetTextColor(hdc, RGB(0x00, 0x00, 0x00));
 	}
+	else {
+		SetTextColor(hdc, RGB(0xff, 0xff, 0xff));
+
+	}
+	if (Text == ID_TEXT_FILENAME) {
+		ShowTextFileName(hdc);
+	}
+	else if (Text == ID_TEXT_SN) {
+		 
+	}
+	else {
+
+	}
+
 }
 void WindowManager::ShowRgb(HDC hdc)
 {
@@ -153,7 +189,7 @@ void WindowManager::UpdateWindowSize(void)
 
 }
 
-void WindowManager::SetPixel(HMENU hSubMenu, HWND hWnd, int wmId)
+void WindowManager::SetYuvPixel(HMENU hSubMenu, HWND hWnd, int wmId)
 {
 	CheckMenuItem(hSubMenu, ID_PIXEL_352X289, MF_UNCHECKED);
 	CheckMenuItem(hSubMenu, ID_PIXEL_1920X1081, MF_UNCHECKED);
@@ -172,7 +208,7 @@ void WindowManager::SetPixel(HMENU hSubMenu, HWND hWnd, int wmId)
 	return;
 
 }
-void WindowManager::SetView(HMENU hSubMenu, HWND hWnd, int wmId)
+void WindowManager::SetYuvView(HMENU hSubMenu, HWND hWnd, int wmId)
 {
 	CheckMenuItem(hSubMenu, ID_VIEW_SINGLE, MF_UNCHECKED);
 	CheckMenuItem(hSubMenu, ID_VIEW_SIDEBYSIDE, MF_UNCHECKED);
@@ -191,7 +227,7 @@ void WindowManager::SetView(HMENU hSubMenu, HWND hWnd, int wmId)
 	return;
 
 }
-void WindowManager::SetDiffMode(HMENU hSubMenu, HWND hWnd, int wmId)
+void WindowManager::SetYuvDiffMode(HMENU hSubMenu, HWND hWnd, int wmId)
 {
 	CheckMenuItem(hSubMenu, ID_DIFF_DISABLE, MF_UNCHECKED);
 	CheckMenuItem(hSubMenu, ID_DIFF_ENABLE, MF_UNCHECKED);
@@ -215,7 +251,7 @@ void WindowManager::SetDiffMode(HMENU hSubMenu, HWND hWnd, int wmId)
 	return;
 
 }
-void WindowManager::SetDiffTimes(HMENU hSubMenu, HWND hWnd, int wmId)
+void WindowManager::SetYuvDiffTimes(HMENU hSubMenu, HWND hWnd, int wmId)
 {
 	CheckMenuItem(hSubMenu, ID_DIFFTIMES_X1, MF_UNCHECKED);
 	CheckMenuItem(hSubMenu, ID_DIFFTIMES_X10, MF_UNCHECKED);
@@ -233,7 +269,7 @@ void WindowManager::SetDiffTimes(HMENU hSubMenu, HWND hWnd, int wmId)
 	}
 	return;
 }
-void WindowManager::SetText(HMENU hSubMenu, HWND hWnd, int wmId)
+void WindowManager::SetYuvText(HMENU hSubMenu, HWND hWnd, int wmId)
 {
 	CheckMenuItem(hSubMenu, ID_TEXT_NONE, MF_UNCHECKED);
 	CheckMenuItem(hSubMenu, ID_TEXT_FILENAME, MF_UNCHECKED);
@@ -250,6 +286,44 @@ void WindowManager::SetText(HMENU hSubMenu, HWND hWnd, int wmId)
 	default:
 		break;
 	}
+	Text = wmId;
+	return;
+}
+
+void WindowManager::SetYuvTextPosition(HMENU hSubMenu, HWND hWnd, int wmId)
+{
+	CheckMenuItem(hSubMenu, ID_POSITION_TOP, MF_UNCHECKED);
+	CheckMenuItem(hSubMenu, ID_POSITION_BOTTOM, MF_UNCHECKED);
+
+	CheckMenuItem(hSubMenu, wmId, MF_CHECKED);
+	switch (wmId) {
+	case ID_POSITION_TOP:
+		break;
+	case ID_POSITION_BOTTOM:
+		break;
+	default:
+		break;
+	}
+	TextPosition = wmId;
+	return;
+}
+void WindowManager::SetYuvTextColor(HMENU hSubMenu, HWND hWnd, int wmId)
+{
+	CheckMenuItem(hSubMenu, ID_COLOR_BLACK, MF_UNCHECKED);
+	CheckMenuItem(hSubMenu, ID_COLOR_WHITE, MF_UNCHECKED);
+
+	CheckMenuItem(hSubMenu, wmId, MF_CHECKED);
+	switch (wmId) {
+	case ID_COLOR_BLACK:
+		break;
+	case ID_COLOR_WHITE:
+		break;
+	default:
+		break;
+	}
+
+	TextColor = wmId;
+
 	return;
 }
 

@@ -145,25 +145,33 @@ int wm_command(HWND hWnd, WPARAM wParam)
 	{
 	case ID_PIXEL_352X289:
 	case ID_PIXEL_1920X1081:
-		WindowManager::GetInst().SetPixel(m_hSubMenu, hWnd, wmId);
+		WindowManager::GetInst().SetYuvPixel(m_hSubMenu, hWnd, wmId);
 		break;
 	case ID_VIEW_SINGLE:
 	case ID_VIEW_SIDEBYSIDE:
-		WindowManager::GetInst().SetView(m_hSubMenu, hWnd, wmId);
+		WindowManager::GetInst().SetYuvView(m_hSubMenu, hWnd, wmId);
 		break;
 	case ID_DIFF_DISABLE:
 	case ID_DIFF_ENABLE:
 	case ID_DIFF_ONMOUSE:
-		WindowManager::GetInst().SetDiffMode(m_hSubMenu, hWnd, wmId);
+		WindowManager::GetInst().SetYuvDiffMode(m_hSubMenu, hWnd, wmId);
 		break;
 	case ID_DIFFTIMES_X1:
 	case ID_DIFFTIMES_X10:
-		WindowManager::GetInst().SetDiffTimes(m_hSubMenu, hWnd, wmId);
+		WindowManager::GetInst().SetYuvDiffTimes(m_hSubMenu, hWnd, wmId);
 		break;
 	case ID_TEXT_NONE:
 	case ID_TEXT_FILENAME:
 	case ID_TEXT_SN:
-		WindowManager::GetInst().SetText(m_hSubMenu, hWnd, wmId);
+		WindowManager::GetInst().SetYuvText(m_hSubMenu, hWnd, wmId);
+		break;
+	case ID_POSITION_TOP:
+	case ID_POSITION_BOTTOM:
+		WindowManager::GetInst().SetYuvTextPosition(m_hSubMenu, hWnd, wmId);
+		break;
+	case ID_COLOR_BLACK:
+	case ID_COLOR_WHITE:
+		WindowManager::GetInst().SetYuvTextColor(m_hSubMenu, hWnd, wmId);
 		break;
 
 	case ID_DUMMY_EXIT:

@@ -18,11 +18,14 @@ public:
 	void MouseRight(HMENU hSubMenu, HWND hWnd, LPARAM lParam);
 	void DropFile(HWND hWnd, WPARAM wParam);
 	void Paint(HWND hWnd);
-	void SetPixel(HMENU hSubMenu, HWND hWnd, int wmId);
-	void SetView(HMENU hSubMenu, HWND hWnd, int wmId);
-	void SetDiffMode(HMENU hSubMenu, HWND hWnd, int wmId);
-	void SetDiffTimes(HMENU hSubMenu, HWND hWnd, int wmId);
-	void SetText(HMENU hSubMenu, HWND hWnd, int wmId);
+	void SetYuvPixel(HMENU hSubMenu, HWND hWnd, int wmId);
+	void SetYuvView(HMENU hSubMenu, HWND hWnd, int wmId);
+	void SetYuvDiffMode(HMENU hSubMenu, HWND hWnd, int wmId);
+	void SetYuvDiffTimes(HMENU hSubMenu, HWND hWnd, int wmId);
+	void SetYuvText(HMENU hSubMenu, HWND hWnd, int wmId);
+	void SetYuvTextPosition(HMENU hSubMenu, HWND hWnd, int wmId);
+	void SetYuvTextColor(HMENU hSubMenu, HWND hWnd, int wmId);
+
 	int KeyDown(WPARAM wParam);
 	void MouseMove(void);
 	void MouseLeave(void);
@@ -42,8 +45,16 @@ private:
 	YuvPlayer::YUV_WINDOW_POS GetMousePosition(void);
 
 	int Text;
+	int TextPosition;
+	int TextColor;
+
 	void ShowText(HDC hdc);
+
+	int GetTextPosition(void);
+	void ShowTextFileName(HDC hdc);
+
 	void ShowRgb(HDC hdc);
+
 };
 
 #endif //_WINDOW_MANAGER_H_
