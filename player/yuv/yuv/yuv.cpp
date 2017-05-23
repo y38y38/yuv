@@ -173,6 +173,11 @@ int wm_command(HWND hWnd, WPARAM wParam)
 	case ID_COLOR_WHITE:
 		WindowManager::GetInst().SetYuvTextColor(m_hSubMenu, hWnd, wmId);
 		break;
+	case ID_SIGNAL_Y:
+	case ID_SIGNAL_CB:
+	case ID_SIGNAL_CR:
+		WindowManager::GetInst().SetYuvSignal(m_hSubMenu, hWnd, wmId);
+		break;
 
 	case ID_DUMMY_EXIT:
 		DestroyWindow(hWnd);

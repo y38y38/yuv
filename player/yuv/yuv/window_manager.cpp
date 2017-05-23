@@ -79,7 +79,6 @@ void WindowManager::DropFile(HWND hWnd, WPARAM wParam)
 
 int WindowManager::GetTextPosition(void)
 {
-	int test_position;
 	if (TextPosition == ID_POSITION_TOP) {
 		return  0;
 	}
@@ -326,6 +325,40 @@ void WindowManager::SetYuvTextColor(HMENU hSubMenu, HWND hWnd, int wmId)
 
 	return;
 }
+bool WindowManager::ToggleAndGetStatus(HMENU submenu, int id)
+{
+	UINT  status = GetMenuState(submenu, id, MF_BYCOMMAND);
+
+	if (status == MF_CHECKED) {
+		CheckMenuItem(submenu, id, MF_UNCHECKED);
+		return false;
+	}
+	else {
+		CheckMenuItem(submenu, id, MF_CHECKED);
+		return true;
+	}
+}
+
+
+void WindowManager::SetYuvSignal(HMENU hSubMenu, HWND hWnd, int wmId)
+{
+	bool status = ToggleAndGetStatus(hSubMenu, wmId);
+	switch (wmId) {
+	case ID_SIGNAL_Y:
+		Player.SetSignalY(status);
+		break;
+	case ID_SIGNAL_CB:
+		Player.SetSignalCb(status);
+		break;
+	case ID_SIGNAL_CR:
+		Player.SetSignalCr(status);
+		break;
+	default:
+		break;
+	}
+	return;
+}
+
 
 
 uint32_t WindowManager::GetWidthSize(void)

@@ -25,7 +25,7 @@ public:
 	void SetYuvText(HMENU hSubMenu, HWND hWnd, int wmId);
 	void SetYuvTextPosition(HMENU hSubMenu, HWND hWnd, int wmId);
 	void SetYuvTextColor(HMENU hSubMenu, HWND hWnd, int wmId);
-
+	void SetYuvSignal(HMENU hSubMenu, HWND hWnd, int wmId);
 	int KeyDown(WPARAM wParam);
 	void MouseMove(void);
 	void MouseLeave(void);
@@ -54,6 +54,8 @@ private:
 	void ShowTextFileName(HDC hdc);
 
 	void ShowRgb(HDC hdc);
+
+	bool ToggleAndGetStatus(HMENU submenu, int id);
 
 };
 

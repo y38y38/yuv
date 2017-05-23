@@ -49,6 +49,14 @@ public:
 	void SetDiffTimes(YuvDiffTimes times);
 	uint32_t GetDiffTimes(void);
 
+	void SetSignalY(bool y);
+	void SetSignalCb(bool cb);
+	void SetSignalCr(bool cr);
+
+	bool GetSignalY(void);
+	bool GetSignalCb(void);
+	bool GetSignalCr(void);
+
 private:
 	YuvSetting();
 	~YuvSetting();
@@ -58,6 +66,10 @@ private:
 	YuvView View;
 	YuvDiffMode DiffMode;
 	YuvDiffTimes DiffTimes;
+
+	bool SignalY;
+	bool SignalCb;
+	bool SignalCr;
 };
 
 #endif //_YUV_SETTING_H

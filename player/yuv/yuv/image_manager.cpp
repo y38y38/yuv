@@ -21,6 +21,10 @@ ImageManager::ImageManager()
 {
 	FrameNumber = 0;
 	YuvBuffer = NULL;
+	SignalY = true;
+	SignalCb = true;
+	SignalCr = true;
+
 	return;
 }
 ImageManager::~ImageManager()
@@ -64,10 +68,10 @@ void ImageManager::GetRgb(uint8_t *yuvbuffer, uint32_t width, uint32_t height, u
 {
 
 	if (YuvSetting::GetInst().GetFormat() == YuvSetting::YUV_FORMAT_YV12) {
-		RawVideo420::getRgb(yuvbuffer, width, height, rgb_buf, TRUE, TRUE, TRUE);
+		RawVideo420::getRgb(yuvbuffer, width, height, rgb_buf, SignalY, SignalCb, SignalCr);
 	}
 	else {
-		Yuv4::getRgb(yuvbuffer, width, height, rgb_buf, TRUE, TRUE, TRUE);
+		Yuv4::getRgb(yuvbuffer, width, height, rgb_buf, SignalY, SignalCb, SignalCr);
 	}
 	return;
 }
@@ -113,4 +117,18 @@ TCHAR *ImageManager::GetFileName(void)
 	return Buffer.getFileName();
 }
 
+void ImageManager::SetSignalY(bool y)
+{
+	SignalY = y;
+}
 
+void ImageManager::SetSignalCb(bool cb)
+{
+	SignalCb = cb;
+
+}
+void ImageManager::SetSignalCr(bool cr)
+{
+	SignalCr = cr;
+
+}

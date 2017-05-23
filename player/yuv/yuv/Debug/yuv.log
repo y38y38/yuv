@@ -1,4 +1,3 @@
-﻿  window_manager.cpp
-c:\cygwin\home\y38y3\yuv\yuv\player\yuv\yuv\window_manager.cpp(82): warning C4101: 'test_position': ローカル変数は 1 度も使われていません。
+﻿  yuv_player.cpp
   yuv.vcxproj -> C:\cygwin\home\y38y3\yuv\yuv\player\yuv\Debug\yuv.exe
   yuv.vcxproj -> C:\cygwin\home\y38y3\yuv\yuv\player\yuv\Debug\yuv.pdb (Partial PDB)

@@ -23,6 +23,10 @@ public:
 
 	TCHAR *GetFileName(void);
 
+	void SetSignalY(bool y);
+	void SetSignalCb(bool cb);
+	void SetSignalCr(bool cr);
+
 
 private:
 	filebuffer Buffer;
@@ -33,9 +37,11 @@ private:
 
 	void GetRgb(uint8_t *yuvbuffer, uint32_t width, uint32_t heigth, uint8_t *rgb_buf);
 	int getFrameBufferSize(uint32_t widht, uint32_t height);
+
+	bool SignalY;
+	bool SignalCb;
+	bool SignalCr;
 	
-
-
 };
 
 

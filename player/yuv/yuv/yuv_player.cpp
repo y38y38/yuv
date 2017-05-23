@@ -126,7 +126,9 @@ void YuvPlayer::InputFile(TCHAR *filename)
 {
 	int index = FileNum % MAX_FILE_NUM;
 	Img[index].Init(filename);
-
+	Img[index].SetSignalY(YuvSetting::GetInst().GetSignalY());
+	Img[index].SetSignalCb(YuvSetting::GetInst().GetSignalCb());
+	Img[index].SetSignalCr(YuvSetting::GetInst().GetSignalCr());
 	UpdateImage(index, 0);
 
 	SingleViewIndex = index;
@@ -329,5 +331,33 @@ void YuvPlayer::UpdateRgbBuf()
 TCHAR *YuvPlayer::GetFileName(int file_index)
 {
 	return Img[file_index].GetFileName();
+}
+
+void YuvPlayer::SetSignalY(bool y)
+{
+	YuvSetting::GetInst().SetSignalY(y);
+	int file_num = GetFileNum();
+	for (int i = 0; i < file_num; i++) {
+		Img[i].SetSignalY(y);
+	}
+
+}
+void YuvPlayer::SetSignalCb(bool cb)
+{
+	YuvSetting::GetInst().SetSignalCb(cb);
+	int file_num = GetFileNum();
+	for (int i = 0; i < file_num; i++) {
+		Img[i].SetSignalCb(cb);
+	}
+
+}
+void YuvPlayer::SetSignalCr(bool cr)
+{
+	YuvSetting::GetInst().SetSignalCr(cr);
+	int file_num = GetFileNum();
+	for (int i = 0; i < file_num; i++) {
+		Img[i].SetSignalCr(cr);
+	}
+
 }
 

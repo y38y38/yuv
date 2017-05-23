@@ -58,6 +58,10 @@ void YuvSetting::InitSetting(void)
 	View = YUV_VIEW_SINGLE;
 	DiffMode = YUV_DIFF_DISABLE;
 	DiffTimes = YUV_DIFFTIMES_X1;
+	SignalY = true;
+	SignalCb = true;
+	SignalCr = true;
+
 	return;
 }
 void YuvSetting::SetView(YuvView view)
@@ -95,4 +99,31 @@ uint32_t YuvSetting::GetDiffTimes(void)
 
 	}
 }
+
+void YuvSetting::SetSignalY(bool y)
+{
+	SignalY = y;
+}
+bool YuvSetting::GetSignalY(void)
+{
+	return SignalY;
+}
+void YuvSetting::SetSignalCb(bool cb)
+{
+	SignalCb = cb;
+}
+bool YuvSetting::GetSignalCb(void)
+{
+	return SignalCb;
+}
+void YuvSetting::SetSignalCr(bool cr)
+{
+	SignalCr = cr;
+}
+bool YuvSetting::GetSignalCr(void)
+{
+	return SignalCr;
+}
+
+
 
