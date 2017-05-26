@@ -62,6 +62,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	m_hMenu = LoadMenu(hInstance, MAKEINTRESOURCE(IDR_MENU1));
 	m_hSubMenu = GetSubMenu(m_hMenu, 0);
+	WindowManager::GetInst().MenuInit(m_hSubMenu);
 
     MSG msg;
 

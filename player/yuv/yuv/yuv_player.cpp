@@ -171,7 +171,7 @@ void YuvPlayer::Init(void)
 	uint32_t height = (int)YuvSetting::GetInst().GetHeightSize();
 
 	Diff.SetSize(width, height);
-	Diff.SetDiffTimes(1);
+	Diff.SetDiffTimes(YuvSetting::GetInst().GetDiffTimes());
 
 	for (int i = 0; i < MAX_FILE_NUM; i++) {
 		Img[i].SetSize(width, height);
@@ -316,6 +316,10 @@ void YuvPlayer::SetDiffTimes(YuvSetting::YuvDiffTimes times)
 	WindowManager::GetInst().Update();
 	return;
 }
+int YuvPlayer::GetDiffTimes(void)
+{
+	return YuvSetting::GetInst().GetDiffTimes();
+}
 
 void YuvPlayer::UpdateRgbBuf()
 {
@@ -358,6 +362,20 @@ void YuvPlayer::SetSignalCr(bool cr)
 	for (int i = 0; i < file_num; i++) {
 		Img[i].SetSignalCr(cr);
 	}
+
+}
+bool YuvPlayer::GetSignalY(void)
+{
+	return YuvSetting::GetInst().GetSignalY();
+}
+bool YuvPlayer::GetSignalCb(void)
+{
+	return YuvSetting::GetInst().GetSignalCb();
+
+}
+bool YuvPlayer::GetSignalCr(void)
+{
+	return YuvSetting::GetInst().GetSignalCr();
 
 }
 

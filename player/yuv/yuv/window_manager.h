@@ -14,6 +14,7 @@ public:
 		return singleton;
 	}
 	void Create(HWND hWnd);
+	void MenuInit(HMENU hSubMenu);
 	void MouseLeft(HWND hWnd, LPARAM lParam);
 	void MouseRight(HMENU hSubMenu, HWND hWnd, LPARAM lParam);
 	void DropFile(HWND hWnd, WPARAM wParam);
@@ -56,6 +57,8 @@ private:
 	void ShowRgb(HDC hdc);
 
 	bool ToggleAndGetStatus(HMENU submenu, int id);
+
+	
 
 };
 

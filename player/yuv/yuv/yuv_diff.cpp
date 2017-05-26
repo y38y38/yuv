@@ -72,6 +72,11 @@ void YuvDiff::SetDiffTimes(int times)
 	Times = times;
 	return;
 }
+int YuvDiff::GetDiffTimes(void)
+{
+	return Times;
+}
+
 void YuvDiff::SetSize(uint32_t width, uint32_t height)
 {
 	Width = width;

@@ -30,11 +30,75 @@ WindowManager::~WindowManager()
 
 void WindowManager::Create(HWND hWnd)
 {
-	Player.Init();
 	MyWindow = hWnd;
+	Player.Init();
 	//ウィンドウがドラック＆ドロップを受け付けるようにする。
 	DragAcceptFiles(hWnd, TRUE);
+
+	
 	return;
+}
+void WindowManager::MenuInit(HMENU hSubMenu)
+{
+	//Windowの初期値を設定する
+	uint32_t width = Player.GetWidthSize();
+	if (width == 352) {
+		CheckMenuItem(hSubMenu, ID_PIXEL_352X289, MF_CHECKED);
+
+	}
+	else if (width = 1080) {
+		CheckMenuItem(hSubMenu, ID_PIXEL_1920X1081, MF_CHECKED);
+
+	}
+
+	YuvSetting::YuvView view = Player.GetView();
+	if (view == YuvSetting::YUV_VIEW_SINGLE) {
+		CheckMenuItem(hSubMenu, ID_VIEW_SINGLE, MF_CHECKED);
+	}
+	else {
+		CheckMenuItem(hSubMenu, ID_VIEW_SIDEBYSIDE, MF_CHECKED);
+	}
+
+	YuvSetting::YuvDiffMode mode = Player.GetDiffMode();
+	if (mode == YuvSetting::YUV_DIFF_DISABLE) {
+		CheckMenuItem(hSubMenu, ID_DIFF_DISABLE, MF_CHECKED);
+	}
+	else if (mode == YuvSetting::YUV_DIFF_ENABLE) {
+		CheckMenuItem(hSubMenu, ID_DIFF_ENABLE, MF_CHECKED);
+
+	}
+	else {
+		CheckMenuItem(hSubMenu, ID_DIFF_ONMOUSE, MF_CHECKED);
+	}
+
+	int difftimes = Player.GetDiffTimes();
+
+	if (difftimes == 1) {
+		CheckMenuItem(hSubMenu, ID_DIFFTIMES_X1, MF_CHECKED);
+
+	}
+	else {
+		CheckMenuItem(hSubMenu, ID_DIFFTIMES_X10, MF_CHECKED);
+	}
+
+	bool y = Player.GetSignalY();
+	if (y == true) {
+		CheckMenuItem(hSubMenu, ID_SIGNAL_Y, MF_CHECKED);
+
+	}
+
+	bool cb = Player.GetSignalCb();
+	if (cb == true) {
+		CheckMenuItem(hSubMenu, ID_SIGNAL_CB, MF_CHECKED);
+	}
+
+	bool cr = Player.GetSignalCr();
+	if (cr == true) {
+		CheckMenuItem(hSubMenu, ID_SIGNAL_CR, MF_CHECKED);
+	}
+
+	return;
+
 }
 void WindowManager::MouseLeft(HWND hWnd, LPARAM lParam)
 {

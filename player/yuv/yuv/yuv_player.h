@@ -29,10 +29,16 @@ public:
 	void SetDiffMode(YuvSetting::YuvDiffMode diff);
 	YuvSetting::YuvDiffMode GetDiffMode(void);
 	void SetDiffTimes(YuvSetting::YuvDiffTimes times);
+	int GetDiffTimes(void);
+
 
 	void SetSignalY(bool y);
 	void SetSignalCb(bool cb);
 	void SetSignalCr(bool cr);
+
+	bool GetSignalY(void);
+	bool GetSignalCb(void);
+	bool GetSignalCr(void);
 
 	typedef enum {
 		YUV_WINDOW_LEFT_TOP = 0,
