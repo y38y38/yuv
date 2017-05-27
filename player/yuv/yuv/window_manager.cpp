@@ -141,14 +141,37 @@ void WindowManager::DropFile(HWND hWnd, WPARAM wParam)
 	return;
 }
 
-int WindowManager::GetTextPosition(void)
+int WindowManager::GetTextPosition(int file_num, int index)
 {
-	if (TextPosition == ID_POSITION_TOP) {
-		return  0;
+	if (file_num < 3) {
+		if (TextPosition == ID_POSITION_TOP) {
+			return  0;
+		}
+		else {
+			return Player.GetHeightSize() - 20;
+		}
+
 	}
 	else {
-		return Player.GetHeightSize() - 20;
-	}
+		if (index < 2) {
+			if (TextPosition == ID_POSITION_TOP) {
+				return  0;
+			}
+			else {
+				return (Player.GetHeightSize() / 2) - 20;
+			}
+		}
+		else {
+			if (TextPosition == ID_POSITION_TOP) {
+				return (Player.GetHeightSize() / 2);
+			}
+			else {
+				return Player.GetHeightSize() - 20;
+			}
+
+		}
+
+	} 
 }
 
 void WindowManager::ShowTextFileName(HDC hdc)
@@ -162,11 +185,55 @@ void WindowManager::ShowTextFileName(HDC hdc)
 			TCHAR *path = Player.GetFileName(0);
 			TCHAR *filename = YuvStr::GetFileName(path);
 
-			TextOut(hdc, 0, GetTextPosition(), filename, _tcslen(filename));
+			TextOut(hdc, 0, GetTextPosition(file_num, 0), filename, _tcslen(filename));
 			path = Player.GetFileName(1);
 			filename = YuvStr::GetFileName(path);
-			TextOut(hdc, (Player.GetWidthSize() / 2), GetTextPosition(), filename, _tcslen(filename));
+			TextOut(hdc, (Player.GetWidthSize() / 2), GetTextPosition(file_num, 1), filename, _tcslen(filename));
 		}
+		else if (file_num == 3) {
+			SetBkMode(hdc, TRANSPARENT);
+			TCHAR *path = Player.GetFileName(0);
+			TCHAR *filename = YuvStr::GetFileName(path);
+
+			TextOut(hdc, 0, GetTextPosition(file_num, 0), filename, _tcslen(filename));
+			path = Player.GetFileName(1);
+			filename = YuvStr::GetFileName(path);
+			TextOut(hdc, (Player.GetWidthSize() / 2), GetTextPosition(file_num, 1), filename, _tcslen(filename));
+
+			path = Player.GetFileName(2);
+			filename = YuvStr::GetFileName(path);
+			TextOut(hdc, 0, GetTextPosition(file_num, 2), filename, _tcslen(filename));
+
+		}
+		else if (file_num == 4) {
+			SetBkMode(hdc, TRANSPARENT);
+			TCHAR *path = Player.GetFileName(0);
+			TCHAR *filename = YuvStr::GetFileName(path);
+
+			TextOut(hdc, 0, GetTextPosition(file_num, 0), filename, _tcslen(filename));
+			path = Player.GetFileName(1);
+			filename = YuvStr::GetFileName(path);
+			TextOut(hdc, (Player.GetWidthSize() / 2), GetTextPosition(file_num, 1), filename, _tcslen(filename));
+
+			path = Player.GetFileName(2);
+			filename = YuvStr::GetFileName(path);
+			TextOut(hdc, 0, GetTextPosition(file_num, 2), filename, _tcslen(filename));
+
+			path = Player.GetFileName(3);
+			filename = YuvStr::GetFileName(path);
+			TextOut(hdc, (Player.GetWidthSize() / 2), GetTextPosition(file_num, 3), filename, _tcslen(filename));
+
+		}
+	}
+	else {
+		int index = Player.GetViewIndex();
+		SetBkMode(hdc, TRANSPARENT);
+		TCHAR *path = Player.GetFileName(index);
+		TCHAR *filename = YuvStr::GetFileName(path);
+
+		TextOut(hdc, 0, GetTextPosition(1,0), filename, _tcslen(filename));
+
+
 	}
 
 }

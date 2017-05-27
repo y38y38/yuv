@@ -51,7 +51,7 @@ private:
 
 	void ShowText(HDC hdc);
 
-	int GetTextPosition(void);
+	int GetTextPosition(int file_num, int index);
 	void ShowTextFileName(HDC hdc);
 
 	void ShowRgb(HDC hdc);

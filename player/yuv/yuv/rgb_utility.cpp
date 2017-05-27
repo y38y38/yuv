@@ -56,7 +56,7 @@ void RgbUtility::RgbCombine(uint32_t width, uint32_t height, int image_num, uint
 		for (uint32_t i = 0; i < height; i++) {
 			memcpy(rgb_pointer, img[2] + ((width * 3) * i), width * 3);
 			rgb_pointer += width * 3;
-			//			memcpy(rgb_pointer, img[3] + ((width * 3) * i), width * 3);
+			memcpy(rgb_pointer, img[3] + ((width * 3) * i), width * 3);
 			rgb_pointer += width * 3;
 		}
 

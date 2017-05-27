@@ -379,3 +379,8 @@ bool YuvPlayer::GetSignalCr(void)
 
 }
 
+int YuvPlayer::GetViewIndex(void)
+{
+	return SingleViewIndex;
+}
+

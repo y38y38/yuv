@@ -53,6 +53,8 @@ public:
 	TCHAR *GetFileName(int file_index);
 	int GetFileNum(void);
 
+	int GetViewIndex(void);
+
 private:
 	const static int MAX_FILE_NUM = 4;
 	uint32_t FileNum;
