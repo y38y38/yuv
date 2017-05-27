@@ -40,23 +40,31 @@ private:
 	WindowManager();
 	~WindowManager();
 
-	void UpdateWindowSize(void);
 	YuvPlayer Player;
 	HWND MyWindow;
-	YuvPlayer::YUV_WINDOW_POS GetMousePosition(void);
-
 	int Text;
 	int TextPosition;
 	int TextColor;
 
+
+	void UpdateWindowSize(void);
+	YuvPlayer::YUV_WINDOW_POS GetMousePosition(void);
+	
 	void ShowText(HDC hdc);
 
-	int GetTextPosition(int file_num, int index);
+	int GetTextPositionHeight(int file_num, int index);
+	int GetTextPositionWidth(int file_num, int index);
 	void ShowTextFileName(HDC hdc);
 
 	void ShowRgb(HDC hdc);
 
 	bool ToggleAndGetStatus(HMENU submenu, int id);
+
+	void SetMenuSetPixel(HMENU submenu);
+	void SetMenuSetView(HMENU submenu);
+	void SetMenuSetDiffMode(HMENU submenu);
+	void SetMenuSetDiffTimes(HMENU submenu);
+	void SetMenuSetSignal(HMENU submenu);
 
 	
 

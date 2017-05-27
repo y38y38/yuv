@@ -38,65 +38,90 @@ void WindowManager::Create(HWND hWnd)
 	
 	return;
 }
-void WindowManager::MenuInit(HMENU hSubMenu)
+
+void WindowManager::SetMenuSetPixel(HMENU submenu)
 {
-	//WindowÇÃèâä˙ílÇê›íËÇ∑ÇÈ
 	uint32_t width = Player.GetWidthSize();
 	if (width == 352) {
-		CheckMenuItem(hSubMenu, ID_PIXEL_352X289, MF_CHECKED);
+		CheckMenuItem(submenu, ID_PIXEL_352X289, MF_CHECKED);
 
 	}
-	else if (width = 1080) {
-		CheckMenuItem(hSubMenu, ID_PIXEL_1920X1081, MF_CHECKED);
-
+	else {
+		CheckMenuItem(submenu, ID_PIXEL_1920X1081, MF_CHECKED);
 	}
-
+	return;
+}
+void WindowManager::SetMenuSetView(HMENU submenu)
+{
 	YuvSetting::YuvView view = Player.GetView();
 	if (view == YuvSetting::YUV_VIEW_SINGLE) {
-		CheckMenuItem(hSubMenu, ID_VIEW_SINGLE, MF_CHECKED);
+		CheckMenuItem(submenu, ID_VIEW_SINGLE, MF_CHECKED);
 	}
 	else {
-		CheckMenuItem(hSubMenu, ID_VIEW_SIDEBYSIDE, MF_CHECKED);
+		CheckMenuItem(submenu, ID_VIEW_SIDEBYSIDE, MF_CHECKED);
 	}
+	return;
 
+}
+void WindowManager::SetMenuSetDiffMode(HMENU submenu)
+{
 	YuvSetting::YuvDiffMode mode = Player.GetDiffMode();
 	if (mode == YuvSetting::YUV_DIFF_DISABLE) {
-		CheckMenuItem(hSubMenu, ID_DIFF_DISABLE, MF_CHECKED);
+		CheckMenuItem(submenu, ID_DIFF_DISABLE, MF_CHECKED);
 	}
 	else if (mode == YuvSetting::YUV_DIFF_ENABLE) {
-		CheckMenuItem(hSubMenu, ID_DIFF_ENABLE, MF_CHECKED);
+		CheckMenuItem(submenu, ID_DIFF_ENABLE, MF_CHECKED);
 
 	}
 	else {
-		CheckMenuItem(hSubMenu, ID_DIFF_ONMOUSE, MF_CHECKED);
+		CheckMenuItem(submenu, ID_DIFF_ONMOUSE, MF_CHECKED);
 	}
+	return;
 
+}
+void WindowManager::SetMenuSetDiffTimes(HMENU submenu)
+{
 	int difftimes = Player.GetDiffTimes();
 
 	if (difftimes == 1) {
-		CheckMenuItem(hSubMenu, ID_DIFFTIMES_X1, MF_CHECKED);
+		CheckMenuItem(submenu, ID_DIFFTIMES_X1, MF_CHECKED);
 
 	}
 	else {
-		CheckMenuItem(hSubMenu, ID_DIFFTIMES_X10, MF_CHECKED);
+		CheckMenuItem(submenu, ID_DIFFTIMES_X10, MF_CHECKED);
 	}
+	return;
 
+}
+void WindowManager::SetMenuSetSignal(HMENU submenu)
+{
 	bool y = Player.GetSignalY();
 	if (y == true) {
-		CheckMenuItem(hSubMenu, ID_SIGNAL_Y, MF_CHECKED);
+		CheckMenuItem(submenu, ID_SIGNAL_Y, MF_CHECKED);
 
 	}
 
 	bool cb = Player.GetSignalCb();
 	if (cb == true) {
-		CheckMenuItem(hSubMenu, ID_SIGNAL_CB, MF_CHECKED);
+		CheckMenuItem(submenu, ID_SIGNAL_CB, MF_CHECKED);
 	}
 
 	bool cr = Player.GetSignalCr();
 	if (cr == true) {
-		CheckMenuItem(hSubMenu, ID_SIGNAL_CR, MF_CHECKED);
+		CheckMenuItem(submenu, ID_SIGNAL_CR, MF_CHECKED);
 	}
+	return;
 
+}
+
+void WindowManager::MenuInit(HMENU hSubMenu)
+{
+	//WindowÇÃèâä˙ílÇê›íËÇ∑ÇÈ
+	SetMenuSetPixel(hSubMenu);
+	SetMenuSetView(hSubMenu);
+	SetMenuSetDiffMode(hSubMenu);
+	SetMenuSetDiffTimes(hSubMenu);
+	SetMenuSetSignal(hSubMenu);
 	return;
 
 }
@@ -141,7 +166,7 @@ void WindowManager::DropFile(HWND hWnd, WPARAM wParam)
 	return;
 }
 
-int WindowManager::GetTextPosition(int file_num, int index)
+int WindowManager::GetTextPositionHeight(int file_num, int index)
 {
 	if (file_num < 3) {
 		if (TextPosition == ID_POSITION_TOP) {
@@ -173,56 +198,27 @@ int WindowManager::GetTextPosition(int file_num, int index)
 
 	} 
 }
+int WindowManager::GetTextPositionWidth(int file_num, int index)
+{
+	if ((index % 2) == 0) {
+		return 0;
+	}
+	else {
+		return (Player.GetWidthSize() / 2);
+	}
+}
 
 void WindowManager::ShowTextFileName(HDC hdc)
 {
 	YuvSetting::YuvView view =  Player.GetView();
 	if (view == YuvSetting::YUV_VIEW_SIDE_BY_SIDE) {
 		int file_num = Player.GetFileNum();
+		SetBkMode(hdc, TRANSPARENT);
 
-		if (file_num == 2) {
-			SetBkMode(hdc, TRANSPARENT);
-			TCHAR *path = Player.GetFileName(0);
+		for (int index = 0; index < file_num; index++) {
+			TCHAR *path = Player.GetFileName(index);
 			TCHAR *filename = YuvStr::GetFileName(path);
-
-			TextOut(hdc, 0, GetTextPosition(file_num, 0), filename, _tcslen(filename));
-			path = Player.GetFileName(1);
-			filename = YuvStr::GetFileName(path);
-			TextOut(hdc, (Player.GetWidthSize() / 2), GetTextPosition(file_num, 1), filename, _tcslen(filename));
-		}
-		else if (file_num == 3) {
-			SetBkMode(hdc, TRANSPARENT);
-			TCHAR *path = Player.GetFileName(0);
-			TCHAR *filename = YuvStr::GetFileName(path);
-
-			TextOut(hdc, 0, GetTextPosition(file_num, 0), filename, _tcslen(filename));
-			path = Player.GetFileName(1);
-			filename = YuvStr::GetFileName(path);
-			TextOut(hdc, (Player.GetWidthSize() / 2), GetTextPosition(file_num, 1), filename, _tcslen(filename));
-
-			path = Player.GetFileName(2);
-			filename = YuvStr::GetFileName(path);
-			TextOut(hdc, 0, GetTextPosition(file_num, 2), filename, _tcslen(filename));
-
-		}
-		else if (file_num == 4) {
-			SetBkMode(hdc, TRANSPARENT);
-			TCHAR *path = Player.GetFileName(0);
-			TCHAR *filename = YuvStr::GetFileName(path);
-
-			TextOut(hdc, 0, GetTextPosition(file_num, 0), filename, _tcslen(filename));
-			path = Player.GetFileName(1);
-			filename = YuvStr::GetFileName(path);
-			TextOut(hdc, (Player.GetWidthSize() / 2), GetTextPosition(file_num, 1), filename, _tcslen(filename));
-
-			path = Player.GetFileName(2);
-			filename = YuvStr::GetFileName(path);
-			TextOut(hdc, 0, GetTextPosition(file_num, 2), filename, _tcslen(filename));
-
-			path = Player.GetFileName(3);
-			filename = YuvStr::GetFileName(path);
-			TextOut(hdc, (Player.GetWidthSize() / 2), GetTextPosition(file_num, 3), filename, _tcslen(filename));
-
+			TextOut(hdc, GetTextPositionWidth(file_num, index), GetTextPositionHeight(file_num, index), filename, _tcslen(filename));
 		}
 	}
 	else {
@@ -231,7 +227,7 @@ void WindowManager::ShowTextFileName(HDC hdc)
 		TCHAR *path = Player.GetFileName(index);
 		TCHAR *filename = YuvStr::GetFileName(path);
 
-		TextOut(hdc, 0, GetTextPosition(1,0), filename, _tcslen(filename));
+		TextOut(hdc, 0, GetTextPositionHeight(1,0), filename, _tcslen(filename));
 
 
 	}
