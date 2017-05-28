@@ -177,7 +177,8 @@ int WindowManager::GetTextPositionHeight(int file_num, int index)
 		}
 
 	}
-	else {
+	else
+	{
 		if (index < 2) {
 			if (TextPosition == ID_POSITION_TOP) {
 				return  0;
