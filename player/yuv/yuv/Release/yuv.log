@@ -1,18 +1,7 @@
-﻿  stdafx.cpp
-  filebuffer.cpp
-  image_manager.cpp
-  rgb_utility.cpp
-  yuv_diff.cpp
-  yuv_player.cpp
-  rawvideo420.cpp
-  window_manager.cpp
-  yuv.cpp
-  yuv4.cpp
-  yuvrgb.cpp
-  yuv_setting.cpp
-  yuv_str.cpp
-  コード生成しています。
-  All 145 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+﻿  コード生成しています。
+  0 of 145 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   yuv.vcxproj -> C:\cygwin\home\y38y3\yuv\yuv\player\yuv\Release\yuv.exe
   yuv.vcxproj -> C:\cygwin\home\y38y3\yuv\yuv\player\yuv\Release\yuv.pdb (Full PDB)

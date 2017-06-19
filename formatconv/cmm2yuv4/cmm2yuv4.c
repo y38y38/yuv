@@ -33,11 +33,13 @@ int cmm2yuv4(unsigned char* input, unsigned char *output, int height, int width)
     int c_height = height / 2;
     
     //cb
+	char cb_value;
     for(i = 0;i < c_height;i++) {
         for(j = 0;j < c_width;j++) {
 
             cmmGetCbPixel((unsigned short*)input, ((i * c_width) + j), &value, c_width, c_height);
-            unsigned char cb_char = (unsigned char)(((unsigned short)value) >> 8);
+            char cb_char = (char)((value) >> 8);
+			cb_char -= 128;
             yuv4SetCbPixel(output, ((i * c_width) + j), cb_char, c_width, c_height);
         }
     }
@@ -46,7 +48,8 @@ int cmm2yuv4(unsigned char* input, unsigned char *output, int height, int width)
         for(j = 0;j < c_width;j++) {
 
             cmmGetCrPixel((unsigned short*)input, ((i * c_width) + j), &value, c_width, c_height);
-            unsigned char cr_char = (unsigned char)(((unsigned short)value) >> 8);
+            char cr_char = (char)(((unsigned short)value) >> 8);
+			cr_char -= 128;
             yuv4SetCrPixel(output, ((i * c_width) + j), cr_char, c_width , c_height );
         }
     }

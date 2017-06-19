@@ -19,20 +19,26 @@ int yuv42cmm(unsigned char* input, unsigned char *output, int height, int width)
         }
     }
     //cb
+    char cb_value;
+	unsigned short cb_short;
     for(i = 0;i < height/2;i++) {
         for(j = 0;j < width/2;j++) {
 
-            yuv4GetCbPixel(input, ((i * width) + j), &value, width, height);
-            unsigned short cb_short = (unsigned short)(((unsigned short)value) << 8);
+            yuv4GetCbPixel(input, ((i * (width/2)) + j), &cb_value, width/2, height/2);
+			cb_short = (unsigned short)(cb_value + 128);
+			cb_short <<= 8;
             *(output_short + (height * width) + ((i * (width/2)) + j)) =  cb_short;
         }
     }
     //cr
+    char cr_value;
+	unsigned short cr_short;
     for(i = 0;i < height/2;i++) {
         for(j = 0;j < width/2;j++) {
 
-            yuv4GetCrPixel(input, ((i * width) + j), &value, width, height);
-            unsigned short cr_short = (unsigned short)(((unsigned short)value) << 8);
+            yuv4GetCrPixel(input, ((i * (width/2)) + j), &cr_value, width/2, height/2);
+			cr_short = (unsigned short)(cr_value + 128);
+			cr_short <<= 8;
             *(output_short + (height * width) + ((height/2) * (width/2)) + ((i * (width/2)) + j)) =  cr_short;
         }
     }

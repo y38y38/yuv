@@ -30,6 +30,7 @@ int conv_file(FILE *input, FILE *output, int width, int height)
 		printf("err malloc 2\n");
 		return -1;
 	}
+	//printf("size = %d,%d\n",input_framesize, output_framesize);
 	for (i=0;;i++) {
 
 		size_t readsize = fread(inbuf, 1, input_framesize, input);
@@ -42,6 +43,7 @@ int conv_file(FILE *input, FILE *output, int width, int height)
 		} else {
 		}
 
+		//printf("start %d 0x%x\n",i, inbuf);
 		int ret = conv_frame(inbuf, outbuf, height, width);
 		if (ret < 0) {
 			printf("frame ng\n");

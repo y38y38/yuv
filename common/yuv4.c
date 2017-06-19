@@ -60,6 +60,7 @@ void yuv4GetYPixel(unsigned char *buffer, int pixel, unsigned char *y, int max_w
 }
 static int Yuv4GetCbOffset(int pixel, int max_width, int  max_height)
 {
+//printf("%d %d %d\n", pixel, max_width, max_height);
     int tmp_width,tmp_height;
     tmp_width = pixel % max_width;
     if (pixel == 0) {
@@ -125,20 +126,22 @@ static int Yuv4GetCbOffset(int pixel, int max_width, int  max_height)
 	if (width == 0) {
 		width = 1;
 	}
+	//printf("offset,%d\n", (height_offset + cb_offset_y + cb_offset_cr + (width /2)));
 	return (height_offset + cb_offset_y + cb_offset_cr + (width /2));
 
 }
-void yuv4GetCbPixel(unsigned char *buffer, int pixel, unsigned char *cb, int max_width, int  max_height) {
+void yuv4GetCbPixel(unsigned char *buffer, int pixel, char *cb, int max_width, int  max_height) {
 //CbCrY1Y1Y2Y2CbCr
 
-	short cb_value;
+	char cb_value;
 	cb_value = *(buffer + Yuv4GetCbOffset(pixel , max_width, max_height));
-	*cb = (cb_value + 128) & 0xff;
+	*cb = cb_value;
 
 	return;
 }
 static int Yuv4GetCrOffset(int pixel, int max_width, int  max_height)
 {
+#if 0
     pixel = pixel * 4;
     max_width = max_width * 2;
     max_height = max_height * 2;
@@ -190,16 +193,21 @@ static int Yuv4GetCrOffset(int pixel, int max_width, int  max_height)
 	if (width == 0) {
 		width = 1;
 	}
-
 	return (height_offset + cr_offset_y + cr_offset_cr + (width / 2) + 1);
-}
-void yuv4GetCrPixel(unsigned char *buffer, int pixel, unsigned char *cr, int max_width, int  max_height) {
-//CbCbY1Y1Y2Y2CrCr
+#else
 
-	short cr_value;
+	return (pixel * 6) + 1;
+
+#endif
+
+}
+void yuv4GetCrPixel(unsigned char *buffer, int pixel, char *cr, int max_width, int  max_height) {
+//CbCrY1Y1Y2Y2CbCr
+
+	char cr_value;
 
 	cr_value = *(buffer + Yuv4GetCrOffset(pixel, max_width, max_height));
-	*cr = (cr_value + 128) & 0xff;
+	*cr = cr_value;
 	return;
 }
 
@@ -207,14 +215,12 @@ void yuv4SetYPixel(unsigned char *buffer, int pixel, unsigned char y, int max_wi
 	*(buffer + Yuv4GetYOffset(pixel, max_width, max_height)) = y;
 }
 
-void yuv4SetCbPixel(unsigned char *buffer, int pixel, unsigned char cb, int max_width, int  max_height) {
-    unsigned char cb_value = (cb - 128) & 0xff;
-	*(buffer + Yuv4GetCbOffset(pixel, max_width, max_height)) = cb_value;
+void yuv4SetCbPixel(unsigned char *buffer, int pixel, char cb, int max_width, int  max_height) {
+	*(buffer + Yuv4GetCbOffset(pixel, max_width, max_height)) = (unsigned char)cb;
 
 }
 
-void yuv4SetCrPixel(unsigned char *buffer, int pixel, unsigned char cr, int max_width, int  max_height) {
-    unsigned char cr_value = (cr - 128) & 0xff;
-	*(buffer + Yuv4GetCrOffset(pixel, max_width, max_height)) = cr_value;
+void yuv4SetCrPixel(unsigned char *buffer, int pixel, char cr, int max_width, int  max_height) {
+	*(buffer + Yuv4GetCrOffset(pixel, max_width, max_height)) = (unsigned char)cr;
 
 }
