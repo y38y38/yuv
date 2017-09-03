@@ -138,7 +138,7 @@ int sn_file(FILE *input1, FILE *input2, int width, int height)
 
 	int input_framesize = inputFrameSize(width, height);
 	inbuf1 = malloc(input_framesize);
-	//printf("i %d\n", input_framesize);
+	printf("i %d\n", input_framesize);
 
 	if (inbuf1 == NULL) {
 		printf("err malloc 1\n");
@@ -155,7 +155,7 @@ int sn_file(FILE *input1, FILE *input2, int width, int height)
 
 		size_t readsize = fread(inbuf1, 1, input_framesize, input1);
         if (readsize == 0 ) {
-            printf("OK end of file %d\n", i);
+            printf("OK end of file %d \n", i);
             return 0;
         } else if (readsize != input_framesize) {
             printf("fread err\n");
@@ -164,7 +164,7 @@ int sn_file(FILE *input1, FILE *input2, int width, int height)
 		}
 		readsize = fread(inbuf2, 1, input_framesize, input2);
         if (readsize == 0 ) {
-            printf("OK end of file %d\n", i);
+            printf("NG end of file %d\n", i);
             return 0;
         } else if (readsize != input_framesize) {
             printf("fread err\n");
