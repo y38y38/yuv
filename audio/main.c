@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include  <stdlib.h>
+#include "opus.h" 
 #include "lib_enc_g711/enc_g711.h"
 
 #define SEND_INTERVAL	(1) //sample@48kHz
@@ -10,7 +11,8 @@ void NotifyEnd(unsigned long id)
 	printf("%s %d\n", __FUNCTION__, (int)id);
 	return;
 }
-int main(int argc, char** argv[])
+//int main(int argc, char** argv[])
+int main(int argc, char** argv)
 {
 	
 	EncG711RegisterFunc(NotifyEnd);
