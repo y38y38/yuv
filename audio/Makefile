@@ -1,18 +1,17 @@
-CFLAGS = -g -Wall  -Wmain
-INC = -I./
-INC += -I./opus/include/
+OPUS_LIB_PATH = /usr/local/lib
+OPUS_INC_PATH = /usr/local/include/opus
 
-g711: main.o sample_send_g711.o enc_g711.o
-		gcc $(CFLAGS) $(INC) -o g711 main.o sample_send_g711.o  enc_g711.o 
+CFLAGS = -g -Wall
+INC = -I./
+INC += -I$(OPUS_INC_PATH)
+
+LIB = -L$(OPUS_LIB_PATH)
+
+opusenc: main.o
+		gcc $(CFLAGS) $(INC) $(LIB)  -o opusenc -lopus main.o
 
 main.o: main.c
 		gcc $(CFLAGS)  $(INC) -c main.c
 
-sample_send_g711.o: sample_send_g711.c
-		gcc $(CFLAGS)  $(INC) -c  sample_send_g711.c
-
-enc_g711.o: lib_enc_g711/enc_g711.c
-		gcc $(CFLAGS)  $(INC) -c lib_enc_g711/enc_g711.c
-
 clean:
-		rm -f g711 *.o lib_enc_g711/*.o
+		rm -f opusenc *.o 
