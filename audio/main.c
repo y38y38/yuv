@@ -23,7 +23,6 @@ int main(int argc, char** argv)
 		printf("can't open file\n");
 		return -1;
 	}
-#if 0
 	OpusEncoder *encoder;
 	int error;
 	encoder = opus_encoder_create(48000, 1, OPUS_APPLICATION_VOIP, &error);
@@ -31,9 +30,9 @@ int main(int argc, char** argv)
 		printf("%d\n", error);
 		return -1;
 	}
-#endif
-	int size;
-	size = opus_encoder_get_size(1);
+	opus_encoder_ctl(encoder, OPUS_SET_BITRATE(500));
+	opus_encoder_ctl(encoder, OPUS_SET_COMPLEXITY(0));
+	opus_encoder_ctl(encoder, OPUS_SET_SIGNAL(OPUS_SIGNAL_VOICE));
 
 
 	return 0;
