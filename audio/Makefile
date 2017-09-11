@@ -8,7 +8,7 @@ INC += -I$(OPUS_INC_PATH)
 LIB = -L$(OPUS_LIB_PATH)
 
 opusenc: main.o
-		gcc $(CFLAGS) $(INC) $(LIB)  -o opusenc -lopus main.o
+		gcc $(CFLAGS) $(INC) $(LIB)  -o opusenc main.o -lopus 
 
 main.o: main.c
 		gcc $(CFLAGS)  $(INC) -c main.c
