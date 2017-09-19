@@ -8,6 +8,7 @@
 
 #include "rawvideo420.h"
 #include "yuv4.h"
+#include "cmm.h"
 
 #include "yuv_diff.h"
 
@@ -37,8 +38,10 @@ void YuvDiff::CreateDiff(uint8_t *img1, uint8_t *img2)
 			if (YuvSetting::GetInst().GetFormat() == YuvSetting::YUV_FORMAT_YV12) {
 				RawVideo420::getYPixel(img1, (i % Width) + (j * Width), &y1, &pb, &pr);
 				RawVideo420::getYPixel(img2, (i % Width) + (j * Width), &y2, &pb, &pr);
-			}
-			else {
+			} else if (YuvSetting::GetInst().GetFormat() == YuvSetting::YUV_FORMAT_CMM) {
+				Cmm::getYPixel(img1, (i % Width) + (j * Width), &y1, &pb, &pr, width, height);
+				Cmm::getYPixel(img2, (i % Width) + (j * Width), &y2, &pb, &pr, width, height);
+			} else {
 				Yuv4::getYPixel(img1, (i % Width) + (j * Width), &y1, &pb, &pr, width, height);
 				Yuv4::getYPixel(img2, (i % Width) + (j * Width), &y2, &pb, &pr, width, height);
 
@@ -46,8 +49,9 @@ void YuvDiff::CreateDiff(uint8_t *img1, uint8_t *img2)
 			diff = 0x80 + ((y1 - y2)  * Times);
 			if (YuvSetting::GetInst().GetFormat() == YuvSetting::YUV_FORMAT_YV12) {
 				RawVideo420::setYPixel(diff, (i % Width) + (j * Width), YuvBuffer);
-			}
-			else {
+			} else if (YuvSetting::GetInst().GetFormat() == YuvSetting::YUV_FORMAT_CMM) {
+				Cmm::setYPixel((unsigned char)diff, (i % Width) + (j * Width), YuvBuffer, width, height);
+			} else {
 				Yuv4::setYPixel((unsigned char )diff, (i % Width) + (j * Width), YuvBuffer, width, height);
 			}
 		}
@@ -59,10 +63,10 @@ void YuvDiff::GetRgb(uint8_t *rgbbuf)
 {
 	if (YuvSetting::GetInst().GetFormat() == YuvSetting::YUV_FORMAT_YV12) {
 		RawVideo420::getRgb(YuvBuffer, Width, Height, rgbbuf, TRUE, TRUE, TRUE);
-	}
-	else {
+	} else if (YuvSetting::GetInst().GetFormat() == YuvSetting::YUV_FORMAT_CMM) {
+		Cmm::getRgb(YuvBuffer, Width, Height, rgbbuf, TRUE, TRUE, TRUE);
+	} else {
 		Yuv4::getRgb(YuvBuffer, Width, Height, rgbbuf, TRUE, TRUE, TRUE);
-
 	}
 	return;
 }
@@ -93,6 +97,8 @@ void YuvDiff::SetSize(uint32_t width, uint32_t height)
 
 	if (YuvSetting::GetInst().GetFormat() == YuvSetting::YUV_FORMAT_YUV4) {
 		memset(YuvBuffer, 0x00, Width * Height + ((Width * height) / 2));
+	} else if (YuvSetting::GetInst().GetFormat() == YuvSetting::YUV_FORMAT_CMM) {
+		memset(YuvBuffer, 0x00, ((Width * Height) * 2) + (((Width * height) * 2) / 2));
 	}
 
 	return;

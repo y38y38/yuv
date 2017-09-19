@@ -20,6 +20,7 @@ public:
 	void DropFile(HWND hWnd, WPARAM wParam);
 	void Paint(HWND hWnd);
 	void SetYuvPixel(HMENU hSubMenu, HWND hWnd, int wmId);
+	void SetYuvFormat(HMENU hSubMenu, HWND hWnd, int wmId);
 	void SetYuvView(HMENU hSubMenu, HWND hWnd, int wmId);
 	void SetYuvDiffMode(HMENU hSubMenu, HWND hWnd, int wmId);
 	void SetYuvDiffTimes(HMENU hSubMenu, HWND hWnd, int wmId);
@@ -61,6 +62,7 @@ private:
 	bool ToggleAndGetStatus(HMENU submenu, int id);
 
 	void SetMenuSetPixel(HMENU submenu);
+	void SetMenuSetFormat(HMENU submenu);
 	void SetMenuSetView(HMENU submenu);
 	void SetMenuSetDiffMode(HMENU submenu);
 	void SetMenuSetDiffTimes(HMENU submenu);

@@ -145,6 +145,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cmm.h" />
     <ClInclude Include="filebuffer.h" />
     <ClInclude Include="image_manager.h" />
     <ClInclude Include="rgb_utility.h" />
@@ -163,6 +164,7 @@
     <ClInclude Include="yuv_str.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="cmm.cpp" />
     <ClCompile Include="filebuffer.cpp" />
     <ClCompile Include="image_manager.cpp" />
     <ClCompile Include="rgb_utility.cpp" />

@@ -13,6 +13,7 @@ public:
 	typedef enum {
 		YUV_FORMAT_YV12,
 		YUV_FORMAT_YUV4,
+		YUV_FORMAT_CMM,
 	} YuvFormat;
 	void SetFormat(YuvFormat format);
 	YuvFormat GetFormat(void);

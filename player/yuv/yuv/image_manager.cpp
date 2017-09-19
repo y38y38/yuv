@@ -11,6 +11,8 @@
 
 #include "rawvideo420.h"
 #include "yuv4.h"
+#include "cmm.h"
+
 #include "yuv_setting.h"
 
 #include "yuv_debug.h"
@@ -70,7 +72,9 @@ void ImageManager::GetRgb(uint8_t *yuvbuffer, uint32_t width, uint32_t height, u
 	if (YuvSetting::GetInst().GetFormat() == YuvSetting::YUV_FORMAT_YV12) {
 		RawVideo420::getRgb(yuvbuffer, width, height, rgb_buf, SignalY, SignalCb, SignalCr);
 	}
-	else {
+	else if (YuvSetting::GetInst().GetFormat() == YuvSetting::YUV_FORMAT_CMM) {
+		Cmm::getRgb(yuvbuffer, width, height, rgb_buf, SignalY, SignalCb, SignalCr);
+	} else {
 		Yuv4::getRgb(yuvbuffer, width, height, rgb_buf, SignalY, SignalCb, SignalCr);
 	}
 	return;
@@ -79,8 +83,10 @@ int ImageManager::getFrameBufferSize(uint32_t width, uint32_t height)
 {
 	if (YuvSetting::GetInst().GetFormat() == YuvSetting::YUV_FORMAT_YV12) {
 		return RawVideo420::getFrameBufferSize(width, height);
-	}
-	else {
+	} else if (YuvSetting::GetInst().GetFormat() == YuvSetting::YUV_FORMAT_CMM) {
+		return Cmm::getFrameBufferSize(width, height);
+
+	} else {
 		return Yuv4::getFrameBufferSize(width, height);
 	}
 }
