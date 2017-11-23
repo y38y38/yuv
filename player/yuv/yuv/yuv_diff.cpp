@@ -93,10 +93,14 @@ void YuvDiff::SetSize(uint32_t width, uint32_t height)
 	else if (YuvSetting::GetInst().GetFormat() == YuvSetting::YUV_FORMAT_CMM) {
 		size = Cmm::getFrameBufferSize(width, height);
 	}
+	else {
+		size = 0;
+	}
 
 	YuvBuffer = (uint8_t *)malloc(size);
 	if (YuvBuffer == NULL) {
 		Win32Printf("%hs %d malloc error", __func__, __LINE__);
+		return;
 	}
 	memset(YuvBuffer, 0x00, size);
 

@@ -21,7 +21,11 @@ int Cmm::getRgb(unsigned char *ypbpr_buffer, int width, int height, unsigned cha
 
 	memset(rgb_buffer, 0x0, (width * height) * 3);
 	for (int i = 0; i < (width*height); i++) {
-		getPixel(ypbpr_buffer, i, &y, &pb, &pr, width, height);
+		getYPixel(ypbpr_buffer, i, &y, &pb, &pr, width, height);
+		if ((i % 2) == 0) {
+			getPbPixel(ypbpr_buffer, i, &pb, width, height);
+			getPrPixel(ypbpr_buffer, i, &pr, width, height);
+		}
 		test_buffer[i] = pb;
 		if (enable_y != TRUE) {
 			y = 128;
