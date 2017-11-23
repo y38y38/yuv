@@ -126,22 +126,6 @@ void YuvPlayer::SetFormat(YuvSetting::YuvFormat format)
 {
 	YuvSetting::GetInst().SetFormat(format);
 
-#if 0
-	//画像サイズが変更されたらバッファサイズを変更する必要がある。
-	//SetRgbBufSize();
-
-	uint32_t width = YuvSetting::GetInst().GetWidthSize();
-	uint32_t height = YuvSetting::GetInst().GetHeightSize();
-
-	for (int i = 0; i < MAX_FILE_NUM; i++) {
-		Img[i].SetSize(width, height);
-
-		//画像サイズが変更されたら画像の更新も行う。
-		uint32_t frame_number = Img[i].GetFrameNumber();
-		UpdateImage(i, frame_number);
-	}
-	Diff.SetSize(width, height);
-#endif
 	WindowManager::GetInst().Update();
 	return;
 }

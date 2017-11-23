@@ -83,23 +83,22 @@ int YuvDiff::GetDiffTimes(void)
 
 void YuvDiff::SetSize(uint32_t width, uint32_t height)
 {
-	Width = width;
-	Height = height;
-
+	int size;
 	if (YuvBuffer != NULL) {
 		free(YuvBuffer);
 	}
+	if (YuvSetting::GetInst().GetFormat() == YuvSetting::YUV_FORMAT_YUV4) {
+		size = Yuv4::getFrameBufferSize(width, height);
+	}
+	else if (YuvSetting::GetInst().GetFormat() == YuvSetting::YUV_FORMAT_CMM) {
+		size = Cmm::getFrameBufferSize(width, height);
+	}
 
-	YuvBuffer = (uint8_t *)malloc(Width * Height + ((Width * height) / 2));
+	YuvBuffer = (uint8_t *)malloc(size);
 	if (YuvBuffer == NULL) {
 		Win32Printf("%hs %d malloc error", __func__, __LINE__);
 	}
-
-	if (YuvSetting::GetInst().GetFormat() == YuvSetting::YUV_FORMAT_YUV4) {
-		memset(YuvBuffer, 0x00, Width * Height + ((Width * height) / 2));
-	} else if (YuvSetting::GetInst().GetFormat() == YuvSetting::YUV_FORMAT_CMM) {
-		memset(YuvBuffer, 0x00, ((Width * Height) * 2) + (((Width * height) * 2) / 2));
-	}
+	memset(YuvBuffer, 0x00, size);
 
 	return;
 }
