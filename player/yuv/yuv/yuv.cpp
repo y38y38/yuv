@@ -244,6 +244,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 		}
 		break;
+	case WM_KEYUP:
+	{
+		int ret = WindowManager::GetInst().KeyUp(wParam);
+		if (ret < 0) {
+			return DefWindowProc(hWnd, message, wParam, lParam);
+		}
+
+	}
+	break;
 	case WM_MOUSEMOVE:
 		WindowManager::GetInst().MouseMove();
 		break;

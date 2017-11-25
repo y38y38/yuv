@@ -68,6 +68,7 @@ void YuvPlayer::UpdateImageAll(int frame_number)
 
 void YuvPlayer::UpdateImage(int image_index, int frame_number)
 {
+	Win32Printf("%hs %d frame_number %d", __FUNCTION__, __LINE__, frame_number);
 	Img[image_index].Update(frame_number, RgbBuf[image_index]);
 
 	WindowManager::GetInst().Update();
@@ -228,6 +229,19 @@ void YuvPlayer::PrevFrame(void)
 	WindowManager::GetInst().Update();
 	return;
 }
+void YuvPlayer::JumpFrame(int frame)
+{
+	int file_num = GetFileNum();
+	for (int i = 0; i < file_num; i++) {
+		uint32_t frame_number = Img[i].GetFrameNumber();
+		if (frame_number != 0) {
+			UpdateImage(i, frame_number + frame);
+		}
+	}
+	WindowManager::GetInst().Update();
+	return;
+}
+
 void YuvPlayer::SetView(YuvSetting::YuvView view)
 {
 	YuvSetting::GetInst().SetView(view);

@@ -26,6 +26,7 @@ public:
 	void PrevFrame(void);
 	void NextImage(void);
 	void PrevImage(void);
+	void JumpFrame(int frame);
 	void SetView(YuvSetting::YuvView view);
 	YuvSetting::YuvView GetView(void);
 	void SetDiffMode(YuvSetting::YuvDiffMode diff);

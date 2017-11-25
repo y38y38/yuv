@@ -29,6 +29,7 @@ public:
 	void SetYuvTextColor(HMENU hSubMenu, HWND hWnd, int wmId);
 	void SetYuvSignal(HMENU hSubMenu, HWND hWnd, int wmId);
 	int KeyDown(WPARAM wParam);
+	int KeyUp(WPARAM wParam);
 	void MouseMove(void);
 	void MouseLeave(void);
 
@@ -46,6 +47,8 @@ private:
 	int Text;
 	int TextPosition;
 	int TextColor;
+	WPARAM Key;
+	int Continus;
 
 
 	void UpdateWindowSize(void);
@@ -67,8 +70,9 @@ private:
 	void SetMenuSetDiffMode(HMENU submenu);
 	void SetMenuSetDiffTimes(HMENU submenu);
 	void SetMenuSetSignal(HMENU submenu);
-
 	
+	void SetKeyLog(BOOL down, WPARAM wParam);
+	int GetKeyContinous(void);
 
 };
 

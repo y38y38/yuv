@@ -21,6 +21,8 @@ WindowManager::WindowManager()
 	Text = ID_TEXT_NONE;
 	TextPosition = ID_POSITION_TOP;
 	TextColor = ID_COLOR_BLACK;
+	Key = 0x0;
+	Continus = 0x0;
 	return;
 }
 WindowManager::~WindowManager()
@@ -533,16 +535,30 @@ uint32_t WindowManager::GetHeightSize(void)
 }
 int WindowManager::KeyDown(WPARAM wParam)
 {
+	Win32Printf("%hs %d %x", __FUNCTION__, __LINE__, wParam);
+	int continous = GetKeyContinous();
 	switch (wParam)
 	{
+	case 0x20://space
+		Player.NextFrame();
+		break;
 	case 0x25://Å©
-		Player.PrevFrame();
+		if (continous != 0) {
+			Player.JumpFrame(-1 * continous);
+		}
+		else {
+			Player.PrevFrame();
+		}
 		break;
 	case 0x26://Å™
 		Player.NextImage();
 		break;
 	case 0x27://Å®
-		Player.NextFrame();
+		if (continous != 0) {
+			Player.JumpFrame(continous);
+		} else {
+			Player.NextFrame();
+		}
 		break;
 	case 0x28://Å´
 		Player.PrevImage();
@@ -551,8 +567,46 @@ int WindowManager::KeyDown(WPARAM wParam)
 		return -1;
 		break;
 	}
+	SetKeyLog(TRUE, wParam);
 	return 0;
 }
+int WindowManager::KeyUp(WPARAM wParam)
+{
+	Win32Printf("%hs %d %x", __FUNCTION__, __LINE__,wParam);
+	switch (wParam)
+	{
+	case 0x25://Å©
+	case 0x27://Å®
+		break;
+	default:
+		return -1;
+		break;
+	}
+	SetKeyLog(FALSE, wParam);
+	return 0;
+}
+void WindowManager::SetKeyLog(BOOL down, WPARAM wParam)
+{
+	if (down == TRUE) {
+		if (Key == wParam) {
+			Continus++;
+		}
+		else {
+			Continus = 0;
+		}
+		Key = wParam;
+	}
+	else {
+		Key = 0;
+		Continus = 0;
+	}
+	return;
+}
+int WindowManager::GetKeyContinous(void)
+{
+	return Continus;
+}
+
 void WindowManager::Update(void)
 {
 	UpdateWindowSize();
