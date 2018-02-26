@@ -366,12 +366,45 @@ int getFrame(FILE* file, int frame_num, uint8_t *buffer)
     }
  
 }
+int getFrameNum(FILE *input)
+{
+    int ret=0;
+    ret = readFileHeader(input);
+    if (ret < 0) {
+        return 0;
+    }
+    uint8_t * buf;
+    buf = (uint8_t*)malloc(kVideoSize);
+    int frame=0;
+    for (frame=0;;frame++) {
+        ret = getFrame(input, frame, buf);
+        if (ret < 0) {
+            break;
+        }
+    }
+    ret = fseek(input, 0, SEEK_SET);
+    if ( ret < 0) {
+        printf("err %d\n", __LINE__);
+        return 0;
+    }
+    if ((frame + 1) > 300) {
+        return 300;
+    } else {
+        return (frame + 1);
+    }
+
+}
 int conv_file2(FILE *input, FILE *output)
 {
+    int frame_num = 0;
+    frame_num = getFrameNum(input);
+    printf("frame num %d\n", frame_num);
 
     readFileHeader(input);
     int audio_counter = 0;
-    int num = VIDEO_FRAME_NUM;
+    //int num = VIDEO_FRAME_NUM;
+    int num = frame_num;
+    
     size_t writesize;
     writesize = fwrite(&kRiffHeader, 1, sizeof(kRiffHeader), output);
     if (writesize != sizeof(kRiffHeader)) {
