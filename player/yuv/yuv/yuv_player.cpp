@@ -96,6 +96,7 @@ void YuvPlayer::SetPixel(YuvSetting::YuvSize size)
 	WindowManager::GetInst().Update();
 	return;
 }
+
 uint32_t YuvPlayer::GetWidthSize(void)
 {
 	if (YuvSetting::GetInst().GetView() == YuvSetting::YUV_VIEW_SINGLE) {
@@ -121,6 +122,18 @@ uint32_t YuvPlayer::GetHeightSize(void)
 
 	}
 }
+void YuvPlayer::SetFormat(YuvSetting::YuvFormat format)
+{
+	YuvSetting::GetInst().SetFormat(format);
+
+	WindowManager::GetInst().Update();
+	return;
+}
+YuvSetting::YuvFormat YuvPlayer::GetFormat(void)
+{
+	return YuvSetting::GetInst().GetFormat();
+}
+
 
 void YuvPlayer::InputFile(TCHAR *filename)
 {

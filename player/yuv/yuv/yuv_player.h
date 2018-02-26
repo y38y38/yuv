@@ -17,6 +17,8 @@ public:
 	void SetPixel(YuvSetting::YuvSize size);
 	uint32_t GetWidthSize(void);
 	uint32_t GetHeightSize(void);
+	void SetFormat(YuvSetting::YuvFormat format);
+	YuvSetting::YuvFormat GetFormat(void);
 	void InputFile(TCHAR *filename);
 	uint8_t *GetRgbBuf(void);
 	void Init(void);

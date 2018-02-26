@@ -22,7 +22,7 @@
     <ProjectGuid>{9EF06024-F1CD-4371-B946-560AD6FABBB8}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>yuv</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -88,6 +88,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -116,6 +117,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -145,6 +147,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cmm.h" />
     <ClInclude Include="filebuffer.h" />
     <ClInclude Include="image_manager.h" />
     <ClInclude Include="rgb_utility.h" />
@@ -163,6 +166,7 @@
     <ClInclude Include="yuv_str.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="cmm.cpp" />
     <ClCompile Include="filebuffer.cpp" />
     <ClCompile Include="image_manager.cpp" />
     <ClCompile Include="rgb_utility.cpp" />

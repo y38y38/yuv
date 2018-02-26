@@ -1,2 +1,7 @@
 *.log
 *.obj
+*.o
+*.exe
+player/yuv/yuv/Debug/
+player/yuv/Debug/
+player/yuv/.vs/

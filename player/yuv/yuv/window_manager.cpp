@@ -51,6 +51,19 @@ void WindowManager::SetMenuSetPixel(HMENU submenu)
 	}
 	return;
 }
+void WindowManager::SetMenuSetFormat(HMENU submenu)
+{
+	YuvSetting::YuvFormat format = Player.GetFormat();
+	if (format == YuvSetting::YUV_FORMAT_YUV4) {
+		CheckMenuItem(submenu, ID_FORMAT_YUV4, MF_CHECKED);
+
+	}
+	else {
+		CheckMenuItem(submenu, ID_FORMAT_CMM, MF_CHECKED);
+	}
+	return;
+}
+
 void WindowManager::SetMenuSetView(HMENU submenu)
 {
 	YuvSetting::YuvView view = Player.GetView();
@@ -118,6 +131,7 @@ void WindowManager::MenuInit(HMENU hSubMenu)
 {
 	//WindowÇÃèâä˙ílÇê›íËÇ∑ÇÈ
 	SetMenuSetPixel(hSubMenu);
+	SetMenuSetFormat(hSubMenu);
 	SetMenuSetView(hSubMenu);
 	SetMenuSetDiffMode(hSubMenu);
 	SetMenuSetDiffTimes(hSubMenu);
@@ -328,6 +342,25 @@ void WindowManager::SetYuvPixel(HMENU hSubMenu, HWND hWnd, int wmId)
 		break;
 	case ID_PIXEL_1920X1081:
 		Player.SetPixel(YuvSetting::YUV_SIZE_1920_1080);
+		break;
+	default:
+		break;
+	}
+	return;
+
+}
+void WindowManager::SetYuvFormat(HMENU hSubMenu, HWND hWnd, int wmId)
+{
+	CheckMenuItem(hSubMenu, ID_FORMAT_YUV4, MF_UNCHECKED);
+	CheckMenuItem(hSubMenu, ID_FORMAT_CMM, MF_UNCHECKED);
+
+	CheckMenuItem(hSubMenu, wmId, MF_CHECKED);
+	switch (wmId) {
+	case ID_FORMAT_YUV4:
+		Player.SetFormat(YuvSetting::YUV_FORMAT_YUV4);
+		break;
+	case ID_FORMAT_CMM:
+		Player.SetFormat(YuvSetting::YUV_FORMAT_CMM);
 		break;
 	default:
 		break;

@@ -148,6 +148,10 @@ int wm_command(HWND hWnd, WPARAM wParam)
 	case ID_PIXEL_1920X1081:
 		WindowManager::GetInst().SetYuvPixel(m_hSubMenu, hWnd, wmId);
 		break;
+	case ID_FORMAT_YUV4:
+	case ID_FORMAT_CMM:
+		WindowManager::GetInst().SetYuvFormat(m_hSubMenu, hWnd, wmId);
+		break;
 	case ID_VIEW_SINGLE:
 	case ID_VIEW_SIDEBYSIDE:
 		WindowManager::GetInst().SetYuvView(m_hSubMenu, hWnd, wmId);
