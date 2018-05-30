@@ -145,6 +145,7 @@ int wm_command(HWND hWnd, WPARAM wParam)
 	switch (wmId)
 	{
 	case ID_PIXEL_352X289:
+	case ID_PIXEL_720X481:
 	case ID_PIXEL_1920X1081:
 		WindowManager::GetInst().SetYuvPixel(m_hSubMenu, hWnd, wmId);
 		break;

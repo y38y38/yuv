@@ -21,6 +21,7 @@ public:
 	typedef enum {
 		YUV_SIZE_352_288,
 		YUV_SIZE_1920_1080,
+		YUV_SIZE_720_480,
 	} YuvSize;
 	void SetSize(YuvSize size);
 	YuvSize GetSize(void);

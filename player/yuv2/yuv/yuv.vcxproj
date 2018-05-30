@@ -151,6 +151,7 @@
     <ClInclude Include="filebuffer.h" />
     <ClInclude Include="image_manager.h" />
     <ClInclude Include="rgb_utility.h" />
+    <ClInclude Include="rtp_reciever.h" />
     <ClInclude Include="yuv_debug.h" />
     <ClInclude Include="yuv_diff.h" />
     <ClInclude Include="yuv_player.h" />
@@ -162,6 +163,7 @@
     <ClInclude Include="yuv.h" />
     <ClInclude Include="yuv4.h" />
     <ClInclude Include="yuvrgb.h" />
+    <ClInclude Include="yuv_reciever.h" />
     <ClInclude Include="yuv_setting.h" />
     <ClInclude Include="yuv_str.h" />
   </ItemGroup>
@@ -170,6 +172,7 @@
     <ClCompile Include="filebuffer.cpp" />
     <ClCompile Include="image_manager.cpp" />
     <ClCompile Include="rgb_utility.cpp" />
+    <ClCompile Include="rtp_reciever.cpp" />
     <ClCompile Include="yuv_diff.cpp" />
     <ClCompile Include="yuv_player.cpp" />
     <ClCompile Include="rawvideo420.cpp" />
@@ -183,6 +186,7 @@
     <ClCompile Include="yuv.cpp" />
     <ClCompile Include="yuv4.cpp" />
     <ClCompile Include="yuvrgb.cpp" />
+    <ClCompile Include="yuv_reciever.cpp" />
     <ClCompile Include="yuv_setting.cpp" />
     <ClCompile Include="yuv_str.cpp" />
   </ItemGroup>

@@ -69,6 +69,12 @@
     <ClInclude Include="cmm.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="yuv_reciever.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="rtp_reciever.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -111,6 +117,12 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="cmm.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="yuv_reciever.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="rtp_reciever.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>

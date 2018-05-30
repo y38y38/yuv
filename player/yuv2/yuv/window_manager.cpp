@@ -48,6 +48,10 @@ void WindowManager::SetMenuSetPixel(HMENU submenu)
 		CheckMenuItem(submenu, ID_PIXEL_352X289, MF_CHECKED);
 
 	}
+	else if (width == 720) {
+		CheckMenuItem(submenu, ID_PIXEL_720X481, MF_CHECKED);
+
+	}
 	else {
 		CheckMenuItem(submenu, ID_PIXEL_1920X1081, MF_CHECKED);
 	}
@@ -335,12 +339,16 @@ void WindowManager::UpdateWindowSize(void)
 void WindowManager::SetYuvPixel(HMENU hSubMenu, HWND hWnd, int wmId)
 {
 	CheckMenuItem(hSubMenu, ID_PIXEL_352X289, MF_UNCHECKED);
+	CheckMenuItem(hSubMenu, ID_PIXEL_720X481, MF_UNCHECKED);
 	CheckMenuItem(hSubMenu, ID_PIXEL_1920X1081, MF_UNCHECKED);
 
 	CheckMenuItem(hSubMenu, wmId, MF_CHECKED);
 	switch (wmId) {
 	case ID_PIXEL_352X289:
 		Player.SetPixel(YuvSetting::YUV_SIZE_352_288);
+		break;
+	case ID_PIXEL_720X481:
+		Player.SetPixel(YuvSetting::YUV_SIZE_720_480);
 		break;
 	case ID_PIXEL_1920X1081:
 		Player.SetPixel(YuvSetting::YUV_SIZE_1920_1080);
