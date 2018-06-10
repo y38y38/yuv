@@ -93,6 +93,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -152,6 +153,7 @@
     <ClInclude Include="image_manager.h" />
     <ClInclude Include="rgb_utility.h" />
     <ClInclude Include="rtp_reciever.h" />
+    <ClInclude Include="test_rtp_sender.h" />
     <ClInclude Include="yuv_debug.h" />
     <ClInclude Include="yuv_diff.h" />
     <ClInclude Include="yuv_player.h" />
@@ -173,6 +175,7 @@
     <ClCompile Include="image_manager.cpp" />
     <ClCompile Include="rgb_utility.cpp" />
     <ClCompile Include="rtp_reciever.cpp" />
+    <ClCompile Include="test_rtp_sender.cpp" />
     <ClCompile Include="yuv_diff.cpp" />
     <ClCompile Include="yuv_player.cpp" />
     <ClCompile Include="rawvideo420.cpp" />
