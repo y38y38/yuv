@@ -7,8 +7,14 @@
 
 #include "yuv_setting.h"
 
+#include "rtp_reciever.h"
+
 class YuvReciever {
 public:
+	static YuvReciever& GetInst(void) {
+		static YuvReciever singleton;
+		return singleton;
+	}
 	YuvReciever();
 	~YuvReciever();
 	void SetPixel(YuvSetting::YuvSize size);
@@ -20,11 +26,17 @@ public:
 	void Init(void);
 	void SetView(YuvSetting::YuvView view);
 	YuvSetting::YuvView GetView(void);
+	void RecievePacket(char *);
 
 private:
 	uint8_t *RgbBuf;
 	void SetRgbBufSize();
 	void UpdateImage();
+	static DWORD WINAPI RecieveThread(LPVOID arg);
+
+	//int *reciever;
+//	RtpReciever *reciever;
+
 };
 
 

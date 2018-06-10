@@ -5,18 +5,22 @@
 
 #include "stdint.h"
 
+#include "yuv_reciever.h"
+
 class RtpReciever {
 public:
-	typedef void(*p_func)(char*);
+//	typedef void(*p_func)(char*);
 
+//	RtpReciever(YuvReciever *parent);
 	RtpReciever();
 	~RtpReciever();
 
-	void RegisterCallback(p_func func_ptr);
+//	void RegisterCallback(p_func func_ptr);
 
+	static DWORD WINAPI RecieveThread(LPVOID arg);
+//	static p_func CallbackPtr;
 private:
-	void RecieveThread(void);
-	p_func CallbackPtr;
+//	static YuvReciever * Parent;
 };
 
 
