@@ -8,6 +8,8 @@
 #include "yuv_debug.h"
 #include "yuv_setting.h"
 #include "yuv_player.h"
+//#include"yuv_reciever.h"
+
 #include "yuv_str.h"
 
 #include "window_manager.h"
@@ -33,7 +35,7 @@ WindowManager::~WindowManager()
 void WindowManager::Create(HWND hWnd)
 {
 	MyWindow = hWnd;
-	Player.Init();
+//	Player.Init();
 	//ウィンドウがドラック＆ドロップを受け付けるようにする。
 	DragAcceptFiles(hWnd, TRUE);
 
@@ -82,6 +84,7 @@ void WindowManager::SetMenuSetView(HMENU submenu)
 	return;
 
 }
+#if 0
 void WindowManager::SetMenuSetDiffMode(HMENU submenu)
 {
 	YuvSetting::YuvDiffMode mode = Player.GetDiffMode();
@@ -98,6 +101,8 @@ void WindowManager::SetMenuSetDiffMode(HMENU submenu)
 	return;
 
 }
+#endif
+#if 0
 void WindowManager::SetMenuSetDiffTimes(HMENU submenu)
 {
 	int difftimes = Player.GetDiffTimes();
@@ -112,6 +117,8 @@ void WindowManager::SetMenuSetDiffTimes(HMENU submenu)
 	return;
 
 }
+#endif
+#if 0
 void WindowManager::SetMenuSetSignal(HMENU submenu)
 {
 	bool y = Player.GetSignalY();
@@ -133,15 +140,16 @@ void WindowManager::SetMenuSetSignal(HMENU submenu)
 
 }
 
+#endif
 void WindowManager::MenuInit(HMENU hSubMenu)
 {
 	//Windowの初期値を設定する
 	SetMenuSetPixel(hSubMenu);
 	SetMenuSetFormat(hSubMenu);
 	SetMenuSetView(hSubMenu);
-	SetMenuSetDiffMode(hSubMenu);
-	SetMenuSetDiffTimes(hSubMenu);
-	SetMenuSetSignal(hSubMenu);
+//	SetMenuSetDiffMode(hSubMenu);
+//	SetMenuSetDiffTimes(hSubMenu);
+//	SetMenuSetSignal(hSubMenu);
 	return;
 
 }
@@ -162,6 +170,7 @@ void WindowManager::MouseRight(HMENU hSubMenu, HWND hWnd, LPARAM lParam)
 
 	return;
 }
+#if 0
 void WindowManager::DropFile(HWND hWnd, WPARAM wParam)
 {
 	TCHAR *filename = (TCHAR*)malloc(sizeof(TCHAR) * MAX_YUV_FILENAME);
@@ -185,6 +194,7 @@ void WindowManager::DropFile(HWND hWnd, WPARAM wParam)
 
 	return;
 }
+#endif
 
 int WindowManager::GetTextPositionHeight(int file_num, int index)
 {
@@ -228,7 +238,7 @@ int WindowManager::GetTextPositionWidth(int file_num, int index)
 		return (Player.GetWidthSize() / 2);
 	}
 }
-
+#if 0
 void WindowManager::ShowTextFileName(HDC hdc)
 {
 	YuvSetting::YuvView view =  Player.GetView();
@@ -254,6 +264,8 @@ void WindowManager::ShowTextFileName(HDC hdc)
 	}
 
 }
+#endif
+#if 0
 void WindowManager::ShowText(HDC hdc)
 {
 
@@ -275,6 +287,7 @@ void WindowManager::ShowText(HDC hdc)
 	}
 
 }
+#endif
 void WindowManager::ShowRgb(HDC hdc)
 {
 	uint32_t width = Player.GetWidthSize();
@@ -319,7 +332,7 @@ void WindowManager::Paint(HWND hWnd)
 	HDC hdc = BeginPaint(hWnd, &ps);
 
 	ShowRgb(hdc);
-	ShowText(hdc);
+//	ShowText(hdc);
 
 	EndPaint(hWnd, &ps);
 	return;
@@ -397,6 +410,7 @@ void WindowManager::SetYuvView(HMENU hSubMenu, HWND hWnd, int wmId)
 	return;
 
 }
+#if 0
 void WindowManager::SetYuvDiffMode(HMENU hSubMenu, HWND hWnd, int wmId)
 {
 	CheckMenuItem(hSubMenu, ID_DIFF_DISABLE, MF_UNCHECKED);
@@ -421,6 +435,9 @@ void WindowManager::SetYuvDiffMode(HMENU hSubMenu, HWND hWnd, int wmId)
 	return;
 
 }
+#endif
+
+#if 0
 void WindowManager::SetYuvDiffTimes(HMENU hSubMenu, HWND hWnd, int wmId)
 {
 	CheckMenuItem(hSubMenu, ID_DIFFTIMES_X1, MF_UNCHECKED);
@@ -439,6 +456,9 @@ void WindowManager::SetYuvDiffTimes(HMENU hSubMenu, HWND hWnd, int wmId)
 	}
 	return;
 }
+#endif
+
+#if 0
 void WindowManager::SetYuvText(HMENU hSubMenu, HWND hWnd, int wmId)
 {
 	CheckMenuItem(hSubMenu, ID_TEXT_NONE, MF_UNCHECKED);
@@ -459,7 +479,8 @@ void WindowManager::SetYuvText(HMENU hSubMenu, HWND hWnd, int wmId)
 	Text = wmId;
 	return;
 }
-
+#endif
+#if 0
 void WindowManager::SetYuvTextPosition(HMENU hSubMenu, HWND hWnd, int wmId)
 {
 	CheckMenuItem(hSubMenu, ID_POSITION_TOP, MF_UNCHECKED);
@@ -477,6 +498,9 @@ void WindowManager::SetYuvTextPosition(HMENU hSubMenu, HWND hWnd, int wmId)
 	TextPosition = wmId;
 	return;
 }
+#endif
+
+#if 0
 void WindowManager::SetYuvTextColor(HMENU hSubMenu, HWND hWnd, int wmId)
 {
 	CheckMenuItem(hSubMenu, ID_COLOR_BLACK, MF_UNCHECKED);
@@ -496,6 +520,7 @@ void WindowManager::SetYuvTextColor(HMENU hSubMenu, HWND hWnd, int wmId)
 
 	return;
 }
+#endif
 bool WindowManager::ToggleAndGetStatus(HMENU submenu, int id)
 {
 	UINT  status = GetMenuState(submenu, id, MF_BYCOMMAND);
@@ -510,7 +535,7 @@ bool WindowManager::ToggleAndGetStatus(HMENU submenu, int id)
 	}
 }
 
-
+#if 0
 void WindowManager::SetYuvSignal(HMENU hSubMenu, HWND hWnd, int wmId)
 {
 	bool status = ToggleAndGetStatus(hSubMenu, wmId);
@@ -529,7 +554,7 @@ void WindowManager::SetYuvSignal(HMENU hSubMenu, HWND hWnd, int wmId)
 	}
 	return;
 }
-
+#endif
 
 
 uint32_t WindowManager::GetWidthSize(void)
@@ -541,6 +566,7 @@ uint32_t WindowManager::GetHeightSize(void)
 	return Player.GetHeightSize();
 
 }
+#if 0
 int WindowManager::KeyDown(WPARAM wParam)
 {
 	Win32Printf("%hs %d %x", __FUNCTION__, __LINE__, wParam);
@@ -578,6 +604,9 @@ int WindowManager::KeyDown(WPARAM wParam)
 	SetKeyLog(TRUE, wParam);
 	return 0;
 }
+#endif
+
+#if 0
 int WindowManager::KeyUp(WPARAM wParam)
 {
 	Win32Printf("%hs %d %x", __FUNCTION__, __LINE__,wParam);
@@ -593,6 +622,9 @@ int WindowManager::KeyUp(WPARAM wParam)
 	SetKeyLog(FALSE, wParam);
 	return 0;
 }
+#endif
+
+
 void WindowManager::SetKeyLog(BOOL down, WPARAM wParam)
 {
 	if (down == TRUE) {
@@ -621,6 +653,7 @@ void WindowManager::Update(void)
 	InvalidateRect(MyWindow, NULL, FALSE);
 	return;
 }
+#if 0
 YuvPlayer::YUV_WINDOW_POS  WindowManager::GetMousePosition(void)
 {
 	POINT p;
@@ -646,7 +679,7 @@ YuvPlayer::YUV_WINDOW_POS  WindowManager::GetMousePosition(void)
 	}
 
 }
-
+#endif
 
 void WindowManager::MouseMove(void)
 {
@@ -658,13 +691,13 @@ void WindowManager::MouseMove(void)
 
 	TrackMouseEvent(&tme);
 
-	Player.SetMouse(GetMousePosition());
+//	Player.SetMouse(GetMousePosition());
 
 	return;
 }
 
 void WindowManager::MouseLeave(void)
 {
-	Player.ReleaseMouse();
+	//Player.ReleaseMouse();
 	return;
 }

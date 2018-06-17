@@ -152,6 +152,7 @@
     <ClInclude Include="filebuffer.h" />
     <ClInclude Include="image_manager.h" />
     <ClInclude Include="rgb_utility.h" />
+    <ClInclude Include="rtp_header.h" />
     <ClInclude Include="rtp_reciever.h" />
     <ClInclude Include="test_rtp_sender.h" />
     <ClInclude Include="yuv_debug.h" />

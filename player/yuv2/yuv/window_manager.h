@@ -5,7 +5,8 @@
 #include "stdint.h"
 #include <Winuser.h>
 
-#include "yuv_player.h"
+//#include "yuv_player.h"
+#include "yuv_reciever.h"
 
 class WindowManager {
 public:
@@ -17,19 +18,19 @@ public:
 	void MenuInit(HMENU hSubMenu);
 	void MouseLeft(HWND hWnd, LPARAM lParam);
 	void MouseRight(HMENU hSubMenu, HWND hWnd, LPARAM lParam);
-	void DropFile(HWND hWnd, WPARAM wParam);
+//	void DropFile(HWND hWnd, WPARAM wParam);
 	void Paint(HWND hWnd);
 	void SetYuvPixel(HMENU hSubMenu, HWND hWnd, int wmId);
 	void SetYuvFormat(HMENU hSubMenu, HWND hWnd, int wmId);
 	void SetYuvView(HMENU hSubMenu, HWND hWnd, int wmId);
-	void SetYuvDiffMode(HMENU hSubMenu, HWND hWnd, int wmId);
-	void SetYuvDiffTimes(HMENU hSubMenu, HWND hWnd, int wmId);
-	void SetYuvText(HMENU hSubMenu, HWND hWnd, int wmId);
-	void SetYuvTextPosition(HMENU hSubMenu, HWND hWnd, int wmId);
-	void SetYuvTextColor(HMENU hSubMenu, HWND hWnd, int wmId);
-	void SetYuvSignal(HMENU hSubMenu, HWND hWnd, int wmId);
-	int KeyDown(WPARAM wParam);
-	int KeyUp(WPARAM wParam);
+	//void SetYuvDiffMode(HMENU hSubMenu, HWND hWnd, int wmId);
+	//void SetYuvDiffTimes(HMENU hSubMenu, HWND hWnd, int wmId);
+	//void SetYuvText(HMENU hSubMenu, HWND hWnd, int wmId);
+	//void SetYuvTextPosition(HMENU hSubMenu, HWND hWnd, int wmId);
+	//void SetYuvTextColor(HMENU hSubMenu, HWND hWnd, int wmId);
+	//void SetYuvSignal(HMENU hSubMenu, HWND hWnd, int wmId);
+	//int KeyDown(WPARAM wParam);
+	//int KeyUp(WPARAM wParam);
 	void MouseMove(void);
 	void MouseLeave(void);
 
@@ -42,7 +43,8 @@ private:
 	WindowManager();
 	~WindowManager();
 
-	YuvPlayer Player;
+	//YuvPlayer Player;
+	YuvReciever Player;
 	HWND MyWindow;
 	int Text;
 	int TextPosition;
@@ -52,7 +54,7 @@ private:
 
 
 	void UpdateWindowSize(void);
-	YuvPlayer::YUV_WINDOW_POS GetMousePosition(void);
+//	YuvPlayer::YUV_WINDOW_POS GetMousePosition(void);
 	
 	void ShowText(HDC hdc);
 

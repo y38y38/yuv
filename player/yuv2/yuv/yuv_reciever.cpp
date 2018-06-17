@@ -11,15 +11,21 @@
 
 #include "yuv_reciever.h"
 
+#include "test_rtp_sender.h"
+
+
+#include "rtp_header.h"
+
 
 YuvReciever::YuvReciever(void)
 {
-	RgbBuf[1] = NULL;
+//	RgbBuf[1] = NULL;
 //	reciever = new RtpReciever(this);
 	HANDLE hThread;
 	DWORD dwThreadId;
 
 	//	Parent = parent;
+
 
 	//スレッド起動
 	hThread = CreateThread(
@@ -130,9 +136,24 @@ YuvSetting::YuvView YuvReciever::GetView(void)
 {
 	return YuvSetting::GetInst().GetView();
 }
-void YuvReciever::RecievePacket(char *buf)
-{
 
+
+void YuvReciever::GetRtpHeader(char* buf)
+{
+	struct RtpHeader *rtp_header = (struct RtpHeader *)buf;
+	//Win32Printf("rtpheader:sequnece_number = %d\n", rtp_header->sequence_number);
+	struct RtpExtendHeader * rtp_ext_header = (struct RtpExtendHeader *)buf + sizeof(struct RtpHeader);
+
+	//Win32Printf("rtp_ext_header:srd_length = %d\n", rtp_ext_header->srd_length);
+	//Win32Printf("rtp_ext_header:srd_row_number = %d\n", rtp_ext_header->srd_row_number);
+	//Win32Printf("rtp_ext_header:srd_offset = %d\n", rtp_ext_header->srd_offset);
+
+	return;
+}
+
+void YuvReciever::RecievePacket(char *buf, int size)
+{
+	GetRtpHeader(buf);
 }
 
 DWORD WINAPI YuvReciever::RecieveThread(LPVOID arg)
@@ -144,6 +165,7 @@ DWORD WINAPI YuvReciever::RecieveThread(LPVOID arg)
 	struct sockaddr_in addr;
 
 	char buf[2048];
+	Win32Printf("%hs %d ", __FUNCTION__, __LINE__);
 
 	WSAStartup(MAKEWORD(2, 0), &wsaData);
 
@@ -155,10 +177,12 @@ DWORD WINAPI YuvReciever::RecieveThread(LPVOID arg)
 
 	bind(sock, (struct sockaddr *)&addr, sizeof(addr));
 
+	TestRtpSender::TestRtpSender();
+
 	for (;;) {
 		memset(buf, 0, sizeof(buf));
-		recv(sock, buf, sizeof(buf), 0);
-		YuvReciever::GetInst().RecievePacket(buf);
+		size_t recvsize = recv(sock, buf, sizeof(buf), 0);
+		YuvReciever::GetInst().RecievePacket(buf, (int)recvsize);
 	}
 
 	closesocket(sock);

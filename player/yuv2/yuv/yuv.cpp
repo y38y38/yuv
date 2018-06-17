@@ -160,29 +160,29 @@ int wm_command(HWND hWnd, WPARAM wParam)
 	case ID_DIFF_DISABLE:
 	case ID_DIFF_ENABLE:
 	case ID_DIFF_ONMOUSE:
-		WindowManager::GetInst().SetYuvDiffMode(m_hSubMenu, hWnd, wmId);
+//		WindowManager::GetInst().SetYuvDiffMode(m_hSubMenu, hWnd, wmId);
 		break;
 	case ID_DIFFTIMES_X1:
 	case ID_DIFFTIMES_X10:
-		WindowManager::GetInst().SetYuvDiffTimes(m_hSubMenu, hWnd, wmId);
+//		WindowManager::GetInst().SetYuvDiffTimes(m_hSubMenu, hWnd, wmId);
 		break;
 	case ID_TEXT_NONE:
 	case ID_TEXT_FILENAME:
 	case ID_TEXT_SN:
-		WindowManager::GetInst().SetYuvText(m_hSubMenu, hWnd, wmId);
+//		WindowManager::GetInst().SetYuvText(m_hSubMenu, hWnd, wmId);
 		break;
 	case ID_POSITION_TOP:
 	case ID_POSITION_BOTTOM:
-		WindowManager::GetInst().SetYuvTextPosition(m_hSubMenu, hWnd, wmId);
+//		WindowManager::GetInst().SetYuvTextPosition(m_hSubMenu, hWnd, wmId);
 		break;
 	case ID_COLOR_BLACK:
 	case ID_COLOR_WHITE:
-		WindowManager::GetInst().SetYuvTextColor(m_hSubMenu, hWnd, wmId);
+//		WindowManager::GetInst().SetYuvTextColor(m_hSubMenu, hWnd, wmId);
 		break;
 	case ID_SIGNAL_Y:
 	case ID_SIGNAL_CB:
 	case ID_SIGNAL_CR:
-		WindowManager::GetInst().SetYuvSignal(m_hSubMenu, hWnd, wmId);
+//		WindowManager::GetInst().SetYuvSignal(m_hSubMenu, hWnd, wmId);
 		break;
 
 	case ID_DUMMY_EXIT:
@@ -228,7 +228,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         PostQuitMessage(0);
         break;
 	case WM_DROPFILES:
-		WindowManager::GetInst().DropFile(hWnd, wParam);
+//		WindowManager::GetInst().DropFile(hWnd, wParam);
 		break;
 	case WM_RBUTTONUP:
 		WindowManager::GetInst().MouseRight(m_hSubMenu, hWnd, lParam);
@@ -236,6 +236,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_LBUTTONDOWN:
 		WindowManager::GetInst().MouseLeft(hWnd, lParam);
 		break;
+#if 0
 	case WM_KEYDOWN:
 		{
 			int ret = WindowManager::GetInst().KeyDown(wParam);
@@ -254,6 +255,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	}
 	break;
+#endif
 	case WM_MOUSEMOVE:
 		WindowManager::GetInst().MouseMove();
 		break;
