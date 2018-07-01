@@ -69,22 +69,23 @@ void st2110SetY(char *frame, int pixel, char y, int width , int height)
 		line_double = pixel / (width * 2);
 	}
 
-	int byte_per_line_doulbe = (width * 2 ) + (width / 2);
+	int byte_per_line_doulbe = (width * 2 ) + (width);
+
 
 	//1st line
 	if ((line % 2) == 0) {
 		if ((pixel % 2) == 0) {
-			*(frame + (line_double * byte_per_line_doulbe) + (pixel % width)) = y;
+			*(frame + (line_double * byte_per_line_doulbe) + (((pixel % width) / 2) * 6)) = y;
 		}
 		else {
-			*(frame + (line_double * byte_per_line_doulbe) + (pixel % width) + 1) = y;
+			*(frame + (line_double * byte_per_line_doulbe) + (((pixel % width) / 2) * 6) + 1) = y;
 		}
 	} else {
 		if ((pixel % 2) == 0) {
-			*(frame + (line_double * byte_per_line_doulbe) + (pixel % width) + 2) = y;
+			*(frame + (line_double * byte_per_line_doulbe) + (((pixel % width) / 2) * 6) + 2) = y;
 		}
 		else {
-			*(frame + (line_double * byte_per_line_doulbe) + (pixel % width) + 3) = y;
+			*(frame + (line_double * byte_per_line_doulbe) + (((pixel % width) / 2) * 6) + 3) = y;
 		}
 	}
 	return;
@@ -98,7 +99,7 @@ void st2110SetCb(char *frame, int pixel, char cb)
 
 void st2110SetCr(char *frame, int pixel, char cr)
 {
-	*(frame + (pixel * 6) + 4) = cr;
+	*(frame + (pixel * 6) + 5) = cr;
 	return;
 }
 
@@ -116,7 +117,7 @@ void TestSetRtpHeader(RtpHeader * rtp_header, int line_number, int start_h)
 
 	RtpExtendHeader * rtp_extend_header = (RtpExtendHeader *)(rtp_header + 1);
 	rtp_extend_header->extended_sequnece_number = (uint16_t)(rtp_sequnec_number >> 16);
-	rtp_extend_header->srd_length = (uint16_t)((720 * 480) + ((720 * 480) / 2));
+	rtp_extend_header->srd_length = (uint16_t)(720 + (720 / 2));
 	rtp_extend_header->f = 0;
 	rtp_extend_header->srd_row_number = line_number;
 	rtp_extend_header->srd_offset = start_h;
@@ -129,13 +130,23 @@ void TestRawVideo2St2110Frame(char *frame, char *st2110)
 	//get y
 	for (int pixel = 0; pixel < 720 * 480; pixel++) {
 		char y = rawVideoGetY(frame, pixel, 720, 480);
-		st2110SetY(frame, pixel, y, 720, 480);
+		if ((pixel % 720) > 710) {
+//	y = 0x0;
+		}
+		st2110SetY(st2110, pixel, y, 720, 480);
+
+//		st2110SetY(st2110, pixel,0x80, 720, 480);
 	}
 	for (int pixel = 0; pixel < 360 * 240; pixel++) {
 		char cb = rawVideoGetCb(frame, pixel, 720, 480);
-		st2110SetCb(frame, pixel, cb);
+		if (pixel < 720) {
+			//Win32Printf("%d", cb);
+		}
+//		st2110SetCb(st2110, pixel, 0x80);
+		st2110SetCb(st2110, pixel, cb);
 		char cr = rawVideoGetCr(frame, pixel, 720, 480);
-		st2110SetCr(frame, pixel, cr);
+//		st2110SetCr(st2110, pixel, 0x80);
+		st2110SetCr(st2110, pixel, cr);
 	}
 }
 
@@ -143,7 +154,7 @@ void GetRtpHeader(char* buf)
 {
 	struct RtpHeader *rtp_header = (struct RtpHeader *)buf;
 	Win32Printf("send rtpheader:sequnece_number = %d\n", rtp_header->sequence_number);
-	struct RtpExtendHeader * rtp_ext_header = (struct RtpExtendHeader *)buf + sizeof(struct RtpHeader);
+	struct RtpExtendHeader * rtp_ext_header = (struct RtpExtendHeader *)(buf + sizeof(struct RtpHeader));
 
 	Win32Printf("send rtp_ext_header:srd_length = %d\n", rtp_ext_header->srd_length);
 	Win32Printf("send rtp_ext_header:srd_row_number = %d\n", rtp_ext_header->srd_row_number);
@@ -158,7 +169,9 @@ void TestFrameSender(SOCKET sock, struct sockaddr_in addr, char* frame)
 	if (st2110_buf == NULL) {
 		return;
 	}
+	memset(st2110_buf, 0x80, (720 * 480) + ((720 * 480) / 2));
 	TestRawVideo2St2110Frame(frame, st2110_buf);
+	//memset(st2110_buf, 0x80, (720 * 480) + ((720 * 480) / 2));
 
 	int line_size = 720 + (720 / 2);//1回に送信するデータ数
 
@@ -169,13 +182,23 @@ void TestFrameSender(SOCKET sock, struct sockaddr_in addr, char* frame)
 	}
 #if 1
 	for (int line_number = 0; line_number < 480; line_number += 2) {
-		//TestSetRtpHeader((struct RtpHeader*)line_buf, line_number, 0);
-		//memcpy(line_buf + rtp_header_size, st2110_buf + (line_number * line_size), line_size);
+		memset(line_buf, 0x80, line_size + rtp_header_size);
+		TestSetRtpHeader((struct RtpHeader*)line_buf, line_number, 0);
+//		memset(st2110_buf + (line_number * line_size), 0x80, 1);
+		//if (line_number == 0) {
+			memcpy(line_buf + rtp_header_size, st2110_buf + (line_number * line_size), line_size);
+		//}
+//		memset(line_buf + rtp_header_size, 0x80, 10);
 		//GetRtpHeader(line_buf);
-		//sendto(sock, line_buf, line_size + rtp_header_size, 0, (struct sockaddr *)&addr, sizeof(addr));
+		sendto(sock, line_buf, line_size + rtp_header_size, 0, (struct sockaddr *)&addr, sizeof(addr));
 
-		//TestSetRtpHeader((struct RtpHeader*)line_buf, line_number, ((720 * 480) + ((720 * 480) / 2)) / 2);
-		//memcpy(line_buf + rtp_header_size, st2110_buf + ((line_number + 1) * line_size), line_size);
+		memset(line_buf, 0x80, line_size + rtp_header_size);
+		TestSetRtpHeader((struct RtpHeader*)line_buf, line_number, 360);
+		//if (line_number == 0) {
+			memcpy(line_buf + rtp_header_size, st2110_buf + ((line_number + 1) * line_size), line_size);
+
+	//	}
+//		memset(line_buf + rtp_header_size, 0x80, 10);
 		//GetRtpHeader(line_buf);
 		sendto(sock, line_buf, line_size + rtp_header_size, 0, (struct sockaddr *)&addr, sizeof(addr));
 	}
@@ -203,6 +226,7 @@ void TestFileRtpSender(void) {
 		Win32Printf("error fopen_s\n");
 		return;
 	}
+	Sleep(1000);
 
 	int framesize = (720 * 480) + ((720 * 480) / 2);
 	char * buf = (char*)malloc(framesize);
@@ -214,6 +238,8 @@ void TestFileRtpSender(void) {
 			break;
 		}
 		TestFrameSender(sock, addr, buf);
+		Sleep(1000);
+//		break;
 	}
 	free(buf);
 	closesocket(sock);
@@ -229,7 +255,10 @@ DWORD WINAPI TestRtpSender::SendThread(LPVOID arg)
 	Win32Printf("%hs %d", __FUNCTION__, __LINE__);
 
 	WSAStartup(MAKEWORD(2, 0), &wsaData);
-	TestFileRtpSender();
+	while(1) {
+		TestFileRtpSender();
+		//break;
+	}
 
 	WSACleanup();
 

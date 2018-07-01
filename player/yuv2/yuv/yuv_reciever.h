@@ -27,15 +27,20 @@ public:
 	void SetView(YuvSetting::YuvView view);
 	YuvSetting::YuvView GetView(void);
 	void RecievePacket(char *buf, int size);
+	void SetRgb(void);
 
 private:
 	uint8_t *RgbBuf;
+	uint8_t *YuvBuf;
 	void SetRgbBufSize();
 	void UpdateImage();
 	static DWORD WINAPI RecieveThread(LPVOID arg);
 	void GetRtpHeader(char* buf);
 	//int *reciever;
 //	RtpReciever *reciever;
+	uint8_t st2110GetY(uint8_t* buf, int pixel, int max_width, int max_height);
+	uint8_t st2110GetCb(uint8_t* buf, int pixel, int max_width, int max_height);
+	uint8_t st2110GetCr(uint8_t* buf, int pixel, int max_width, int max_height);
 
 };
 

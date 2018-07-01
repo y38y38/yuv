@@ -35,7 +35,7 @@ WindowManager::~WindowManager()
 void WindowManager::Create(HWND hWnd)
 {
 	MyWindow = hWnd;
-//	Player.Init();
+	YuvReciever::GetInst().Init();
 	//ウィンドウがドラック＆ドロップを受け付けるようにする。
 	DragAcceptFiles(hWnd, TRUE);
 
@@ -45,7 +45,7 @@ void WindowManager::Create(HWND hWnd)
 
 void WindowManager::SetMenuSetPixel(HMENU submenu)
 {
-	uint32_t width = Player.GetWidthSize();
+	uint32_t width = YuvReciever::GetInst().GetWidthSize();
 	if (width == 352) {
 		CheckMenuItem(submenu, ID_PIXEL_352X289, MF_CHECKED);
 
@@ -61,7 +61,7 @@ void WindowManager::SetMenuSetPixel(HMENU submenu)
 }
 void WindowManager::SetMenuSetFormat(HMENU submenu)
 {
-	YuvSetting::YuvFormat format = Player.GetFormat();
+	YuvSetting::YuvFormat format = YuvReciever::GetInst().GetFormat();
 	if (format == YuvSetting::YUV_FORMAT_YUV4) {
 		CheckMenuItem(submenu, ID_FORMAT_YUV4, MF_CHECKED);
 
@@ -74,7 +74,7 @@ void WindowManager::SetMenuSetFormat(HMENU submenu)
 
 void WindowManager::SetMenuSetView(HMENU submenu)
 {
-	YuvSetting::YuvView view = Player.GetView();
+	YuvSetting::YuvView view = YuvReciever::GetInst().GetView();
 	if (view == YuvSetting::YUV_VIEW_SINGLE) {
 		CheckMenuItem(submenu, ID_VIEW_SINGLE, MF_CHECKED);
 	}
@@ -87,7 +87,7 @@ void WindowManager::SetMenuSetView(HMENU submenu)
 #if 0
 void WindowManager::SetMenuSetDiffMode(HMENU submenu)
 {
-	YuvSetting::YuvDiffMode mode = Player.GetDiffMode();
+	YuvSetting::YuvDiffMode mode = YuvReciever::GetInst().GetDiffMode();
 	if (mode == YuvSetting::YUV_DIFF_DISABLE) {
 		CheckMenuItem(submenu, ID_DIFF_DISABLE, MF_CHECKED);
 	}
@@ -105,7 +105,7 @@ void WindowManager::SetMenuSetDiffMode(HMENU submenu)
 #if 0
 void WindowManager::SetMenuSetDiffTimes(HMENU submenu)
 {
-	int difftimes = Player.GetDiffTimes();
+	int difftimes = YuvReciever::GetInst().GetDiffTimes();
 
 	if (difftimes == 1) {
 		CheckMenuItem(submenu, ID_DIFFTIMES_X1, MF_CHECKED);
@@ -121,18 +121,18 @@ void WindowManager::SetMenuSetDiffTimes(HMENU submenu)
 #if 0
 void WindowManager::SetMenuSetSignal(HMENU submenu)
 {
-	bool y = Player.GetSignalY();
+	bool y = YuvReciever::GetInst().GetSignalY();
 	if (y == true) {
 		CheckMenuItem(submenu, ID_SIGNAL_Y, MF_CHECKED);
 
 	}
 
-	bool cb = Player.GetSignalCb();
+	bool cb = YuvReciever::GetInst().GetSignalCb();
 	if (cb == true) {
 		CheckMenuItem(submenu, ID_SIGNAL_CB, MF_CHECKED);
 	}
 
-	bool cr = Player.GetSignalCr();
+	bool cr = YuvReciever::GetInst().GetSignalCr();
 	if (cr == true) {
 		CheckMenuItem(submenu, ID_SIGNAL_CR, MF_CHECKED);
 	}
@@ -186,7 +186,7 @@ void WindowManager::DropFile(HWND hWnd, WPARAM wParam)
 	dwDropped = DragQueryFile(hDrop, (UINT)-1, NULL, 0);
 	for (DWORD i = 0; i < dwDropped; i++) {
 		DragQueryFile(hDrop, 0, filename, MAX_PATH);
-		Player.InputFile(filename);
+		YuvReciever::GetInst().InputFile(filename);
 	}
 	DragFinish(hDrop);
 
@@ -203,7 +203,7 @@ int WindowManager::GetTextPositionHeight(int file_num, int index)
 			return  0;
 		}
 		else {
-			return Player.GetHeightSize() - 20;
+			return 	YuvReciever::GetInst().GetHeightSize() - 20;
 		}
 
 	}
@@ -214,15 +214,15 @@ int WindowManager::GetTextPositionHeight(int file_num, int index)
 				return  0;
 			}
 			else {
-				return (Player.GetHeightSize() / 2) - 20;
+				return (YuvReciever::GetInst().GetHeightSize() / 2) - 20;
 			}
 		}
 		else {
 			if (TextPosition == ID_POSITION_TOP) {
-				return (Player.GetHeightSize() / 2);
+				return (YuvReciever::GetInst().GetHeightSize() / 2);
 			}
 			else {
-				return Player.GetHeightSize() - 20;
+				return 	YuvReciever::GetInst().GetHeightSize() - 20;
 			}
 
 		}
@@ -235,27 +235,27 @@ int WindowManager::GetTextPositionWidth(int file_num, int index)
 		return 0;
 	}
 	else {
-		return (Player.GetWidthSize() / 2);
+		return (YuvReciever::GetInst().GetWidthSize() / 2);
 	}
 }
 #if 0
 void WindowManager::ShowTextFileName(HDC hdc)
 {
-	YuvSetting::YuvView view =  Player.GetView();
+	YuvSetting::YuvView view = YuvReciever::GetInst().GetView();
 	if (view == YuvSetting::YUV_VIEW_SIDE_BY_SIDE) {
-		int file_num = Player.GetFileNum();
+		int file_num = YuvReciever::GetInst().GetFileNum();
 		SetBkMode(hdc, TRANSPARENT);
 
 		for (int index = 0; index < file_num; index++) {
-			TCHAR *path = Player.GetFileName(index);
+			TCHAR *path = YuvReciever::GetInst().GetFileName(index);
 			TCHAR *filename = YuvStr::GetFileName(path);
 			TextOut(hdc, GetTextPositionWidth(file_num, index), GetTextPositionHeight(file_num, index), filename, _tcslen(filename));
 		}
 	}
 	else {
-		int index = Player.GetViewIndex();
+		int index = YuvReciever::GetInst().GetViewIndex();
 		SetBkMode(hdc, TRANSPARENT);
-		TCHAR *path = Player.GetFileName(index);
+		TCHAR *path = YuvReciever::GetInst().GetFileName(index);
 		TCHAR *filename = YuvStr::GetFileName(path);
 
 		TextOut(hdc, 0, GetTextPositionHeight(1,0), filename, _tcslen(filename));
@@ -290,9 +290,9 @@ void WindowManager::ShowText(HDC hdc)
 #endif
 void WindowManager::ShowRgb(HDC hdc)
 {
-	uint32_t width = Player.GetWidthSize();
-	uint32_t height = Player.GetHeightSize();
-	uint8_t *rgb_buf = Player.GetRgbBuf();
+	uint32_t width = YuvReciever::GetInst().GetWidthSize();
+	uint32_t height = YuvReciever::GetInst().GetHeightSize();
+	uint8_t *rgb_buf = YuvReciever::GetInst().GetRgbBuf();
 
 	// TODO: HDC を使用する描画コードをここに追加してください...
 	BITMAPINFO bitmapinfo;
@@ -342,8 +342,8 @@ void WindowManager::UpdateWindowSize(void)
 {
 	//Windowサイズを変更する。
 	RECT rc1;
-	int width = Player.GetWidthSize();
-	int height = Player.GetHeightSize();
+	int width = YuvReciever::GetInst().GetWidthSize();
+	int height = YuvReciever::GetInst().GetHeightSize();
 	GetWindowRect(MyWindow, &rc1);
 	SetWindowPos(MyWindow, NULL, rc1.left, rc1.top, width, height, (SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOMOVE));
 
@@ -358,13 +358,13 @@ void WindowManager::SetYuvPixel(HMENU hSubMenu, HWND hWnd, int wmId)
 	CheckMenuItem(hSubMenu, wmId, MF_CHECKED);
 	switch (wmId) {
 	case ID_PIXEL_352X289:
-		Player.SetPixel(YuvSetting::YUV_SIZE_352_288);
+		YuvReciever::GetInst().SetPixel(YuvSetting::YUV_SIZE_352_288);
 		break;
 	case ID_PIXEL_720X481:
-		Player.SetPixel(YuvSetting::YUV_SIZE_720_480);
+		YuvReciever::GetInst().SetPixel(YuvSetting::YUV_SIZE_720_480);
 		break;
 	case ID_PIXEL_1920X1081:
-		Player.SetPixel(YuvSetting::YUV_SIZE_1920_1080);
+		YuvReciever::GetInst().SetPixel(YuvSetting::YUV_SIZE_1920_1080);
 		break;
 	default:
 		break;
@@ -380,10 +380,10 @@ void WindowManager::SetYuvFormat(HMENU hSubMenu, HWND hWnd, int wmId)
 	CheckMenuItem(hSubMenu, wmId, MF_CHECKED);
 	switch (wmId) {
 	case ID_FORMAT_YUV4:
-		Player.SetFormat(YuvSetting::YUV_FORMAT_YUV4);
+		YuvReciever::GetInst().SetFormat(YuvSetting::YUV_FORMAT_YUV4);
 		break;
 	case ID_FORMAT_CMM:
-		Player.SetFormat(YuvSetting::YUV_FORMAT_CMM);
+		YuvReciever::GetInst().SetFormat(YuvSetting::YUV_FORMAT_CMM);
 		break;
 	default:
 		break;
@@ -399,10 +399,10 @@ void WindowManager::SetYuvView(HMENU hSubMenu, HWND hWnd, int wmId)
 	CheckMenuItem(hSubMenu, wmId, MF_CHECKED);
 	switch (wmId) {
 	case ID_VIEW_SINGLE:
-		Player.SetView(YuvSetting::YUV_VIEW_SINGLE);
+		YuvReciever::GetInst().SetView(YuvSetting::YUV_VIEW_SINGLE);
 		break;
 	case ID_VIEW_SIDEBYSIDE:
-		Player.SetView(YuvSetting::YUV_VIEW_SIDE_BY_SIDE);
+		YuvReciever::GetInst().SetView(YuvSetting::YUV_VIEW_SIDE_BY_SIDE);
 		break;
 	default:
 		break;
@@ -421,13 +421,13 @@ void WindowManager::SetYuvDiffMode(HMENU hSubMenu, HWND hWnd, int wmId)
 
 	switch (wmId) {
 	case ID_DIFF_DISABLE:
-		Player.SetDiffMode(YuvSetting::YUV_DIFF_DISABLE);
+		YuvReciever::GetInst().SetDiffMode(YuvSetting::YUV_DIFF_DISABLE);
 		break;
 	case ID_DIFF_ENABLE:
-		Player.SetDiffMode(YuvSetting::YUV_DIFF_ENABLE);
+		YuvReciever::GetInst().SetDiffMode(YuvSetting::YUV_DIFF_ENABLE);
 		break;
 	case ID_DIFF_ONMOUSE:
-		Player.SetDiffMode(YuvSetting::YUV_DIFF_ONMOUSE);
+		YuvReciever::GetInst().SetDiffMode(YuvSetting::YUV_DIFF_ONMOUSE);
 		break;
 	default:
 		break;
@@ -446,10 +446,10 @@ void WindowManager::SetYuvDiffTimes(HMENU hSubMenu, HWND hWnd, int wmId)
 
 	switch (wmId) {
 	case ID_DIFFTIMES_X1:
-		Player.SetDiffTimes(YuvSetting::YUV_DIFFTIMES_X1);
+		YuvReciever::GetInst().SetDiffTimes(YuvSetting::YUV_DIFFTIMES_X1);
 		break;
 	case ID_DIFFTIMES_X10:
-		Player.SetDiffTimes(YuvSetting::YUV_DIFFTIMES_X10);
+		YuvReciever::GetInst().SetDiffTimes(YuvSetting::YUV_DIFFTIMES_X10);
 		break;
 	default:
 		break;
@@ -541,13 +541,13 @@ void WindowManager::SetYuvSignal(HMENU hSubMenu, HWND hWnd, int wmId)
 	bool status = ToggleAndGetStatus(hSubMenu, wmId);
 	switch (wmId) {
 	case ID_SIGNAL_Y:
-		Player.SetSignalY(status);
+		YuvReciever::GetInst().SetSignalY(status);
 		break;
 	case ID_SIGNAL_CB:
-		Player.SetSignalCb(status);
+		YuvReciever::GetInst().SetSignalCb(status);
 		break;
 	case ID_SIGNAL_CR:
-		Player.SetSignalCr(status);
+		YuvReciever::GetInst().SetSignalCr(status);
 		break;
 	default:
 		break;
@@ -559,11 +559,11 @@ void WindowManager::SetYuvSignal(HMENU hSubMenu, HWND hWnd, int wmId)
 
 uint32_t WindowManager::GetWidthSize(void)
 {
-	return Player.GetWidthSize();
+	return 	YuvReciever::GetInst().GetWidthSize();
 }
 uint32_t WindowManager::GetHeightSize(void)
 {
-	return Player.GetHeightSize();
+	return 	YuvReciever::GetInst().GetHeightSize();
 
 }
 #if 0
@@ -574,28 +574,28 @@ int WindowManager::KeyDown(WPARAM wParam)
 	switch (wParam)
 	{
 	case 0x20://space
-		Player.NextFrame();
+		YuvReciever::GetInst().NextFrame();
 		break;
 	case 0x25://←
 		if (continous != 0) {
-			Player.JumpFrame(-1 * continous);
+			YuvReciever::GetInst().JumpFrame(-1 * continous);
 		}
 		else {
-			Player.PrevFrame();
+			YuvReciever::GetInst().PrevFrame();
 		}
 		break;
 	case 0x26://↑
-		Player.NextImage();
+		YuvReciever::GetInst().NextImage();
 		break;
 	case 0x27://→
 		if (continous != 0) {
-			Player.JumpFrame(continous);
+			YuvReciever::GetInst().JumpFrame(continous);
 		} else {
-			Player.NextFrame();
+			YuvReciever::GetInst().NextFrame();
 		}
 		break;
 	case 0x28://↓
-		Player.PrevImage();
+		YuvReciever::GetInst().PrevImage();
 		break;
 	default:
 		return -1;
@@ -659,8 +659,8 @@ YuvPlayer::YUV_WINDOW_POS  WindowManager::GetMousePosition(void)
 	POINT p;
 	GetCursorPos(&p);
 	ScreenToClient(MyWindow, &p);
-	int width = (int)Player.GetWidthSize();
-	int height = (int)Player.GetHeightSize();
+	int width = (int)YuvReciever::GetInst().GetWidthSize();
+	int height = (int)YuvReciever::GetInst().GetHeightSize();
 	if ((p.x > (width / 2))) {
 		if ((p.y) > (height / 2)) {
 			return YuvPlayer::YUV_WINDOW_RIGHT_BOTTOM;
@@ -691,13 +691,13 @@ void WindowManager::MouseMove(void)
 
 	TrackMouseEvent(&tme);
 
-//	Player.SetMouse(GetMousePosition());
+//		YuvReciever::GetInst().SetMouse(GetMousePosition());
 
 	return;
 }
 
 void WindowManager::MouseLeave(void)
 {
-	//Player.ReleaseMouse();
+	//	YuvReciever::GetInst().ReleaseMouse();
 	return;
 }

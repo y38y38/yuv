@@ -44,7 +44,7 @@ private:
 	~WindowManager();
 
 	//YuvPlayer Player;
-	YuvReciever Player;
+//	YuvReciever *Player;
 	HWND MyWindow;
 	int Text;
 	int TextPosition;

@@ -8,11 +8,11 @@
 
 struct RtpExtendHeader {
 	uint16_t extended_sequnece_number;
-	uint16_t srd_length;
+	uint16_t srd_length;  //RTP パケットに含まれる データサイズ (byte)
 	uint16_t f : 1;
-	uint16_t srd_row_number : 15;
+	uint16_t srd_row_number : 15; //line number
 	uint16_t c : 1;
-	uint16_t srd_offset : 15;
+	uint16_t srd_offset : 15;//lineの左はじからのピクセル数
 };
 struct RtpHeader {
 	uint8_t v : 2;

@@ -3,7 +3,11 @@
 
 void YuvRgb::ypbpr2rgb(short y, short pb, short pr, unsigned char *rgb) {
 	unsigned char *rgb_p = rgb;
-
+#if 0
+	y = 0x80;
+	pb = 0x80;
+	pr = 0x80;
+#endif
 	//èÄîı
 	double y_data = y;
 	double pb_data = (pb - 128);
