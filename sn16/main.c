@@ -42,10 +42,28 @@ void GetCrPixel(unsigned short* buffer, int pixel, unsigned short *cr, int width
     *cr = *(buffer + (width * height) + ((width / 2) * height) + (pixel % (width / 2)) + ((pixel / (width / 2)) * (width / 2)));
 
 }
-double sn(unsigned short *data1, unsigned short *data2, int num, int bit_num)
+int abs22(int val)
+{
+    if (val < 0) {
+        //printf("m\n");
+        return val * -1;
+    } else {
+        //printf("p\n");
+        return val;
+    }
+}
+int max(int a, int b)
+{
+    if( a > b) {
+        return a;
+    } else {
+        return b;
+    }
+}
+double sn(unsigned short *data1, unsigned short *data2, int num, int bit_num, int * max_diff)
 {
 	double sn_sum;
-	
+	*max_diff = 0;
 	sn_sum = 0;
 	for (int i = 0;i < num; i++) {
 
@@ -53,6 +71,7 @@ double sn(unsigned short *data1, unsigned short *data2, int num, int bit_num)
 		unsigned short temp2 = *(data2 + i);
 		//temp1 = temp1 >> (16 - bit_num);
 		//temp2 = temp2 >> (16 - bit_num);
+        //printf("%d %d\n",temp1, temp2);
 
 		int a,b;
 		a = (int)temp1;
@@ -61,6 +80,9 @@ double sn(unsigned short *data1, unsigned short *data2, int num, int bit_num)
 		int diff;
 		diff = a;
 		diff -= b;
+
+        int abs = abs22(diff);
+        *max_diff = max(*max_diff, abs);
 		
 		int x2 = diff * diff;
 
@@ -101,12 +123,13 @@ int getbuffer(int height, int width, unsigned short **y, unsigned short **cb, un
 
 int sn_calc(unsigned short *y1, unsigned short *y2, unsigned short *cb1, unsigned short *cb2, unsigned short *cr1, unsigned short *cr2, int height, int width)
 {
-	double psnr = sn(y1, y2, height * width, 10);
-	printf("y,%f,", psnr);
-	psnr = sn(cb1, cb2, height * width / 4, 10);
-	printf("cb,%f,", psnr);
-	psnr = sn(cr1, cr2, height * width / 4, 10);
-	printf("cr,%f\n", psnr);
+    int max_diff;
+	double psnr = sn(y1, y2, height * width, 10, &max_diff);
+	printf("y,%f, max diff,%d,", psnr,max_diff);
+	psnr = sn(cb1, cb2, height * width / 4, 10, &max_diff);
+	printf("cb,%f, max diff,%d,", psnr,max_diff);
+	psnr = sn(cr1, cr2, height * width / 4, 10, &max_diff);
+	printf("cr,%f, max diff,%d\n", psnr,max_diff);
 	return 0;
 }
 
@@ -179,7 +202,7 @@ int sn_file(FILE *input1, FILE *input2, int width, int height)
 
 	int input_framesize = inputFrameSize(width, height);
 	inbuf1 = malloc(input_framesize);
-	printf("i %d\n", input_framesize);
+	//printf("i %d\n", input_framesize);
 
 	if (inbuf1 == NULL) {
 		printf("err malloc 1\n");
@@ -196,7 +219,7 @@ int sn_file(FILE *input1, FILE *input2, int width, int height)
 
 		size_t readsize = fread(inbuf1, 1, input_framesize, input1);
         if (readsize == 0 ) {
-            printf("OK end of file %d \n", i);
+            //printf("OK end of file %d \n", i);
             return 0;
         } else if (readsize != input_framesize) {
             printf("fread err\n");
