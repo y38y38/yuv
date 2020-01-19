@@ -52,7 +52,7 @@ int main(int argc, char **argv)
             return -1;
         }
         if (i==0) {
-          break;
+          //break;
         }
         //printf("end frame\n");
         printf(".");

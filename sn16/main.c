@@ -222,7 +222,7 @@ int sn_file(FILE *input1, FILE *input2, int width, int height)
             //printf("OK end of file %d \n", i);
             return 0;
         } else if (readsize != input_framesize) {
-            printf("fread err\n");
+            printf("fread err %d %d\n", (int)readsize, input_framesize);
 			return -1;
 		} else {
 		}
