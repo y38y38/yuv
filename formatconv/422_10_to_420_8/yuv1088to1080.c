@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <string.h>
 
+/* input is 422 16bit */
 int main(int argc, char **argv)
 {
     if (argc != 3) {
@@ -19,14 +20,14 @@ int main(int argc, char **argv)
         printf("err %s\n", argv[2]);
         return -1;
     }
-    uint32_t src_size = (1920*1088) + ((1920*1088) / 2);
-    uint8_t *src_data = (uint8_t*)malloc(src_size);
+    uint32_t src_size = ((1920*1088)*2) + ((1920*1088)*2);
+    uint16_t *src_data = (uint16_t*)malloc(src_size);
     if (src_data == NULL) {
         printf("%d\n", __LINE__);
         return 0;
     }
-    uint32_t dst_size = (1920*1080) + ((1920*1080) /2 );
-    uint8_t *dst_data = (uint8_t*)malloc(dst_size);
+    uint32_t dst_size = ((1920*1080)*2) + ((1920*1080)*2) ;
+    uint16_t *dst_data = (uint16_t*)malloc(dst_size);
     if (dst_data == NULL) {
         printf("%d\n", __LINE__);
         return 0;
@@ -38,13 +39,13 @@ int main(int argc, char **argv)
             break;
         }
         //y
-        memcpy(dst_data, src_data, 1920*1080);
+        memcpy(dst_data, src_data, 1920*1080*(sizeof(uint16_t)));
 
         //cb
-        memcpy(dst_data + (1920*1080), src_data + (1920*1088), (1920*1080) / 4);
+        memcpy(dst_data + (1920*1080), src_data + (1920*1088), ((1920*1080) / 2)  *(sizeof(uint16_t)));
 
         //cr
-        memcpy(dst_data + (1920*1080) + (960*540), src_data + (1920*1088) + (960*544), (1920*1080) / 4);
+        memcpy(dst_data + (1920*1080) + ((1920*1080) / 2), src_data + (1920*1088) + ((1920*1088) / 2), ((1920*1080) / 2)  *(sizeof(uint16_t)));
 
         size_t writesize = fwrite(dst_data, 1, dst_size,  output);
         if (writesize != dst_size) {
