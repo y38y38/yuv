@@ -1,5 +1,5 @@
 #all:yuv1080to1088 yuv420to422 yuv8to10 yuv10to8 yuv422to420 yuv1088to1080 yuv10422_1088to1080 
-all:yuv10to8 yuv444to420
+all:yuv10to8 yuv444to420 yuv1088to1080
 
 
 CFLAGS= -g -I./
@@ -39,12 +39,12 @@ yyuv444to420:yuv444to420.o
 yuv444to420.o:yuv444to420.c
 	gcc ${CFLAGS} -c yuv444to420.c
 
-#yuv1088to1080:yuv1088to1080.o
-#	gcc -o yuv1088to1080 ${CFLAGS} yuv1088to1080.o
+yuv1088to1080:yuv1088to1080.o
+	gcc -o yuv1088to1080 ${CFLAGS} yuv1088to1080.o
 
 
-#yuv1088to1080.o:yuv1088to1080.c
-#	gcc ${CFLAGS} -c yuv1088to1080.c
+yuv1088to1080.o:yuv1088to1080.c
+	gcc ${CFLAGS} -c yuv1088to1080.c
 
 #yuv10422_1088to1080:yuv10422_1088to1080.o
 #	gcc -o yuv10422_1088to1080 ${CFLAGS} yuv10422_1088to1080.o
@@ -55,5 +55,5 @@ yuv444to420.o:yuv444to420.c
 
 clean:
 #	rm -f *.o yuv1080to1088 yuv420to422 yuv10to8 yuv422to420 yuv1088to1080
-	rm -f *.o yuv10to8 yuv444to420
+	rm -f *.o yuv10to8 yuv444to420 yuv1088to1080
 
