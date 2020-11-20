@@ -35,7 +35,9 @@ int main(int argc, char **argv)
     for (int i=0;;i++) {
         size_t readsize = fread(src_data, 1, src_size, input);
         if (readsize != src_size) {
-            printf("%d %d\n", __LINE__, (int)readsize);
+            if (readsize != 0) {
+                printf("%d %d\n", __LINE__, (int)readsize);
+            }
             break;
         }
         //y
@@ -57,7 +59,7 @@ int main(int argc, char **argv)
           //break;
         }
         //printf("end frame\n");
-        printf(".");
+        //printf(".");
     }
 
     return 0;
