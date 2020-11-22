@@ -5,3 +5,15 @@
 player/yuv/yuv/Debug/
 player/yuv/Debug/
 player/yuv/.vs/
+
+yuv8to10
+yuv10to8
+yuv420to422
+yuv422to420
+yuv444to420
+yuv1080to1088
+yuv1088to1080
+yuv10422_1088to1080
+yuv10to8yuv444to420
+yuv1088to1080sn16
+sn16
