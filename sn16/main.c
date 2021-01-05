@@ -105,13 +105,13 @@ int getbuffer(int height, int width, unsigned short **y, unsigned short **cb, un
 		printf("malloc ng\n");
 		return -1;
 	}
-	*cb = (unsigned short *)malloc((height*width)/2);
+	*cb = (unsigned short *)malloc((height*(width/2))*2);
 	//printf("0x%x %d\n", *cb, (height*width)/2);
 	if (*cb == NULL) {
 		printf("malloc ng\n");
 		return -1;
 	}
-	*cr = (unsigned short *)malloc((height*width)/2);
+	*cr = (unsigned short *)malloc((height*(width/2))*2);
 	//printf("0x%x %d\n", *cr, (height*width)/2);
 	if (*cr == NULL) {
 		printf("malloc ng\n");
@@ -121,19 +121,27 @@ int getbuffer(int height, int width, unsigned short **y, unsigned short **cb, un
 }
 
 
-int sn_calc(unsigned short *y1, unsigned short *y2, unsigned short *cb1, unsigned short *cb2, unsigned short *cr1, unsigned short *cr2, int height, int width)
+int sn_calc(unsigned short *y1, unsigned short *y2, unsigned short *cb1, unsigned short *cb2, unsigned short *cr1, unsigned short *cr2, int height, int width, int color)
 {
     int max_diff;
 	double psnr = sn(y1, y2, height * width, 10, &max_diff);
 	printf("y,%f, max diff,%d,", psnr,max_diff);
-	psnr = sn(cb1, cb2, height * width / 4, 10, &max_diff);
-	printf("cb,%f, max diff,%d,", psnr,max_diff);
-	psnr = sn(cr1, cr2, height * width / 4, 10, &max_diff);
-	printf("cr,%f, max diff,%d\n", psnr,max_diff);
+	if (color==444) {
+		psnr = sn(cb1, cb2, height * (width), 10, &max_diff);
+		printf("cb,%f, max diff,%d,", psnr,max_diff);
+		psnr = sn(cr1, cr2, height * (width), 10, &max_diff);
+		printf("cr,%f, max diff,%d\n", psnr,max_diff);
+	} else {
+		psnr = sn(cb1, cb2, height * (width/2), 10, &max_diff);
+		printf("cb,%f, max diff,%d,", psnr,max_diff);
+		psnr = sn(cr1, cr2, height * (width/2), 10, &max_diff);
+		printf("cr,%f, max diff,%d\n", psnr,max_diff);
+
+	}
 	return 0;
 }
 
-int getsignal(unsigned char *frame, int height, int width, unsigned short **y, unsigned short **cb, unsigned short **cr)
+int getsignal(unsigned char *frame, int height, int width, unsigned short **y, unsigned short **cb, unsigned short **cr, int color)
 {
 	int ret = getbuffer(height, width, y, cb, cr);
 	if (ret < 0) {
@@ -145,35 +153,49 @@ int getsignal(unsigned char *frame, int height, int width, unsigned short **y, u
 		GetYPixel((unsigned short*)frame, pixel,*y + pixel, width, height);
 	}
 
-	//cb
-	for (int pixel = 0;pixel < (height * width) / 4;pixel++) {
-		GetCbPixel((unsigned short*)frame, pixel,*cb + pixel, width/2, height/2);
-	}
+	if (color==444) {
+		//cb
+		for (int pixel = 0;pixel < (height * (width));pixel++) {
+			GetCbPixel((unsigned short*)frame, pixel,*cb + pixel, width, height);
+		}
+		
+		//cr
+		for (int pixel = 0;pixel < (height * (width));pixel++) {
+			GetCrPixel((unsigned short*)frame, pixel,*cr + pixel, width, height);
+		}
 
-	//cr
-	for (int pixel = 0;pixel < (height * width) / 4;pixel++) {
-		GetCrPixel((unsigned short*)frame, pixel,*cr + pixel, width/2, height/2);
+	} else {
+		//cb
+		for (int pixel = 0;pixel < (height * (width/2));pixel++) {
+			GetCbPixel((unsigned short*)frame, pixel,*cb + pixel, width/2, height);
+		}
+
+		//cr
+		for (int pixel = 0;pixel < (height * (width/2));pixel++) {
+			GetCrPixel((unsigned short*)frame, pixel,*cr + pixel, width/2, height);
+		}
+
 	}
 
 	return 0;
 }
 
-int sn_frame(unsigned char* frame1, unsigned char *frame2, int height, int width)
+int sn_frame(unsigned char* frame1, unsigned char *frame2, int height, int width, int color)
 {
 	unsigned short *y1, *y2, *cb1, *cb2, *cr1, *cr2;
-	int ret = getsignal(frame1, height, width, &y1, &cb1, &cr1);
+	int ret = getsignal(frame1, height, width, &y1, &cb1, &cr1, color);
 	if (ret < 0) {
 		printf("getsignal ng\n");
 		return -1;
 	}
-	ret = getsignal(frame2, height, width, &y2, &cb2, &cr2);
+	ret = getsignal(frame2, height, width, &y2, &cb2, &cr2, color);
 	if (ret < 0) {
 		printf("getsignal ng\n");
 		return -1;
 	}
 
 
-	ret = sn_calc(y1, y2, cb1, cb2, cr1,cr2,height, width);
+	ret = sn_calc(y1, y2, cb1, cb2, cr1,cr2,height, width, color);
 	if (ret < 0) {
 		printf("sn_calc ng\n");
 		return -1;
@@ -181,26 +203,30 @@ int sn_frame(unsigned char* frame1, unsigned char *frame2, int height, int width
 
 	return 0;
 }
-int GetFrameSize(int width, int height)
+int GetFrameSize(int width, int height, int color)
 {
-    return ((width * height) + (width * height)) * 2;
+	if (color == 444) {
+	    return ((width * height) + (width * height) + (width * height)) * 2;
+	} else {
+	    return ((width * height) + (width * height)) * 2;
+	}
 }
-int inputFrameSize(int width, int height) {
-    return GetFrameSize(width, height);
+int inputFrameSize(int width, int height, int color) {
+    return GetFrameSize(width, height, color);
 }
 
-int outputFrameSize(int width, int height) {
-    return GetFrameSize(width, height);
+int outputFrameSize(int width, int height, int color) {
+    return GetFrameSize(width, height, color);
 }
 
-int sn_file(FILE *input1, FILE *input2, int width, int height)
+int sn_file(FILE *input1, FILE *input2, int width, int height, int color)
 {
 
 	void *inbuf1;
 	void *inbuf2;
     int i;
 
-	int input_framesize = inputFrameSize(width, height);
+	int input_framesize = inputFrameSize(width, height, color);
 	inbuf1 = malloc(input_framesize);
 	//printf("i %d\n", input_framesize);
 
@@ -236,7 +262,7 @@ int sn_file(FILE *input1, FILE *input2, int width, int height)
 		} else {
 		}
 
-		int ret = sn_frame(inbuf1, inbuf2, height, width);
+		int ret = sn_frame(inbuf1, inbuf2, height, width, color);
 		if (ret < 0) {
 			printf("frame ng\n");
 		}
@@ -252,12 +278,13 @@ int sn_file(FILE *input1, FILE *input2, int width, int height)
 //parameter2 input 2
 //parameter3 height
 //parameter4 width
+//parameter5 color 444 or 422. default is 422
 
 //format cmm only
 int main(int argc, char** argv)
 {
-	if (argc != 5) {
-		printf("sn.exe input_filename input_filename height width\n");
+	if ((argc != 5) && (argc != 6)) {
+		printf("sn.exe input_filename input_filename height width [color]\n");
 		return -1;
 	}
 	FILE *input1 = fopen((const char*)argv[1], "r");
@@ -275,7 +302,17 @@ int main(int argc, char** argv)
 	int width = atoi((const char*)argv[3]);
 	int height = atoi((const char*)argv[4]);
 
-	int ret = sn_file(input1, input2, width, height);
+	int color = 422;
+
+	if (argc == 6) {
+		color = atoi((const char*)argv[5]);
+		if ((color != 444) && (color != 422) ) {
+			printf("color invaled\n");
+			return -1;
+		}
+	}	
+
+	int ret = sn_file(input1, input2, width, height, color);
 	if (ret < 0) {
 		printf("ng\n");
 	}
