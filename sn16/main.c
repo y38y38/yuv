@@ -125,15 +125,15 @@ int sn_calc(unsigned short *y1, unsigned short *y2, unsigned short *cb1, unsigne
 {
     int max_diff;
 	double psnr = sn(y1, y2, height * width, 10, &max_diff);
-	printf("y,%f, max diff,%d,", psnr,max_diff);
+	printf("y ,%f, max diff,%d,\n", psnr,max_diff);
 	if (color==444) {
 		psnr = sn(cb1, cb2, height * (width), 10, &max_diff);
-		printf("cb,%f, max diff,%d,", psnr,max_diff);
+		printf("cb,%f, max diff,%d,\n", psnr,max_diff);
 		psnr = sn(cr1, cr2, height * (width), 10, &max_diff);
 		printf("cr,%f, max diff,%d\n", psnr,max_diff);
 	} else {
 		psnr = sn(cb1, cb2, height * (width/2), 10, &max_diff);
-		printf("cb,%f, max diff,%d,", psnr,max_diff);
+		printf("cb,%f, max diff,%d,\n", psnr,max_diff);
 		psnr = sn(cr1, cr2, height * (width/2), 10, &max_diff);
 		printf("cr,%f, max diff,%d\n", psnr,max_diff);
 
