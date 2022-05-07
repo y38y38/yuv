@@ -1,15 +1,15 @@
 #include "stdio.h"
 
-#include "cmm.h"
+#include "cmm422.h"
 
-int cmmGetFrameSize(int width, int height)
+int cmm422GetFrameSize(int width, int height)
 {
 	if (width == 0) return 0;
 	if (height == 0) return 0;
 
-	return (((width * height) * 2) + (((width / 2) * (height / 2))  * 4));
+	return (((width * height) * 2) + (((width / 2) * (height))  * 4));
 }
-void cmmGetYPixel(unsigned short *buffer, int pixel, unsigned short *y, int max_width, int  max_height) {
+void cmm422GetYPixel(unsigned short *buffer, int pixel, unsigned short *y, int max_width, int  max_height) {
 	//pointer is short
     int width = pixel % max_width;
     int height= 0;
@@ -23,7 +23,7 @@ void cmmGetYPixel(unsigned short *buffer, int pixel, unsigned short *y, int max_
     return;
 }
 
-void cmmGetCbPixel(unsigned short *buffer, int pixel, unsigned short *cb, int max_width, int  max_height) {
+void cmm422GetCbPixel(unsigned short *buffer, int pixel, unsigned short *cb, int max_width, int  max_height) {
 	//pointer is short
 	
     int width = pixel % max_width;
@@ -34,10 +34,10 @@ void cmmGetCbPixel(unsigned short *buffer, int pixel, unsigned short *cb, int ma
         height = pixel / max_width;
     }
 
-    *cb = *(buffer + ((max_height * 2) * (max_width * 2)) + ((height * (max_width)) + width));
+    *cb = *(buffer + ((max_height) * (max_width * 2)) + ((height * (max_width)) + width));
 }
 
-void cmmGetCrPixel(unsigned short *buffer, int pixel, unsigned short *cr, int max_width, int  max_height) {
+void cmm422GetCrPixel(unsigned short *buffer, int pixel, unsigned short *cr, int max_width, int  max_height) {
 	//pointer is short
     int width = pixel % max_width;
     int height= 0;
@@ -46,14 +46,14 @@ void cmmGetCrPixel(unsigned short *buffer, int pixel, unsigned short *cr, int ma
     } else {
         height = pixel / max_width;
     }
-	int offset =  ((max_height * 2) * (max_width * 2)) + (max_height * max_width ) + ((height * max_width) + width);
+	int offset =  ((max_height) * (max_width * 2)) + (max_height * max_width ) + ((height * max_width) + width);
     *cr = *(buffer + offset);
     unsigned short tmp  = *(buffer + offset);
 	*cr = tmp;
     //*cr = *(buffer + ((max_height * 2) * (max_width * 2)) + (max_height * max_width ) + ((height * max_width) + width));
 }
 
-void cmmSetYPixel(unsigned short *buffer, int pixel, unsigned short y, int max_width, int  max_height) {
+void cmm422SetYPixel(unsigned short *buffer, int pixel, unsigned short y, int max_width, int  max_height) {
 	//pointer is short
     int width = pixel % max_width;
     int height= 0;
@@ -67,7 +67,7 @@ void cmmSetYPixel(unsigned short *buffer, int pixel, unsigned short y, int max_w
     return;
 }
 
-void cmmSetCbPixel(unsigned short *buffer, int pixel, unsigned short cb, int max_width, int  max_height) {
+void cmm422SetCbPixel(unsigned short *buffer, int pixel, unsigned short cb, int max_width, int  max_height) {
 	//pointer is short
 	
     int width = pixel % max_width;
@@ -78,10 +78,10 @@ void cmmSetCbPixel(unsigned short *buffer, int pixel, unsigned short cb, int max
         height = pixel / max_width;
     }
 
-    *(buffer + ((max_height * 2) * (max_width * 2)) + ((height * (max_width)) + width)) = cb;
+    *(buffer + ((max_height) * (max_width * 2)) + ((height * (max_width)) + width)) = cb;
 }
 
-void cmmSetCrPixel(unsigned short *buffer, int pixel, unsigned short cr, int max_width, int  max_height) {
+void cmm422SetCrPixel(unsigned short *buffer, int pixel, unsigned short cr, int max_width, int  max_height) {
 	//pointer is short
     int width = pixel % max_width;
     int height= 0;
@@ -90,7 +90,7 @@ void cmmSetCrPixel(unsigned short *buffer, int pixel, unsigned short cr, int max
     } else {
         height = pixel / max_width;
     }
-	int offset =  ((max_height * 2) * (max_width * 2)) + (max_height * max_width ) + ((height * max_width) + width);
+	int offset =  ((max_height) * (max_width * 2)) + (max_height * max_width ) + ((height * max_width) + width);
     *(buffer + offset) = cr;
 //    unsigned short tmp  = *(buffer + offset);
 //	tmp = cr;
